@@ -1,5 +1,5 @@
-resources:
-  - metallb.yaml
-  - namespace.yaml
-  - layer2-config.yaml
+namespace: metallb-system
 
+resources:
+  - github.com/metallb/metallb//manifests?ref=v0.10.2
+  - config.yaml
