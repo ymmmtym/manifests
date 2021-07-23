@@ -1,0 +1,4 @@
+namespace: argocd
+resources:
+  - metallb.yaml
+  - rook-ceph.yaml
