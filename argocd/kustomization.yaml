@@ -2,3 +2,4 @@ namespace: argocd
 resources:
   - metallb.yaml
   - rook-ceph.yaml
+  - jupyter-notebook.yaml
