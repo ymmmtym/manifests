@@ -1,5 +1,7 @@
 namespace: argocd
 resources:
+  - argocd.yaml
   - metallb.yaml
+  - ingress-nginx.yaml
   - rook-ceph.yaml
   - jupyter-notebook.yaml

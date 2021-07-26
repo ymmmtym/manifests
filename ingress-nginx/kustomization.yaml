@@ -1,0 +1,15 @@
+# kustomization.yaml
+bases:
+- github.com/kubernetes/ingress-nginx/deploy/static/provider/baremetal?ref=controller-v0.47.0
+resources:
+- configs/tcp-services.yaml
+- configs/udp-services.yaml
+patchesStrategicMerge:
+- configs/nginx.conf.yaml
+patchesJson6902:
+- target:
+    group: ''
+    version: v1
+    kind: Service
+    name: ingress-nginx-controller
+  path: service.yaml
