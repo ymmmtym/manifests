@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: jupyter-notebook
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: jupyter-notebook
   ports:
@@ -11,3 +11,4 @@ spec:
       name: http
       port: 80
       targetPort: 8888
+      nodePort: 30080

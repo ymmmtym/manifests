@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: jupyter-notebook
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
   - host: jupyter-notebook.ymmmtym.com.local
@@ -12,6 +14,5 @@ spec:
         backend:
           service:
             name: jupyter-notebook
-            port: 
+            port:
               number: 80
-
