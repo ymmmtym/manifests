@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 
 install_rook-ceph_via_helm(){
     helm repo add rook-release https://charts.rook.io/release
