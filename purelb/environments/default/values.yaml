@@ -1,0 +1,22 @@
+---
+# Default values for purelb.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Docker image configuration
+image:
+  repository: registry.gitlab.com/purelb/purelb
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: v0.3.5
+
+nameOverride: ""
+fullnameOverride: ""
+
+# PureLB will act as the default service announcer if this value is
+# "PureLB". This means that PureLB will handle services that do not
+# have a Spec.LoadBalancerClass field. If this is other than "PureLB"
+# then PureLB will handle only those services that have a
+# Spec.LoadBalancerClass explictly set to "purelb.io/purelb".
+defaultAnnouncer: "PureLB"
+

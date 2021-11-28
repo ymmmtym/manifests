@@ -1,0 +1,17 @@
+repositories:
+  - name: purelb
+    url: https://gitlab.com/api/v4/projects/20400619/packages/helm/stable
+
+templates:
+  default: &default
+    chart: purelb/{{`{{ .Release.Name }}`}}
+    namespace: purelb
+    values:
+      - "./environments/{{ .Environment.Name }}/values*.yaml"
+
+releases:
+  - name: purelb
+    <<: *default
+  - name: kustomize
+    namespace: purelb
+    chart: ./base
