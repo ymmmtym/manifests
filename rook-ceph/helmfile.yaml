@@ -1,0 +1,20 @@
+repositories:
+- name: rook-release
+  url: https://charts.rook.io/release
+
+templates:
+  default: &default
+    chart: rook-release/{{`{{ .Release.Name }}`}}
+    namespace: rook-ceph
+    values:
+    - "./environments/{{ .Environment.Name }}/values-{{`{{ .Release.Name }}`}}.yaml"
+
+releases:
+- name: rook-ceph
+  <<: *default
+  disableValidation: true
+- name: rook-ceph-cluster
+  <<: *default
+  needs:
+  - rook-ceph
+  disableValidation: true
