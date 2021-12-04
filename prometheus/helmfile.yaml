@@ -1,0 +1,20 @@
+repositories:
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+
+templates:
+  default: &default
+    chart: prometheus-community/{{`{{ .Release.Name }}`}}
+    namespace: prometheus
+    values:
+      - "./environments/{{ .Environment.Name }}/values*.yaml"
+
+releases:
+  - name: kustomize
+    namespace: prometheus
+    chart: ./base
+  - name: kube-prometheus-stack
+    <<: *default
+    needs:
+    - kustomize
+    disableValidation: true
