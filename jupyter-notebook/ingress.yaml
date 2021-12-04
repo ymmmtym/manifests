@@ -6,10 +6,10 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-  - host: jupyter-notebook.ymmmtym.com.local
+  - host: cluster.yumenomatayume.local.net
     http:
       paths:
-      - path: /
+      - path: /jupyter-notebook
         pathType: Prefix
         backend:
           service:
