@@ -513,7 +513,12 @@ prometheus:
         password:
           name: kubepromsecret
           key: password
-    
+    - url: https://metric-api.newrelic.com/prometheus/v1/write?prometheus_server=cluster.yumenomatayume.local.net
+      authorization:
+        credentials:
+          name: newrelic
+          key: bearerToken
+
     ## Enable/Disable Grafana dashboards provisioning for prometheus remote write feature
     remoteWriteDashboards: true
 

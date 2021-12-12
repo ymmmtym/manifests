@@ -13,6 +13,7 @@ releases:
   - name: kustomize
     namespace: prometheus
     chart: ./base
+    disableValidation: true
   - name: kube-prometheus-stack
     <<: *default
     needs:
