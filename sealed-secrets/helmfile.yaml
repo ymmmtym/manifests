@@ -12,3 +12,5 @@ templates:
 releases:
 - name: sealed-secrets
   <<: *default
+  disableValidation: true
+
