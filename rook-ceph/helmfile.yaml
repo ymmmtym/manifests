@@ -13,8 +13,11 @@ releases:
 - name: rook-ceph
   <<: *default
   disableValidation: true
+  wait: true
+  waitForJobs: true
 - name: rook-ceph-cluster
   <<: *default
   needs:
   - rook-ceph
   disableValidation: true
+
