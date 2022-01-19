@@ -13,9 +13,3 @@ releases:
   - name: purelb
     <<: *default
     disableValidation: true
-  - name: kustomize
-    namespace: purelb
-    chart: ./base
-    needs:
-    - purelb
-    disableValidation: true
