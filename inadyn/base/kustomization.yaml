@@ -1,0 +1,4 @@
+resources:
+  - inadyn-sealed-secret.yaml
+  - inadyn.yaml
+
