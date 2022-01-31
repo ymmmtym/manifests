@@ -4,3 +4,5 @@ namespace: prometheus
 resources:
   - kubepromsecret-sealed-secret.yaml
   - newrelic-sealed-secret.yaml
+  - vsphere-sealed-secret.yaml
+  - vsphere.yaml

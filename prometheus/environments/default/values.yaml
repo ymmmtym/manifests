@@ -227,6 +227,7 @@ alertmanager:
     ## Hosts must be provided if Ingress is enabled.
     ##
     hosts:
+      - home.yumenomatayume.net
       - cluster.yumenomatayume.local.net
 
     ## Paths to use for ingress rules - one path should match the alertmanagerSpec.routePrefix
@@ -241,10 +242,10 @@ alertmanager:
     ## TLS configuration for Alertmanager Ingress
     ## Secret must be manually created in the namespace
     ##
-    tls: []
-    # - secretName: alertmanager-general-tls
-    #   hosts:
-    #   - alertmanager.example.com
+    tls:
+    - secretName: letsencrypt-prod-tls
+      hosts:
+      - home.yumenomatayume.net
 
   ## Configuration for Alertmanager secret
   ##
@@ -680,6 +681,7 @@ grafana:
     # hosts:
     #   - grafana.domain.com
     hosts:
+      - home.yumenomatayume.net
       - cluster.yumenomatayume.local.net
 
     ## Path for grafana ingress
@@ -688,10 +690,10 @@ grafana:
     ## TLS configuration for grafana Ingress
     ## Secret must be manually created in the namespace
     ##
-    tls: []
-    # - secretName: grafana-general-tls
-    #   hosts:
-    #   - grafana.example.com
+    tls:
+    - secretName: letsencrypt-prod-tls
+      hosts:
+      - home.yumenomatayume.net
 
   sidecar:
     dashboards:
@@ -1957,6 +1959,7 @@ prometheus:
     # hosts:
     #   - prometheus.domain.com
     hosts:
+      - home.yumenomatayume.net
       - cluster.yumenomatayume.local.net
 
     ## Paths to use for ingress rules - one path should match the prometheusSpec.routePrefix
@@ -1971,10 +1974,10 @@ prometheus:
     ## TLS configuration for Prometheus Ingress
     ## Secret must be manually created in the namespace
     ##
-    tls: []
-      # - secretName: prometheus-general-tls
-      #   hosts:
-      #     - prometheus.example.com
+    tls:
+    - secretName: letsencrypt-prod-tls
+      hosts:
+      - home.yumenomatayume.net
 
   ## Configuration for creating an Ingress that will map to each Prometheus replica service
   ## prometheus.servicePerReplica must be enabled
@@ -2168,7 +2171,7 @@ prometheus:
 
     ## External URL at which Prometheus will be reachable.
     ##
-    externalUrl: "http://clustser.yumenomatayume.local.net/prometheus/"
+    externalUrl: "https://home.yumenomatayume.net/prometheus/"
 
     ## Define which Nodes the Pods are scheduled on.
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -2380,7 +2383,7 @@ prometheus:
         password:
           name: kubepromsecret
           key: password
-    - url: https://metric-api.newrelic.com/prometheus/v1/write?prometheus_server=cluster.yumenomatayume.local.net
+    - url: https://metric-api.newrelic.com/prometheus/v1/write?prometheus_server=home.yumenomatayume.net
       authorization:
         credentials:
           name: newrelic
@@ -2618,7 +2621,17 @@ prometheus:
   #      - nodes/proxy
   #    verbs: [ "get", "list", "watch" ]
 
-  additionalServiceMonitors: []
+  additionalServiceMonitors:
+  - name: "vsphere"
+    selector:
+      matchLabels:
+        app: vsphere
+    namespaceSelector:
+      any: false
+      matchNames:
+      - prometheus
+    endpoints:
+    - port: http
   ## Name of the ServiceMonitor to create
   ##
   # - name: ""

@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vsphere
+  labels:
+    app: vsphere
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vsphere
+  template:
+    metadata:
+      labels:
+        app: vsphere
+    spec:
+      containers:
+        - name: vsphere
+          image: pryorda/vmware_exporter:latest
+          envFrom:
+            - secretRef:
+                name: vsphere
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: vsphere
+  labels:
+    app: vsphere
+spec:
+  type: ClusterIP
+  selector:
+    app: vsphere
+  ports:
+    - protocol: TCP
+      name: http
+      port: 9272
+      targetPort: 9272
