@@ -1,7 +1,8 @@
 helmfiles:
   - sealed-secrets/helmfile.yaml
   - purelb/helmfile.yaml
-  # - cert-manager/helmfile.yaml
+  - cert-manager/helmfile.yaml
   - ingress-nginx/helmfile.yaml
   - rook-ceph/helmfile.yaml
   - prometheus/helmfile.yaml
+  - inadyn/helmfile.yaml
