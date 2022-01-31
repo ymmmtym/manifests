@@ -1,0 +1,16 @@
+repositories:
+- name: sealed-secrets
+  url: https://bitnami-labs.github.io/sealed-secrets
+
+templates:
+  default: &default
+    chart: sealed-secrets/{{`{{ .Release.Name }}`}}
+    namespace: sealed-secrets
+    values:
+    - "./environments/{{ .Environment.Name }}/values*.yaml"
+
+releases:
+- name: sealed-secrets
+  <<: *default
+  disableValidation: true
+

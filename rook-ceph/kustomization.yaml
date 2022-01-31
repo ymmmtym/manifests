@@ -1,4 +1,0 @@
-resources:
-  - cluster.yaml
-  - toolbox.yaml
-  - storageclass.yaml

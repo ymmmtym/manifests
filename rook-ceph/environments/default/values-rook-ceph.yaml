@@ -1,0 +1,125 @@
+image:
+  prefix: rook
+  repository: rook/ceph
+  tag: v1.7.8
+  pullPolicy: IfNotPresent
+
+crds:
+  enabled: true
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+nodeSelector: {}
+# Constraint rook-ceph-operator Deployment to nodes with label `disktype: ssd`.
+# For more info, see https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+#  disktype: ssd
+
+# Tolerations for the rook-ceph-operator to allow it to run on nodes with particular taints
+tolerations: []
+
+# Delay to use in node.kubernetes.io/unreachable toleration
+unreachableNodeTolerationSeconds: 5
+
+# Whether rook watches its current namespace for CRDs or the entire cluster, defaults to false
+currentNamespaceOnly: false
+
+## Annotations to be added to pod
+annotations: {}
+
+## LogLevel can be set to: TRACE, DEBUG, INFO, NOTICE, WARNING, ERROR or CRITICAL
+logLevel: INFO
+
+## If true, create & use RBAC resources
+##
+rbacEnable: true
+
+## If true, create & use PSP resources
+##
+pspEnable: true
+
+## Settings for whether to disable the drivers or other daemons if they are not
+## needed
+csi:
+  enableRbdDriver: true
+  enableCephfsDriver: true
+  enableGrpcMetrics: false
+  # Set to true to enable host networking for CSI CephFS and RBD nodeplugins. This may be necessary
+  # in some network configurations where the SDN does not provide access to an external cluster or
+  # there is significant drop in read/write performance.
+  # enableCSIHostNetwork: true
+  # set to false to disable deployment of snapshotter container in CephFS provisioner pod.
+  enableCephfsSnapshotter: true
+  # set to false to disable deployment of snapshotter container in RBD provisioner pod.
+  enableRBDSnapshotter: true
+  # (Optional) set user created priorityclassName for csi plugin pods.
+  # pluginPriorityClassName: system-node-critical
+
+  # (Optional) set user created priorityclassName for csi provisioner pods.
+  # provisionerPriorityClassName: system-cluster-critical
+
+  # (Optional) policy for modifying a volume's ownership or permissions when the RBD PVC is being mounted.
+  # supported values are documented at https://kubernetes-csi.github.io/docs/support-fsgroup.html
+  rbdFSGroupPolicy: "ReadWriteOnceWithFSType"
+
+  # (Optional) policy for modifying a volume's ownership or permissions when the CephFS PVC is being mounted.
+  # supported values are documented at https://kubernetes-csi.github.io/docs/support-fsgroup.html
+  cephFSFSGroupPolicy: "None"
+
+  # OMAP generator generates the omap mapping between the PV name and the RBD image
+  # which helps CSI to identify the rbd images for CSI operations.
+  # CSI_ENABLE_OMAP_GENERATOR need to be enabled when we are using rbd mirroring feature.
+  # By default OMAP generator is disabled and when enabled it will be deployed as a
+  # sidecar with CSI provisioner pod, to enable set it to true.
+  enableOMAPGenerator: false
+
+  # Set replicas for csi provisioner deployment.
+  provisionerReplicas: 2
+
+  # Set logging level for csi containers.
+  # Supported values from 0 to 5. 0 for general useful logs, 5 for trace level verbosity.
+  #logLevel: 0
+  # CSI CephFS plugin daemonset update strategy, supported values are OnDelete and RollingUpdate.
+  # Default value is RollingUpdate.
+  #rbdPluginUpdateStrategy: OnDelete
+  # CSI Rbd plugin daemonset update strategy, supported values are OnDelete and RollingUpdate.
+  # Default value is RollingUpdate.
+  #cephFSPluginUpdateStrategy: OnDelete
+  # Allow starting unsupported ceph-csi image
+  allowUnsupportedVersion: false
+  forceCephFSKernelClient: true
+  volumeReplication:
+    enabled: false
+    #image: "quay.io/csiaddons/volumereplication-operator:v0.1.0"
+
+enableFlexDriver: false
+enableDiscoveryDaemon: false
+cephCommandsTimeoutSeconds: "15"
+
+allowMultipleFilesystems: false
+
+enableSelinuxRelabeling: true
+
+# Writing to the hostPath is required for the Ceph mon and osd pods. Given the restricted permissions in OpenShift with SELinux,
+# the pod must be running privileged in order to write to the hostPath volume, this must be set to true then.
+hostpathRequiresPrivileged: false
+
+# Disable automatic orchestration when new devices are discovered.
+disableDeviceHotplug: false
+
+# Blacklist certain disks according to the regex provided.
+discoverDaemonUdev:
+
+# imagePullSecrets option allow to pull docker images from private docker registry. Option will be passed to all service accounts.
+# imagePullSecrets:
+# - name: my-registry-secret
+
+# Whether the OBC provisioner should watch on the operator namespace or not, if not the namespace of the cluster will be used
+enableOBCWatchOperatorNamespace: true
+
+admissionController:

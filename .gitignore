@@ -1,0 +1,5 @@
+*.swp
+
+# manifests
+*secret.yaml
+!*-sealed-secret.yaml

@@ -1,0 +1,11 @@
+---
+version: "2.1"
+services:
+  inadyn:
+    image: troglobit/inadyn:latest
+    container_name: inadyn
+    volumes:
+      - type: bind
+        source: "${PWD}/inadyn.conf"
+        target: "/etc/inadyn.conf"
+    restart: unless-stopped
