@@ -6,7 +6,7 @@ namespace: monitoring
 helmCharts:
 - name: kube-prometheus-stack
   namespace: monitoring
-  includeCRDs: false
+  includeCRDs: true
   releaseName: kube-prometheus-stack
   version: 30.2.0
   repo: https://kubernetes.github.io/ingress-nginx

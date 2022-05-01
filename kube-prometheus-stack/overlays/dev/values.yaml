@@ -2626,7 +2626,7 @@ prometheus:
     namespaceSelector:
       any: false
       matchNames:
-      - prometheus
+      - monitoring
     endpoints:
     - port: http
   ## Name of the ServiceMonitor to create

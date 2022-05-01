@@ -1664,14 +1664,14 @@ server:
       repoURL: https://k8s-at-home.com/charts/
       targetRevision: 5.2.0
     destination:
-      namespace: k8s-at-home
+      namespace: monitoring
       server: https://kubernetes.default.svc
     syncPolicy:
       automated:
         prune: false
         selfHeal: true
       syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=false
   - name: whoogle
     namespace: argocd
     additionalLabels:
