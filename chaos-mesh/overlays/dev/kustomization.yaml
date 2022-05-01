@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: chaos-mesh
+
+helmCharts:
+- name: chaos-mesh
+  namespace: chaos-mesh
+  includeCRDs: true
+  releaseName: chaos-mesh
+  version: 2.1.5
+  repo: https://charts.chaos-mesh.org
+  valuesFile: values.yaml
+

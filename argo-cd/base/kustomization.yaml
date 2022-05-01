@@ -1,13 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: cert-manager
+namespace: argocd
 
 helmCharts:
-- name: cert-manager
-  namespace: cert-manager
+- name: argo-cd
+  namespace: argocd
   includeCRDs: true
-  releaseName: cert-manager
+  releaseName: argo-cd
   version: latest
-  repo: https://charts.jetstack.io
+  repo: https://argoproj.github.io/argo-helm
   valuesFile: values.yaml
+

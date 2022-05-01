@@ -4,6 +4,4 @@ kind: Kustomization
 namespace: inadyn
 
 resources:
-- inadyn-sealed-secret.yaml
-- inadyn.yaml
-
+- ../../base
