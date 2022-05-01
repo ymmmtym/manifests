@@ -1315,6 +1315,9 @@ server:
     project: default
     source:
       chart: rook-ceph
+      helm:
+        valueFiles:
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/rook-ceph/overlays/dev/values-rook-ceph.yaml
       repoURL: https://charts.rook.io/release
       targetRevision: v1.8.2
     destination:
@@ -1339,7 +1342,7 @@ server:
       chart: rook-ceph-cluster
       helm:
         valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/rook-ceph/environments/default/values-rook-ceph-cluster.yaml
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/rook-ceph/overlays/dev/values-rook-ceph-cluster.yaml
       repoURL: https://charts.rook.io/release
       targetRevision: v1.8.2
     destination:
