@@ -1245,7 +1245,7 @@ server:
       chart: purelb
       helm:
         valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/purelb/environments/default/values.yaml
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/purelb/overlays/dev/values.yaml
       repoURL: https://gitlab.com/api/v4/projects/20400619/packages/helm/stable
       targetRevision: v0.6.1
     destination:
