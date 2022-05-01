@@ -795,19 +795,19 @@ server:
   name: server
 
   # -- The number of server pods to run
-  replicas: 2
+  replicas: ""
 
   autoscaling:
     # -- Enable Horizontal Pod Autoscaler ([HPA]) for the Argo CD server
-    enabled: false
+    enabled: true
     # -- Minimum number of replicas for the Argo CD server [HPA]
-    minReplicas: 1
+    minReplicas: 2
     # -- Maximum number of replicas for the Argo CD server [HPA]
-    maxReplicas: 5
+    maxReplicas: 6
     # -- Average CPU utilization percentage for the Argo CD server [HPA]
-    targetCPUUtilizationPercentage: 50
+    targetCPUUtilizationPercentage: 150
     # -- Average memory utilization percentage for the Argo CD server [HPA]
-    targetMemoryUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 150
 
   image:
     # -- Repository to use for the Argo CD server
@@ -920,13 +920,13 @@ server:
     # readOnlyRootFilesystem: true
 
   # -- Resource limits and requests for the Argo CD server
-  resources: {}
+  resources:
   #  limits:
   #    cpu: 100m
   #    memory: 128Mi
-  #  requests:
-  #    cpu: 50m
-  #    memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 256Mi
 
   ## Certificate configuration
   certificate:

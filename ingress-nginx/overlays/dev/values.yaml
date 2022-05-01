@@ -332,7 +332,7 @@ controller:
   ##
   podAnnotations: {}
 
-  replicaCount: 2
+  replicaCount: ""
 
   minAvailable: 1
 
@@ -350,11 +350,11 @@ controller:
 
   # Mutually exclusive with keda autoscaling
   autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 11
-    targetCPUUtilizationPercentage: 50
-    targetMemoryUtilizationPercentage: 50
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 15
+    targetCPUUtilizationPercentage: 150
+    targetMemoryUtilizationPercentage: 150
     behavior: {}
       # scaleDown:
       #   stabilizationWindowSeconds: 300
@@ -628,7 +628,7 @@ controller:
   metrics:
     port: 10254
     # if this port is changed, change healthz-port: in extraArgs: accordingly
-    enabled: false
+    enabled: true
 
     service:
       annotations: {}
@@ -650,7 +650,7 @@ controller:
       # nodePort: ""
 
     serviceMonitor:
-      enabled: false
+      enabled: true
       additionalLabels: {}
       # The label to use to retrieve the job name from.
       # jobLabel: "app.kubernetes.io/name"
