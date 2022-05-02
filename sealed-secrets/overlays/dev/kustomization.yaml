@@ -8,7 +8,7 @@ helmCharts:
   namespace: sealed-secrets
   includeCRDs: true
   releaseName: sealed-secrets
-  version: 2.0.2
+  version: 2.1.7
   repo: https://bitnami-labs.github.io/sealed-secrets
   valuesFile: values.yaml
 
