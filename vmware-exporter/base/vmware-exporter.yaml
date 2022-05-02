@@ -2,38 +2,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vsphere
+  name: vmware-exporter
   labels:
-    app: vsphere
+    app: vmware-exporter
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vsphere
+      app: vmware-exporter
   template:
     metadata:
       labels:
-        app: vsphere
+        app: vmware-exporter
     spec:
       containers:
-        - name: vsphere
+        - name: vmware-exporter
           image: pryorda/vmware_exporter:latest
           envFrom:
             - secretRef:
-                name: vsphere
+                name: vmware-exporter
+
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: vsphere
+  name: vmware-exporter
   labels:
-    app: vsphere
+    app: vmware-exporter
 spec:
   type: ClusterIP
   selector:
-    app: vsphere
+    app: vmware-exporter
   ports:
     - protocol: TCP
-      name: http
+      name: metrics
       port: 9272
       targetPort: 9272
+
