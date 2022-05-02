@@ -88,7 +88,7 @@ metrics:
   enabled: true
   serviceMonitor:
     # -- The interval field must use minutes for the padding to calculate properly.
-    interval: 60s
+    interval: 5m
     scrapeTimeout: 1m
     labels: {}
   # -- Enable and configure Prometheus Rules for the chart under this key.
