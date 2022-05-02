@@ -1238,7 +1238,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "0"
+      argocd.argoproj.io/sync-wave: "3"
     finalizers: []
     project: default
     source:
@@ -1310,7 +1310,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "1"
+      argocd.argoproj.io/sync-wave: "2"
     finalizers: []
     project: default
     source:
@@ -1335,7 +1335,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "3"
+      argocd.argoproj.io/sync-wave: "4"
     finalizers: []
     project: default
     source:
@@ -1360,7 +1360,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "5"
     finalizers: []
     project: default
     source:
@@ -1385,7 +1385,8 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/hook: PreSync
+      argocd.argoproj.io/sync-wave: "0"
     finalizers: []
     project: default
     source:
@@ -1456,7 +1457,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "5"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1478,7 +1479,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1497,7 +1498,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1519,7 +1520,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1564,7 +1565,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1586,7 +1587,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1608,7 +1609,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1652,7 +1653,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1668,38 +1669,38 @@ server:
         selfHeal: true
       syncOptions:
       - CreateNamespace=true
-  - name: librespeed
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
-    finalizers: []
-    project: default
-    source:
-      chart: librespeed
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/librespeed/overlays/dev/values.yaml
-      repoURL: https://k8s-at-home.com/charts/
-      targetRevision: 5.2.0
-    destination:
-      namespace: k8s-at-home
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: false
-        selfHeal: true
-      syncOptions:
-      - CreateNamespace=true
+  # - name: librespeed
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "6"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: librespeed
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/librespeed/overlays/dev/values.yaml
+  #     repoURL: https://k8s-at-home.com/charts/
+  #     targetRevision: 5.2.0
+  #   destination:
+  #     namespace: k8s-at-home
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: false
+  #       selfHeal: true
+  #     syncOptions:
+  #     - CreateNamespace=true
   - name: speedtest-exporter
     namespace: argocd
     additionalLabels:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1724,7 +1725,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
