@@ -1461,18 +1461,17 @@ server:
     finalizers: []
     project: default
     source:
-      chart: cert-manager
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/cert-manager/overlays/dev/values.yaml
-      repoURL: https://charts.jetstack.io
-      targetRevision: v1.8.0
+      repoURL: https://github.com/ymmmtym/manifests.git
+      path: cert-manager/overlays/dev/
     destination:
-      namespace: cert-manager
+      namespace: kube-system
       server: https://kubernetes.default.svc
     syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
       syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=false
   - name: jaeger
     namespace: argocd
     additionalLabels:
