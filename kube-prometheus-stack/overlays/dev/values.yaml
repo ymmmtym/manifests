@@ -2618,17 +2618,18 @@ prometheus:
   #      - nodes/proxy
   #    verbs: [ "get", "list", "watch" ]
 
-  additionalServiceMonitors:
-  - name: "vsphere"
-    selector:
-      matchLabels:
-        app: vsphere
-    namespaceSelector:
-      any: false
-      matchNames:
-      - monitoring
-    endpoints:
-    - port: http
+  additionalServiceMonitors: []
+  # - name: "vsphere"
+  #   selector:
+  #     matchLabels:
+  #       app: vsphere
+  #   namespaceSelector:
+  #     any: false
+  #     matchNames:
+  #     - monitoring
+  #   endpoints:
+  #   - port: http
+
   ## Name of the ServiceMonitor to create
   ##
   # - name: ""

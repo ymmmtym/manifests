@@ -1429,6 +1429,27 @@ server:
         selfHeal: true
       syncOptions:
       - CreateNamespace=true
+  - name: vmware-exporter
+    namespace: argocd
+    additionalLabels:
+      app.kubernetes.io/instance: argo-cd
+      argocd.argoproj.io/instance: argo-cd
+    additionalAnnotations:
+      argocd.argoproj.io/sync-wave: "5"
+    finalizers: []
+    project: default
+    source:
+      repoURL: https://github.com/ymmmtym/manifests.git
+      path: vmware-exporter/overlays/dev/
+    destination:
+      namespace: monitoring
+      server: https://kubernetes.default.svc
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=false
   - name: cert-manager
     namespace: argocd
     additionalLabels:
