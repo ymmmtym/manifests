@@ -1463,6 +1463,8 @@ server:
     source:
       repoURL: https://github.com/ymmmtym/manifests.git
       path: cert-manager/overlays/dev/
+      plugin:
+        name: kustomize-build-enable-helm
     destination:
       namespace: kube-system
       server: https://kubernetes.default.svc
