@@ -1257,28 +1257,28 @@ server:
         selfHeal: true
       syncOptions:
       - CreateNamespace=true
-  - name: external-secrets
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "1"
-    finalizers: []
-    project: default
-    source:
-      chart: external-secrets
-      repoURL: https://charts.external-secrets.io
-      targetRevision: v0.5.2
-    destination:
-      namespace: external-secrets
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: false
-        selfHeal: true
-      syncOptions:
-      - CreateNamespace=true
+  # - name: external-secrets
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "1"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: external-secrets
+  #     repoURL: https://charts.external-secrets.io
+  #     targetRevision: v0.5.2
+  #   destination:
+  #     namespace: external-secrets
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: false
+  #       selfHeal: true
+  #     syncOptions:
+  #     - CreateNamespace=true
   - name: sealed-secrets
     namespace: argocd
     additionalLabels:
