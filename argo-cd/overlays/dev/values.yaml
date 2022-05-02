@@ -1279,6 +1279,31 @@ server:
         selfHeal: true
       syncOptions:
       - CreateNamespace=true
+  - name: sealed-secrets
+    namespace: argocd
+    additionalLabels:
+      app.kubernetes.io/instance: argo-cd
+      argocd.argoproj.io/instance: argo-cd
+    additionalAnnotations:
+      argocd.argoproj.io/sync-wave: "1"
+    finalizers: []
+    project: default
+    source:
+      chart: sealed-secrets
+      helm:
+        valueFiles:
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/sealed-secrets/overlays/dev/values.yaml
+      repoURL: https://bitnami-labs.github.io/sealed-secrets
+      targetRevision: v0.5.2
+    destination:
+      namespace: kube-system
+      server: https://kubernetes.default.svc
+    syncPolicy:
+      automated:
+        prune: false
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=false
   - name: ingress-nginx
     namespace: argocd
     additionalLabels:
