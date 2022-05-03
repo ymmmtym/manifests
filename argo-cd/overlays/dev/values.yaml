@@ -1042,19 +1042,19 @@ server:
       - cluster.yumenomatayume.home
 
     # -- List of ingress paths
-    # paths:
-    #   - /argo-cd
+    paths:
+      - /argo-cd
     # -- Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`
-    # pathType: Prefix
+    pathType: Prefix
     # -- Additional ingress paths
-    extraPaths:
-      - path: /argo-cd
-        pathType: Prefix
-        backend:
-          service:
-            name: argo-cd-argocd-server
-            port:
-              name: http
+    extraPaths: []
+    #   - path: /argo-cd
+    #     pathType: Prefix
+    #     backend:
+    #       service:
+    #         name: argo-cd-argocd-server
+    #         port:
+    #           name: http
 
     # -- Ingress TLS configuration
     tls:
@@ -1101,19 +1101,19 @@ server:
       - grpc.cluster.yumenomatayume.home
 
     # -- List of ingress paths for dedicated [gRPC-ingress]
-    # paths:
-    #   - /argo-cd
+    paths:
+      - /argo-cd
     # -- Ingress path type for dedicated [gRPC-ingress]. One of `Exact`, `Prefix` or `ImplementationSpecific`
-    # pathType: Prefix
+    pathType: Prefix
     # -- Additional ingress paths for dedicated [gRPC-ingress]
-    extraPaths:
-      - path: /argo-cd
-        pathType: Prefix
-        backend:
-          service:
-            name: argo-cd-argocd-server
-            port:
-              name: https
+    extraPaths: []
+    #   - path: /argo-cd
+    #     pathType: Prefix
+    #     backend:
+    #       service:
+    #         name: argo-cd-argocd-server
+    #         port:
+    #           name: https
 
     # -- Ingress TLS configuration for dedicated [gRPC-ingress]
     tls:

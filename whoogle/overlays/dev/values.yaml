@@ -25,7 +25,7 @@ env:
   # WHOOGLE_CONFIG_TOR:
   # WHOOGLE_CONFIG_NEW_TAB:
   # WHOOGLE_CONFIG_GET_ONLY:
-  # WHOOGLE_CONFIG_URL: https://<your url>/
+  WHOOGLE_CONFIG_URL: https://cluster.yumenomatayume.home/whoogle
   # WHOOGLE_CONFIG_STYLE:
 
 # -- Configures service settings for the chart.
@@ -45,7 +45,7 @@ ingress:
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /$2
     hosts:
-    - host: cluster.yumenoamtayume.home
+    - host: cluster.yumenomatayume.home
       paths:
       - path: /whoogle(/|$)(.*)
         pathType: Prefix
