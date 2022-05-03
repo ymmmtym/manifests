@@ -1659,6 +1659,9 @@ server:
     project: default
     source:
       chart: minecraft
+      helm:
+        valueFiles:
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/minecraft/overlays/dev/values.yaml
       repoURL: https://itzg.github.io/minecraft-server-charts/
       targetRevision: 3.10.0
     destination:
