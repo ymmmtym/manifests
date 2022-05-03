@@ -63,7 +63,7 @@ service:
   main:
     ports:
       http:
-        enabled: true
+        enabled: false
       metrics:
         enabled: true
         protocol: TCP

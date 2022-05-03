@@ -1593,6 +1593,9 @@ server:
     project: default
     source:
       chart: home-assistant
+      helm:
+        valueFiles:
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/home-assistant/overlays/dev/values.yaml
       repoURL: https://k8s-at-home.com/charts/
       targetRevision: 13.0.2
     destination:
@@ -1615,6 +1618,9 @@ server:
     project: default
     source:
       chart: calibre-web
+      helm:
+        valueFiles:
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/calibre-web/overlays/dev/values.yaml
       repoURL: https://k8s-at-home.com/charts/
       targetRevision: 8.2.0
     destination:

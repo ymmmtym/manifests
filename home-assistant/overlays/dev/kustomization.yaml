@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: k8s-at-home
+
+helmCharts:
+- name: home-assistant
+  namespace: k8s-at-home
+  includeCRDs: true
+  releaseName: home-assistant
+  version: 13.0.2
+  repo: https://k8s-at-home.com/charts/
+  valuesFile: values.yaml
+
