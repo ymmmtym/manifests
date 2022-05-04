@@ -1504,6 +1504,9 @@ server:
     project: default
     source:
       chart: loki
+      helm:
+        valueFiles:
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/loki/overlays/dev/values.yaml
       repoURL: https://grafana.github.io/helm-charts
       targetRevision: 2.11.1
     destination:
