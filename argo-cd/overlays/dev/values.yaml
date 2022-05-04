@@ -1489,11 +1489,14 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/jaeger-operator/overlays/dev/values.yaml
       repoURL: https://jaegertracing.github.io/helm-charts
-      targetRevision: 2.29.0
+      targetRevision: 2.30.0
     destination:
       namespace: monitoring
       server: https://kubernetes.default.svc
     syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
       syncOptions:
       - CreateNamespace=true
   # - name: loki

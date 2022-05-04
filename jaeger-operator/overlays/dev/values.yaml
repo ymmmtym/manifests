@@ -4,7 +4,7 @@
 
 image:
   repository: jaegertracing/jaeger-operator
-  tag: 1.31.0
+  tag: 1.30.0
   pullPolicy: IfNotPresent
   imagePullSecrets: []
 
@@ -16,7 +16,30 @@ jaeger:
   create: true
   # namespace where Jaeger resource should be created default to .Release.Namespace
   namespace:
-  spec: {}
+  spec:
+    strategy: allInOne
+    allInOne:
+      options:
+        log-level: debug
+        query:
+          base-path: /jaeger
+    storage:
+      type: memory
+      options:
+        memory:
+          max-traces: 100000
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      # annotations:
+      #   nginx.ingress.kubernetes.io/rewrite-target: /$2
+      hosts:
+      - cluster.yumenomatayume.home
+
+    agent:
+      strategy: DaemonSet
+    annotations:
+      scheduler.alpha.kubernetes.io/critical-pod: ""
 
 rbac:
   # Specifies whether RBAC resources should be created
