@@ -1592,7 +1592,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/chaos-mesh/overlays/dev/values.yaml
       repoURL: https://charts.chaos-mesh.org
-      targetRevision: 2.1.5
+      targetRevision: 2.2.0
     destination:
       namespace: chaos-testing
       server: https://kubernetes.default.svc
@@ -1600,6 +1600,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 60s
+          factor: 2
+          maxDuration: 3m0s
+        limit: 3
       syncOptions:
       - Replace=true
       - CreateNamespace=true
