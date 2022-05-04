@@ -4,10 +4,11 @@ kind: Kustomization
 namespace: monitoring
 
 helmCharts:
-- name: loki
+- name: loki-stack
   namespace: monitoring
   includeCRDs: false
-  releaseName: loki
-  version: 2.11.1
+  releaseName: loki-stack
+  # version: latest
   repo: https://grafana.github.io/helm-charts
   valuesFile: values.yaml
+

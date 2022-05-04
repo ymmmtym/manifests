@@ -1493,7 +1493,32 @@ server:
     syncPolicy:
       syncOptions:
       - CreateNamespace=true
-  - name: loki
+  # - name: loki
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "6"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: loki
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/loki/overlays/dev/values.yaml
+  #     repoURL: https://grafana.github.io/helm-charts
+  #     targetRevision: 2.11.1
+  #   destination:
+  #     namespace: monitoring
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: false
+  #       selfHeal: true
+  #     syncOptions:
+  #     - CreateNamespace=true
+  - name: loki-stack
     namespace: argocd
     additionalLabels:
       app.kubernetes.io/instance: argo-cd
@@ -1503,12 +1528,12 @@ server:
     finalizers: []
     project: default
     source:
-      chart: loki
+      chart: loki-stack
       helm:
         valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/loki/overlays/dev/values.yaml
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/loki-stack/overlays/dev/values.yaml
       repoURL: https://grafana.github.io/helm-charts
-      targetRevision: 2.11.1
+      targetRevision: 2.6.4
     destination:
       namespace: monitoring
       server: https://kubernetes.default.svc
