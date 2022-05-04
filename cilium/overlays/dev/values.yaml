@@ -82,12 +82,12 @@ rollOutCiliumPods: false
 # -- Agent container image.
 image:
   override: ~
-  repository: quay.io/cilium/cilium
-  tag: v1.11.4
+  repository: rancher/mirrored-cilium-cilium
+  tag: v1.11.2
   pullPolicy: IfNotPresent
   # cilium-digest
   digest: "sha256:d9d4c7759175db31aa32eaa68274bb9355d468fbc87e23123c80052e3ed63116"
-  useDigest: true
+  useDigest: false
 
 # -- Pod affinity for cilium-agent.
 affinity:

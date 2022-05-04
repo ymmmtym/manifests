@@ -3,9 +3,9 @@ build:
 
 update: build
 	for dir in */; do \
-		releaseName=$$(yq eval '.helmCharts[].releaseName' $${dir}base/kustomization.yaml); \
+		name=$$(yq eval '.helmCharts[].name' $${dir}base/kustomization.yaml); \
 		valuesFile=$$(sed -e "s/# valuesFile/valuesFile/g" $${dir}base/kustomization.yaml | yq eval '.helmCharts[].valuesFile' -); \
-		cp $${dir}base/{charts/$${releaseName}/values.yaml,$${valuesFile}}; \
+		cp $${dir}base/{charts/$${name}/values.yaml,$${valuesFile}}; \
 	done
 
 clean:
