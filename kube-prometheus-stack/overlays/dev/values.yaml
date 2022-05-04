@@ -42,7 +42,7 @@ defaultRules:
     kubeApiserverAvailability: true
     kubeApiserverSlos: true
     kubelet: true
-    kubeProxy: true
+    kubeProxy: false
     kubePrometheusGeneral: true
     kubePrometheusNodeRecording: true
     kubernetesApps: true
@@ -1259,7 +1259,7 @@ kubeScheduler:
 ## Component scraping kube proxy
 ##
 kubeProxy:
-  enabled: true
+  enabled: false
 
   ## If your kube proxy is not deployed as a pod, specify IPs it can be found on
   ##
