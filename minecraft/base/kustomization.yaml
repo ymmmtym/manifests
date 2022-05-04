@@ -10,5 +10,5 @@ helmCharts:
   releaseName: minecraft
   # version: latest
   repo: https://itzg.github.io/minecraft-server-charts/
-  valuesFile: values.yaml
+  # valuesFile: values.yaml
 

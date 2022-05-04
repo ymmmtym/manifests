@@ -4,11 +4,11 @@ kind: Kustomization
 namespace: kube-system
 
 helmCharts:
-- name: kubernetes-dashboard
+- name: cilium
   namespace: kube-system
   includeCRDs: true
-  releaseName: kubernetes-dashboard
+  releaseName: cilium
   # version: latest
-  repo: https://kubernetes.github.io/dashboard
+  repo: https://helm.cilium.io/
   # valuesFile: values.yaml
 

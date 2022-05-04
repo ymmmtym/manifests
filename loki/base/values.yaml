@@ -323,4 +323,3 @@ alerting_groups: []
 useExistingAlertingGroup:
   enabled: false
   configmapName: ""
-

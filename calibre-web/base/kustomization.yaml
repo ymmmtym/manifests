@@ -10,5 +10,5 @@ helmCharts:
   releaseName: calibre-web
   # version: latest
   repo: https://k8s-at-home.com/charts/
-  valuesFile: values.yaml
+  # valuesFile: values.yaml
 

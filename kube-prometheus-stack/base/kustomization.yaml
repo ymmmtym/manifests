@@ -4,11 +4,11 @@ kind: Kustomization
 namespace: monitoring
 
 helmCharts:
-- name: jaeger
+- name: kube-prometheus-stack
   namespace: monitoring
-  includeCRDs: false
-  releaseName: jaeger
+  includeCRDs: true
+  releaseName: kube-prometheus-stack
   # version: latest
-  repo: https://jaegertracing.github.io/helm-charts
+  repo: https://prometheus-community.github.io/helm-charts
   # valuesFile: values.yaml
 

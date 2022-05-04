@@ -177,4 +177,3 @@ allocator:
   resources:
     limits:
       memory: 100Mi
-

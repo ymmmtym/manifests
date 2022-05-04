@@ -4,11 +4,11 @@ kind: Kustomization
 namespace: monitoring
 
 helmCharts:
-- name: jaeger
+- name: speedtest-exporter
   namespace: monitoring
   includeCRDs: false
-  releaseName: jaeger
+  releaseName: speedtest-exporter
   # version: latest
-  repo: https://jaegertracing.github.io/helm-charts
+  repo: https://k8s-at-home.com/charts/
   # valuesFile: values.yaml
 

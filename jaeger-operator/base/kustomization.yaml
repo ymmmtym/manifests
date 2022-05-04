@@ -10,5 +10,5 @@ helmCharts:
   releaseName: jaeger-operator
   # version: latest
   repo: https://jaegertracing.github.io/helm-charts
-  valuesFile: values.yaml
+  # valuesFile: values.yaml
 

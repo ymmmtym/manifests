@@ -46,4 +46,3 @@ persistence:
   books:
     enabled: false
     mountPath: /books
-

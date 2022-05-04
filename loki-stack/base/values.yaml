@@ -72,4 +72,3 @@ logstash:
         }
         # stdout { codec => rubydebug }
       }
-

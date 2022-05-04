@@ -393,4 +393,3 @@ mcbackup:
       enabled: false
       # existingClaim: nil
       Size: 1Gi
-

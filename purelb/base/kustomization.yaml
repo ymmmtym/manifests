@@ -10,5 +10,5 @@ helmCharts:
   releaseName: purelb
   # version: latest
   repo: https://gitlab.com/api/v4/projects/20400619/packages/helm/stable
-  valuesFile: values.yaml
+  # valuesFile: values.yaml
 

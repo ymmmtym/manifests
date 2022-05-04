@@ -134,14 +134,14 @@ metrics:
     labels: {}
     # -- Configure additionial rules for the chart under this key.
     # @default -- See prometheusrules.yaml
-    rules:
-      - alert: HomeAssistantAbsent
-        annotations:
-          description: Home Assistant has disappeared from Prometheus service discovery.
-          summary: Home Assistant is down.
-        expr: |
-          absent(up{job=~".*home-assistant.*"} == 1)
-        for: 5m
-        labels:
-          severity: critical
+    rules: []
+    #   - alert: HomeAssistantAbsent
+    #     annotations:
+    #       description: Home Assistant has disappeared from Prometheus service discovery.
+    #       summary: Home Assistant is down.
+    #     expr: |
+    #       absent(up{job=~".*home-assistant.*"} == 1)
+    #     for: 5m
+    #     labels:
+    #       severity: critical
 

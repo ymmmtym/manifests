@@ -1,13 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: kube-system
+namespace: chaos-mesh
 
 helmCharts:
-- name: cert-manager
-  namespace: kube-system
+- name: chaos-mesh
+  namespace: chaos-mesh
   includeCRDs: true
-  releaseName: cert-manager
+  releaseName: chaos-mesh
   # version: latest
-  repo: https://charts.jetstack.io
+  repo: https://charts.chaos-mesh.org
   # valuesFile: values.yaml
+

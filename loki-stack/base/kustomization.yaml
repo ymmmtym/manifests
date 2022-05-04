@@ -10,5 +10,5 @@ helmCharts:
   releaseName: loki-stack
   # version: latest
   repo: https://grafana.github.io/helm-charts
-  valuesFile: values.yaml
+  # valuesFile: values.yaml
 
