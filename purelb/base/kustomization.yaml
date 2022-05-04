@@ -8,7 +8,7 @@ helmCharts:
   namespace: purelb
   includeCRDs: true
   releaseName: purelb
-  version: latest
+  # version: latest
   repo: https://gitlab.com/api/v4/projects/20400619/packages/helm/stable
   valuesFile: values.yaml
 

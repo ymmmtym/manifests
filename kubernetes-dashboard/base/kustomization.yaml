@@ -4,10 +4,11 @@ kind: Kustomization
 namespace: kube-system
 
 helmCharts:
-- name: cert-manager
+- name: kubernetes-dashboard
   namespace: kube-system
   includeCRDs: true
-  releaseName: cert-manager
-  # version: latest
-  repo: https://charts.jetstack.io
+  releaseName: kubernetes-dashboard
+  version: latest
+  repo: https://kubernetes.github.io/dashboard
   valuesFile: values.yaml
+
