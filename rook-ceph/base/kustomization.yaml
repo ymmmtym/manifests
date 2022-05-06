@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: rook-ceph
 
+resources:
+- namespace.yaml
+
 helmCharts:
 - name: rook-ceph
   namespace: rook-ceph

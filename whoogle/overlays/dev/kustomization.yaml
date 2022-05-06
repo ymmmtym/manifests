@@ -4,11 +4,11 @@ kind: Kustomization
 namespace: k8s-at-home
 
 helmCharts:
-- name: librespeed
+- name: whoogle
   namespace: k8s-at-home
-  includeCRDs: true
-  releaseName: librespeed
-  version: 5.2.0
+  includeCRDs: false
+  releaseName: whoogle
+  version: 3.2.0
   repo: https://k8s-at-home.com/charts/
   valuesFile: values.yaml
 
