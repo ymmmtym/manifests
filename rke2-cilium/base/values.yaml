@@ -81,8 +81,9 @@ rollOutCiliumPods: false
 
 # -- Agent container image.
 image:
+  override: ~
   repository: rancher/mirrored-cilium-cilium
-  tag: v1.11.2
+  tag: v1.11.4
   pullPolicy: IfNotPresent
   useDigest: false
 
@@ -496,8 +497,14 @@ eni:
   # See https://github.com/aws/amazon-eks-pod-identity-webhook
   iamRole: ""
   # -- Filter via subnet IDs which will dictate which subnets are going to be used to create new ENIs
+  # Important note: This requires that each instance has an ENI with a matching subnet attached
+  # when Cilium is deployed. If you only want to control subnets for ENIs attached by Cilium,
+  # use the CNI configuration file settings (cni.customConf) instead.
   subnetIDsFilter: ""
   # -- Filter via tags (k=v) which will dictate which subnets are going to be used to create new ENIs
+  # Important note: This requires that each instance has an ENI with a matching subnet attached
+  # when Cilium is deployed. If you only want to control subnets for ENIs attached by Cilium,
+  # use the CNI configuration file settings (cni.customConf) instead.
   subnetTagsFilter: ""
 
 externalIPs:
@@ -543,6 +550,7 @@ hostServices:
 # (re)generate any certificates not provided manually.
 certgen:
   image:
+    override: ~
     repository: quay.io/cilium/certgen
     tag: v0.1.5
     pullPolicy: IfNotPresent
@@ -673,10 +681,11 @@ hubble:
 
     # -- Hubble-relay container image.
     image:
+      override: ~
       repository: quay.io/cilium/hubble-relay
-      tag: v1.11.2
+      tag: v1.11.4
        # hubble-relay-digest
-      digest: "sha256:f031f95f3c9ba8962094649c0cc913f90723d553203444c8fb9a591e38873c9d"
+      digest: "sha256:460d50bd0c6bcdfa3c62b0488541c102a4079f5def07d2649ff67bc24fd0dd3f"
       useDigest: true
       pullPolicy: IfNotPresent
 
@@ -800,6 +809,7 @@ hubble:
     backend:
       # -- Hubble-ui backend image.
       image:
+        override: ~
         repository: quay.io/cilium/hubble-ui-backend
         tag: v0.8.5@sha256:2bce50cf6c32719d072706f7ceccad654bfa907b2745a496da99610776fe31ed
         pullPolicy: IfNotPresent
@@ -817,6 +827,7 @@ hubble:
     frontend:
       # -- Hubble-ui frontend image.
       image:
+        override: ~
         repository: quay.io/cilium/hubble-ui
         tag: v0.8.5@sha256:4eaca1ec1741043cfba6066a165b3bf251590cf4ac66371c4f63fbed2224ebb4
         pullPolicy: IfNotPresent
@@ -834,6 +845,7 @@ hubble:
     proxy:
       # -- Hubble-ui ingress proxy image.
       image:
+        override: ~
         repository: docker.io/envoyproxy/envoy
         tag: v1.18.4@sha256:e5c2bb2870d0e59ce917a5100311813b4ede96ce4eb0c6bfa879e3fbe3e83935
         pullPolicy: IfNotPresent
@@ -1009,7 +1021,7 @@ l2NeighDiscovery:
   # -- Enable L2 neighbor discovery in the agent
   enabled: true
   # -- Override the agent's default neighbor resolution refresh period.
-  arping-refresh-period: "30s"
+  refreshPeriod: "30s"
 
 # -- Enable Layer 7 network policy.
 l7Proxy: true
@@ -1207,6 +1219,7 @@ etcd:
 
   # -- cilium-etcd-operator image.
   image:
+    override: ~
     repository: quay.io/cilium/cilium-etcd-operator
     tag: v2.0.7
     pullPolicy: IfNotPresent
@@ -1307,8 +1320,9 @@ operator:
 
   # -- cilium-operator image.
   image:
+    override: ~
     repository: rancher/mirrored-cilium-operator
-    tag: v1.11.2
+    tag: v1.11.4
     useDigest: false
     pullPolicy: IfNotPresent
     suffix: ""
@@ -1440,6 +1454,7 @@ nodeinit:
 
   # -- node-init image.
   image:
+    override: ~
     repository: rancher/mirrored-cilium-startup-script
     tag: 62bfbe88c17778aad7bef9fa57ff9e2d4a9ba0d8
     pullPolicy: IfNotPresent
@@ -1511,7 +1526,7 @@ nodeinit:
 
   # -- bootstrapFile is the location of the file where the bootstrap timestamp is
   # written by the node-init DaemonSet
-  bootstrapFile: "/tmp/cilium-bootstrap-time"
+  bootstrapFile: "/tmp/cilium-bootstrap.d/cilium-bootstrap-time"
 
 preflight:
   # -- Enable Cilium pre-flight resources (required for upgrade)
@@ -1519,8 +1534,9 @@ preflight:
 
   # -- Cilium pre-flight image.
   image:
+    override: ~
     repository: rancher/mirrored-cilium-cilium
-    tag: v1.11.2
+    tag: v1.11.4
     useDigest: false
     pullPolicy: IfNotPresent
 
@@ -1622,19 +1638,48 @@ clustermesh:
   # -- Deploy clustermesh-apiserver for clustermesh
   useAPIServer: false
 
+  # -- Clustermesh explicit configuration.
+  config:
+    # -- Enable the Clustermesh explicit configuration.
+    enabled: false
+    # -- Default dns domain for the Clustermesh API servers
+    # This is used in the case cluster addresses are not provided
+    # and IPs are used.
+    domain: mesh.cilium.io
+    # -- List of clusters to be peered in the mesh.
+    clusters: []
+    # clusters:
+    # # -- Name of the cluster
+    # - name: cluster1
+    # # -- Address of the cluster, use this if you created DNS records for
+    # # the cluster Clustermesh API server.
+    #   address: cluster1.mesh.cilium.io
+    # # -- Port of the cluster Clustermesh API server.
+    #   port: 2379
+    # # -- IPs of the cluster Clustermesh API server, use multiple ones when
+    # # you have multiple IPs to access the Clustermesh API server.
+    #   ips:
+    #   - 172.18.255.201
+    # # -- base64 encoded PEM values for the cluster client certificate, private key and certificate authority.
+    #   tls:
+    #     cert: ""
+    #     key: ""
+
   apiserver:
     # -- Clustermesh API server image.
     image:
+      override: ~
       repository: quay.io/cilium/clustermesh-apiserver
-      tag: v1.11.2
+      tag: v1.11.4
       # clustermesh-apiserver-digest
-      digest: "sha256:2be171e91944a7f764c0fe13618401f68d1b7a7b199d09711db0da38f8cbaf70"
+      digest: "sha256:ce6ade955e6aaec9f9956c1ac5ec7e923465c26747aa56d93118fcb14e4326b7"
       useDigest: true
       pullPolicy: IfNotPresent
 
     etcd:
       # -- Clustermesh API server etcd image.
       image:
+        override: ~
         repository: quay.io/coreos/etcd
         tag: v3.4.13
         pullPolicy: IfNotPresent
@@ -1657,8 +1702,7 @@ clustermesh:
 
     # -- Node labels for pod assignment
     # ref: https://kubernetes.io/docs/user-guide/node-selection/
-    nodeSelector:
-      kubernetes.io/os: linux
+    nodeSelector: {}
 
     # -- Annotations to be added to clustermesh-apiserver pods
     podAnnotations: {}
