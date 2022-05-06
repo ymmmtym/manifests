@@ -1227,33 +1227,39 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=true
     info:
     - name: url
       value: https://argoproj.github.io/
-  - name: cilium
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "3"
-    finalizers: []
-    project: default
-    source:
-      chart: rke2-cilium
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/rke2-cilium/overlays/dev/values.yaml
-      repoURL: https://rke2-charts.rancher.io/
-      targetRevision: 1.11.203
-    destination:
-      namespace: kube-system
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      syncOptions:
-      - CreateNamespace=false
+  # - name: cilium
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "3"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: rke2-cilium
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/rke2-cilium/overlays/dev/values.yaml
+  #     repoURL: https://rke2-charts.rancher.io/
+  #     targetRevision: 1.11.203
+  #   destination:
+  #     namespace: kube-system
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     syncOptions:
+  #     - CreateNamespace=false
   - name: purelb
     namespace: argocd
     additionalLabels:
@@ -1326,13 +1332,36 @@ server:
         selfHeal: true
       syncOptions:
       - CreateNamespace=false
-  - name: ingress-nginx
+  - name: cert-manager
     namespace: argocd
     additionalLabels:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
       argocd.argoproj.io/sync-wave: "2"
+    finalizers: []
+    project: default
+    source:
+      repoURL: https://github.com/ymmmtym/manifests.git
+      path: cert-manager/overlays/dev/
+      plugin:
+        name: kustomize-build-enable-helm
+    destination:
+      namespace: kube-system
+      server: https://kubernetes.default.svc
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=false
+  - name: ingress-nginx
+    namespace: argocd
+    additionalLabels:
+      app.kubernetes.io/instance: argo-cd
+      argocd.argoproj.io/instance: argo-cd
+    additionalAnnotations:
+      argocd.argoproj.io/sync-wave: "3"
     finalizers: []
     project: default
     source:
@@ -1472,29 +1501,6 @@ server:
       path: vmware-exporter/overlays/dev/
     destination:
       namespace: monitoring
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      syncOptions:
-      - CreateNamespace=false
-  - name: cert-manager
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
-    finalizers: []
-    project: default
-    source:
-      repoURL: https://github.com/ymmmtym/manifests.git
-      path: cert-manager/overlays/dev/
-      plugin:
-        name: kustomize-build-enable-helm
-    destination:
-      namespace: kube-system
       server: https://kubernetes.default.svc
     syncPolicy:
       automated:

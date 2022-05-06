@@ -34,12 +34,10 @@ Prometheus:
 
       ## Specify the endpoints
       ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/design.md#servicemonitor
-      endpoints: []
-      ## Sample
-      ## endpoints:
-      ## - port: metrics
-      ##   path: /metrics
-      ##   scheme: http
+      endpoints:
+      - port: metrics
+        path: /metrics
+        scheme: http
     prometheusRules:
       ## Toggle the prometheusRules to true if you have Prometheus Operator installed and configured
       ##
