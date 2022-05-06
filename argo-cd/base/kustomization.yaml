@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: argocd
 
+resources:
+- namespace.yaml
+
 helmCharts:
 - name: argo-cd
   namespace: argocd

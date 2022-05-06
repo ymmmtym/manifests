@@ -3,12 +3,12 @@ kind: Kustomization
 
 namespace: kube-system
 
-helmCharts:
-- name: cilium
-  namespace: kube-system
-  includeCRDs: true
-  releaseName: cilium
-  # version: latest
-  repo: https://helm.cilium.io/
-  # valuesFile: values.yaml
+# helmCharts:
+# - name: cilium
+#   namespace: kube-system
+#   includeCRDs: true
+#   releaseName: cilium
+#   # version: latest
+#   repo: https://helm.cilium.io/
+#   # valuesFile: values.yaml
 
