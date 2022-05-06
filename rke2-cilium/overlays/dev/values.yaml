@@ -18,8 +18,8 @@ imagePullSecrets:
 # - name: "image-pull-secret"
 
 # kubeConfigPath: ~/.kube/config
-# k8sServiceHost:
-# k8sServicePort:
+k8sServiceHost: rke2-server
+k8sServicePort: 6443
 
 cluster:
   # -- Name of the cluster. Only required for Cluster Mesh.

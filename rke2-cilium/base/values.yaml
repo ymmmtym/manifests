@@ -18,8 +18,8 @@ imagePullSecrets:
 # - name: "image-pull-secret"
 
 # kubeConfigPath: ~/.kube/config
-k8sServiceHost: rke2-server
-k8sServicePort: 6443
+# k8sServiceHost:
+# k8sServicePort:
 
 cluster:
   # -- Name of the cluster. Only required for Cluster Mesh.
@@ -81,13 +81,10 @@ rollOutCiliumPods: false
 
 # -- Agent container image.
 image:
-  override: ~
-  repository: quay.io/cilium/cilium
-  tag: v1.11.4
+  repository: rancher/mirrored-cilium-cilium
+  tag: v1.11.2
   pullPolicy: IfNotPresent
-  # cilium-digest
-  digest: "sha256:d9d4c7759175db31aa32eaa68274bb9355d468fbc87e23123c80052e3ed63116"
-  useDigest: true
+  useDigest: false
 
 # -- Pod affinity for cilium-agent.
 affinity:
@@ -96,12 +93,6 @@ affinity:
       nodeSelectorTerms:
         - matchExpressions:
             - key: kubernetes.io/os
-              operator: In
-              values:
-                - linux
-        # Compatible with Kubernetes 1.12.x and 1.13.x
-        - matchExpressions:
-            - key: beta.kubernetes.io/os
               operator: In
               values:
                 - linux
@@ -505,14 +496,8 @@ eni:
   # See https://github.com/aws/amazon-eks-pod-identity-webhook
   iamRole: ""
   # -- Filter via subnet IDs which will dictate which subnets are going to be used to create new ENIs
-  # Important note: This requires that each instance has an ENI with a matching subnet attached
-  # when Cilium is deployed. If you only want to control subnets for ENIs attached by Cilium,
-  # use the CNI configuration file settings (cni.customConf) instead.
   subnetIDsFilter: ""
   # -- Filter via tags (k=v) which will dictate which subnets are going to be used to create new ENIs
-  # Important note: This requires that each instance has an ENI with a matching subnet attached
-  # when Cilium is deployed. If you only want to control subnets for ENIs attached by Cilium,
-  # use the CNI configuration file settings (cni.customConf) instead.
   subnetTagsFilter: ""
 
 externalIPs:
@@ -558,7 +543,6 @@ hostServices:
 # (re)generate any certificates not provided manually.
 certgen:
   image:
-    override: ~
     repository: quay.io/cilium/certgen
     tag: v0.1.5
     pullPolicy: IfNotPresent
@@ -569,7 +553,7 @@ certgen:
 
 hubble:
   # -- Enable Hubble (true by default).
-  enabled: true
+  enabled: false
 
   # -- Buffer size of the channel Hubble uses to receive monitor events. If this
   # value is not set, the queue size is set to the default monitor queue size.
@@ -610,7 +594,7 @@ hubble:
       # -- Create ServiceMonitor resources for Prometheus Operator.
       # This requires the prometheus CRDs to be available.
       # ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
-      enabled: true
+      enabled: false
       # -- Labels to add to ServiceMonitor hubble
       labels: {}
       # -- Annotations to add to ServiceMonitor hubble
@@ -689,11 +673,10 @@ hubble:
 
     # -- Hubble-relay container image.
     image:
-      override: ~
       repository: quay.io/cilium/hubble-relay
-      tag: v1.11.4
+      tag: v1.11.2
        # hubble-relay-digest
-      digest: "sha256:460d50bd0c6bcdfa3c62b0488541c102a4079f5def07d2649ff67bc24fd0dd3f"
+      digest: "sha256:f031f95f3c9ba8962094649c0cc913f90723d553203444c8fb9a591e38873c9d"
       useDigest: true
       pullPolicy: IfNotPresent
 
@@ -705,7 +688,8 @@ hubble:
 
     # -- Node labels for pod assignment
     # ref: https://kubernetes.io/docs/user-guide/node-selection/
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/os: linux
 
     # -- Annotations to be added to hubble-relay pods
     podAnnotations: {}
@@ -775,7 +759,7 @@ hubble:
 
   ui:
     # -- Whether to enable the Hubble UI.
-    enabled: true
+    enabled: false
 
     standalone:
       # -- When true, it will allow installing the Hubble UI only, without checking dependencies.
@@ -816,7 +800,6 @@ hubble:
     backend:
       # -- Hubble-ui backend image.
       image:
-        override: ~
         repository: quay.io/cilium/hubble-ui-backend
         tag: v0.8.5@sha256:2bce50cf6c32719d072706f7ceccad654bfa907b2745a496da99610776fe31ed
         pullPolicy: IfNotPresent
@@ -834,7 +817,6 @@ hubble:
     frontend:
       # -- Hubble-ui frontend image.
       image:
-        override: ~
         repository: quay.io/cilium/hubble-ui
         tag: v0.8.5@sha256:4eaca1ec1741043cfba6066a165b3bf251590cf4ac66371c4f63fbed2224ebb4
         pullPolicy: IfNotPresent
@@ -852,7 +834,6 @@ hubble:
     proxy:
       # -- Hubble-ui ingress proxy image.
       image:
-        override: ~
         repository: docker.io/envoyproxy/envoy
         tag: v1.18.4@sha256:e5c2bb2870d0e59ce917a5100311813b4ede96ce4eb0c6bfa879e3fbe3e83935
         pullPolicy: IfNotPresent
@@ -878,7 +859,8 @@ hubble:
 
     # -- Node labels for pod assignment
     # ref: https://kubernetes.io/docs/user-guide/node-selection/
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/os: linux
 
     # -- Node tolerations for pod assignment on nodes with taints
     # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
@@ -900,12 +882,12 @@ hubble:
 
     # -- hubble-ui ingress configuration.
     ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: nginx
+      enabled: false
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
       hosts:
-        - cluster.yumenomatayume.home
+        - chart-example.local
       tls: []
       #  - secretName: chart-example-tls
       #    hosts:
@@ -939,7 +921,7 @@ installNoConntrackIptablesRules: false
 ipam:
   # -- Configure IP Address Management mode.
   # ref: https://docs.cilium.io/en/stable/concepts/networking/ipam/
-  mode: "cluster-pool"
+  mode: "kubernetes"
   operator:
     # -- Deprecated in favor of ipam.operator.clusterPoolIPv4PodCIDRList.
     # IPv4 CIDR range to delegate to individual nodes for IPAM.
@@ -1015,7 +997,7 @@ readinessProbe:
 # -- Configure the kube-proxy replacement in Cilium BPF datapath
 # Valid options are "disabled", "probe", "partial", "strict".
 # ref: https://docs.cilium.io/en/stable/gettingstarted/kubeproxy-free/
-kubeProxyReplacement: "strict"
+#kubeProxyReplacement: "disabled"
 
 # -- healthz server bind address for the kube-proxy replacement.
 # To enable set the value to '0.0.0.0:10256' for all ipv4
@@ -1027,7 +1009,7 @@ l2NeighDiscovery:
   # -- Enable L2 neighbor discovery in the agent
   enabled: true
   # -- Override the agent's default neighbor resolution refresh period.
-  refreshPeriod: "30s"
+  arping-refresh-period: "30s"
 
 # -- Enable Layer 7 network policy.
 l7Proxy: true
@@ -1136,7 +1118,7 @@ pprof:
 
 # -- Configure prometheus metrics on the configured port at /metrics
 prometheus:
-  enabled: false
+  enabled: true
   port: 9090
   serviceMonitor:
     # -- Enable service monitors.
@@ -1225,7 +1207,6 @@ etcd:
 
   # -- cilium-etcd-operator image.
   image:
-    override: ~
     repository: quay.io/cilium/cilium-etcd-operator
     tag: v2.0.7
     pullPolicy: IfNotPresent
@@ -1265,7 +1246,8 @@ etcd:
 
   # -- Node labels for cilium-etcd-operator pod assignment
   # ref: https://kubernetes.io/docs/user-guide/node-selection/
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/os: linux
 
   # -- Annotations to be added to cilium-etcd-operator pods
   podAnnotations: {}
@@ -1325,18 +1307,9 @@ operator:
 
   # -- cilium-operator image.
   image:
-    override: ~
-    repository: quay.io/cilium/operator
-    tag: v1.11.4
-    # operator-generic-digest
-    genericDigest: "sha256:bf75ad0dc47691a3a519b8ab148ed3a792ffa2f1e309e6efa955f30a40e95adc"
-    # operator-azure-digest
-    azureDigest: "sha256:e507e3ece5a3cb45daf2e879bd3888681f297c76523661551ecdd38d8c46c798"
-    # operator-aws-digest
-    awsDigest: "sha256:3ef7a13d962d977815d12846c04fade989195722ba6628bffaf865fb46d4b6a0"
-    # operator-alibabacloud-digest
-    alibabacloudDigest: "sha256:bb6eb1d389d87d435b6ddb7c32955459ccdea15d6542da2bcb38738c8dca15d9"
-    useDigest: true
+    repository: rancher/mirrored-cilium-operator
+    tag: v1.11.2
+    useDigest: false
     pullPolicy: IfNotPresent
     suffix: ""
 
@@ -1405,7 +1378,8 @@ operator:
 
   # -- Node labels for cilium-operator pod assignment
   # ref: https://kubernetes.io/docs/user-guide/node-selection/
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/os: linux
 
   # -- Annotations to be added to cilium-operator pods
   podAnnotations: {}
@@ -1445,7 +1419,7 @@ operator:
   # -- Enable prometheus metrics for cilium-operator on the configured port at
   # /metrics
   prometheus:
-    enabled: false
+    enabled: true
     port: 6942
     serviceMonitor:
       # -- Enable service monitors.
@@ -1462,12 +1436,11 @@ operator:
 
 nodeinit:
   # -- Enable the node initialization DaemonSet
-  enabled: false
+  enabled: true
 
   # -- node-init image.
   image:
-    override: ~
-    repository: quay.io/cilium/startup-script
+    repository: rancher/mirrored-cilium-startup-script
     tag: 62bfbe88c17778aad7bef9fa57ff9e2d4a9ba0d8
     pullPolicy: IfNotPresent
 
@@ -1510,7 +1483,8 @@ nodeinit:
 
   # -- Node labels for nodeinit pod assignment
   # ref: https://kubernetes.io/docs/user-guide/node-selection/
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/os: linux
 
   # -- Annotations to be added to node-init pods.
   podAnnotations: {}
@@ -1537,7 +1511,7 @@ nodeinit:
 
   # -- bootstrapFile is the location of the file where the bootstrap timestamp is
   # written by the node-init DaemonSet
-  bootstrapFile: "/tmp/cilium-bootstrap.d/cilium-bootstrap-time"
+  bootstrapFile: "/tmp/cilium-bootstrap-time"
 
 preflight:
   # -- Enable Cilium pre-flight resources (required for upgrade)
@@ -1545,12 +1519,9 @@ preflight:
 
   # -- Cilium pre-flight image.
   image:
-    override: ~
-    repository: quay.io/cilium/cilium
-    tag: v1.11.4
-    # cilium-digest
-    digest: "sha256:d9d4c7759175db31aa32eaa68274bb9355d468fbc87e23123c80052e3ed63116"
-    useDigest: true
+    repository: rancher/mirrored-cilium-cilium
+    tag: v1.11.2
+    useDigest: false
     pullPolicy: IfNotPresent
 
   # -- The priority class to use for the preflight pod.
@@ -1600,7 +1571,8 @@ preflight:
 
   # -- Node labels for preflight pod assignment
   # ref: https://kubernetes.io/docs/user-guide/node-selection/
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/os: linux
 
   # -- Annotations to be added to preflight pods
   podAnnotations: {}
@@ -1650,48 +1622,19 @@ clustermesh:
   # -- Deploy clustermesh-apiserver for clustermesh
   useAPIServer: false
 
-  # -- Clustermesh explicit configuration.
-  config:
-    # -- Enable the Clustermesh explicit configuration.
-    enabled: false
-    # -- Default dns domain for the Clustermesh API servers
-    # This is used in the case cluster addresses are not provided
-    # and IPs are used.
-    domain: mesh.cilium.io
-    # -- List of clusters to be peered in the mesh.
-    clusters: []
-    # clusters:
-    # # -- Name of the cluster
-    # - name: cluster1
-    # # -- Address of the cluster, use this if you created DNS records for
-    # # the cluster Clustermesh API server.
-    #   address: cluster1.mesh.cilium.io
-    # # -- Port of the cluster Clustermesh API server.
-    #   port: 2379
-    # # -- IPs of the cluster Clustermesh API server, use multiple ones when
-    # # you have multiple IPs to access the Clustermesh API server.
-    #   ips:
-    #   - 172.18.255.201
-    # # -- base64 encoded PEM values for the cluster client certificate, private key and certificate authority.
-    #   tls:
-    #     cert: ""
-    #     key: ""
-
   apiserver:
     # -- Clustermesh API server image.
     image:
-      override: ~
       repository: quay.io/cilium/clustermesh-apiserver
-      tag: v1.11.4
+      tag: v1.11.2
       # clustermesh-apiserver-digest
-      digest: "sha256:ce6ade955e6aaec9f9956c1ac5ec7e923465c26747aa56d93118fcb14e4326b7"
+      digest: "sha256:2be171e91944a7f764c0fe13618401f68d1b7a7b199d09711db0da38f8cbaf70"
       useDigest: true
       pullPolicy: IfNotPresent
 
     etcd:
       # -- Clustermesh API server etcd image.
       image:
-        override: ~
         repository: quay.io/coreos/etcd
         tag: v3.4.13
         pullPolicy: IfNotPresent
@@ -1714,7 +1657,8 @@ clustermesh:
 
     # -- Node labels for pod assignment
     # ref: https://kubernetes.io/docs/user-guide/node-selection/
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/os: linux
 
     # -- Annotations to be added to clustermesh-apiserver pods
     podAnnotations: {}
@@ -1840,3 +1784,6 @@ cgroup:
 # -- Configure whether to enable auto detect of terminating state for endpoints
 # in order to support graceful termination.
 enableK8sTerminatingEndpoint: true
+
+global:
+  systemDefaultRegistry: ""

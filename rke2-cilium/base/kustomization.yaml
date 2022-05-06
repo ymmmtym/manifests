@@ -4,10 +4,10 @@ kind: Kustomization
 namespace: kube-system
 
 helmCharts:
-- name: cilium
+- name: rke2-cilium
   namespace: kube-system
   includeCRDs: true
-  releaseName: rke2-cilium
+  releaseName: cilium
   # version: latest
   repo: https://rke2-charts.rancher.io/
   # valuesFile: values.yaml
