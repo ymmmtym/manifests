@@ -1316,7 +1316,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/sealed-secrets/overlays/dev/values.yaml
       repoURL: https://bitnami-labs.github.io/sealed-secrets
-      targetRevision: 2.1.7
+      targetRevision: 2.1.8
     destination:
       namespace: kube-system
       server: https://kubernetes.default.svc
