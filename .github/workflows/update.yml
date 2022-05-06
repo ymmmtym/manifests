@@ -1,0 +1,26 @@
+name: "Update base values"
+on: [pull_request]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      # - uses: engineerd/setup-kind@v0.5.0
+      #   with:
+      #     version: "v0.11.1"
+      - name: Install kustomize
+        run: curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+      - name: Update
+        run: make update
+      - name: Push auto-fixed files
+        run: |
+          # git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          if (git diff --shortstat | grep '[0-9]'); then \
+            git add .; \
+            git commit -m "👕 Fixed auto-fixable helm values by github-actions"; \
+            git push origin ${GITHUB_REF_NAME}; \
+          fi
+
