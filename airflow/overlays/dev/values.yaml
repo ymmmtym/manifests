@@ -109,7 +109,8 @@ ingress:
   # Configs for the Ingress of the web Service
   web:
     # Annotations for the web Ingress
-    annotations: {}
+    # annotations:
+    #   nginx.ingress.kubernetes.io/rewrite-target: /$2
 
     # The path for the web Ingress
     path: "/airflow"
@@ -131,7 +132,7 @@ ingress:
     #     secretName: ""
 
     # The Ingress Class for the web Ingress (used only with Kubernetes v1.19 and above)
-    ingressClassName: "ingress-nginx"
+    ingressClassName: "nginx"
 
     # configs for web Ingress TLS (Deprecated - renamed to `ingress.web.hosts[*].tls`)
     tls:
@@ -149,16 +150,17 @@ ingress:
   # Configs for the Ingress of the flower Service
   flower:
     # Annotations for the flower Ingress
-    annotations: {}
+    # annotations:
+    #   nginx.ingress.kubernetes.io/rewrite-target: /$2
 
     # The path for the flower Ingress
-    path: "/"
+    path: "/flower"
 
     # The pathType for the above path (used only with Kubernetes v1.19 and above)
-    pathType: "ImplementationSpecific"
+    pathType: "Prefix"
 
     # The hostname for the flower Ingress (Deprecated - renamed to `ingress.flower.hosts`)
-    host: ""
+    host: "cluster.yumenomatayume.home"
 
     # The hostnames or hosts configuration for the flower Ingress
     hosts: []
@@ -170,7 +172,7 @@ ingress:
     #     secretName: ""
 
     # The Ingress Class for the flower Ingress (used only with Kubernetes v1.19 and above)
-    ingressClassName: ""
+    ingressClassName: "nginx"
 
     # configs for flower Ingress TLS (Deprecated - renamed to `ingress.flower.hosts[*].tls`)
     tls:
@@ -340,7 +342,7 @@ data:
 # Fernet key settings
 # Note: fernetKey can only be set during install, not upgrade
 fernetKey: ~
-fernetKeySecretName: ~
+# fernetKeySecretName: ~
 
 # Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
 webserverSecretKey: ~
@@ -737,7 +739,7 @@ createUserJob:
   tolerations: []
   # In case you need to disable the helm hooks that create the jobs after install.
   # Disable this if you are using ArgoCD for example
-  useHelmHooks: true
+  useHelmHooks: false
 
   resources: {}
   #  limits:
@@ -802,7 +804,7 @@ migrateDatabaseJob:
   tolerations: []
   # In case you need to disable the helm hooks that create the jobs after install.
   # Disable this if you are using ArgoCD for example
-  useHelmHooks: true
+  useHelmHooks: false
 
 # Airflow webserver settings
 webserver:
@@ -873,7 +875,7 @@ webserver:
     email: admin@example.com
     firstName: admin
     lastName: user
-    password: admin
+    password: adminpass
 
   # Launch additional containers into webserver.
   extraContainers: []
@@ -1325,12 +1327,12 @@ redis:
   #   memory: 128Mi
 
   # If set use as redis secret. Make sure to also set data.brokerUrlSecretName value.
-  passwordSecretName: ~
+  # passwordSecretName: airflow-redis-password
 
   # Else, if password is set, create secret with it,
   # Otherwise a new password will be generated on install
   # Note: password can only be set during install, not upgrade.
-  password: ~
+  password: redis
 
   # This setting tells kubernetes that its ok to evict
   # when it wants to scale a node down.
@@ -1464,10 +1466,12 @@ config:
     statsd_host: '{{ printf "%s-statsd" .Release.Name }}'
   webserver:
     enable_proxy_fix: 'True'
+    base_url: 'https://cluster.yumenomatayume.home/airflow'
     # For Airflow 1.10
     rbac: 'True'
   celery:
     worker_concurrency: 16
+    flower_url_prefix: '/flower'
   scheduler:
     # statsd params included for Airflow 1.10 backward compatibility; moved to [metrics] in 2.0
     statsd_on: '{{ ternary "True" "False" .Values.statsd.enabled }}'
