@@ -1857,7 +1857,7 @@ server:
   #     syncOptions:
   #     - CreateNamespace=true
   - name: argo-workflows
-    namespace: argoproj
+    namespace: argocd
     additionalLabels:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
