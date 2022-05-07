@@ -1821,7 +1821,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/whoogle/overlays/dev/values.yaml
       repoURL: https://k8s-at-home.com/charts/
-      targetRevision: 3.2.0
+      targetRevision: 3.3.1
     destination:
       namespace: k8s-at-home
       server: https://kubernetes.default.svc
