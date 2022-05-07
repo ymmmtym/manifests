@@ -743,12 +743,10 @@ grafana:
   additionalDataSources:
   - name: Loki
     type: loki
-    orgId: 1
     access: proxy
     url: http://loki-stack:3100
     basicAuth: false
     isDefault: false
-    version: 1
 
   ## Passed to grafana subchart and used by servicemonitor below
   ##

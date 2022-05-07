@@ -1219,7 +1219,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/argo-cd/overlays/dev/values.yaml
       repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 4.5.7
+      targetRevision: 4.5.10
     destination:
       server: https://kubernetes.default.svc
       namespace: argocd
@@ -1583,38 +1583,38 @@ server:
         selfHeal: true
       syncOptions:
       - CreateNamespace=true
-  - name: chaos-mesh
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
-    finalizers: []
-    project: default
-    source:
-      chart: chaos-mesh
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/chaos-mesh/overlays/dev/values.yaml
-      repoURL: https://charts.chaos-mesh.org
-      targetRevision: 2.2.0
-    destination:
-      namespace: chaos-testing
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 60s
-          factor: 2
-          maxDuration: 3m0s
-        limit: 3
-      syncOptions:
-      - Replace=true
-      - CreateNamespace=true
+  # - name: chaos-mesh
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "6"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: chaos-mesh
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/chaos-mesh/overlays/dev/values.yaml
+  #     repoURL: https://charts.chaos-mesh.org
+  #     targetRevision: 2.2.0
+  #   destination:
+  #     namespace: chaos-testing
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: true
+  #       selfHeal: true
+  #     retry:
+  #       backoff:
+  #         duration: 60s
+  #         factor: 2
+  #         maxDuration: 3m0s
+  #       limit: 3
+  #     syncOptions:
+  #     - Replace=true
+  #     - CreateNamespace=true
   # - name: jupyterhub
   #   namespace: argocd
   #   additionalLabels:
@@ -1831,31 +1831,31 @@ server:
         selfHeal: true
       syncOptions:
       - CreateNamespace=true
-  - name: airflow
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
-    finalizers: []
-    project: default
-    source:
-      chart: airflow
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/airflow/overlays/dev/values.yaml
-      repoURL: https://airflow.apache.org/
-      targetRevision: 1.5.0
-    destination:
-      namespace: airflow
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      syncOptions:
-      - CreateNamespace=true
+  # - name: airflow
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "6"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: airflow
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/airflow/overlays/dev/values.yaml
+  #     repoURL: https://airflow.apache.org/
+  #     targetRevision: 1.5.0
+  #   destination:
+  #     namespace: airflow
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: true
+  #       selfHeal: true
+  #     syncOptions:
+  #     - CreateNamespace=true
 
   # -- Deploy Argo CD Projects within this helm release
   # @default -- `[]` (See [values.yaml])
