@@ -1699,7 +1699,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/calibre-web/overlays/dev/values.yaml
       repoURL: https://k8s-at-home.com/charts/
-      targetRevision: 8.2.0
+      targetRevision: 8.3.1
     destination:
       namespace: k8s-at-home
       server: https://kubernetes.default.svc
