@@ -6,7 +6,7 @@ namespace: monitoring
 helmCharts:
 - name: jaeger-operator
   namespace: monitoring
-  includeCRDs: false
+  includeCRDs: true
   releaseName: jaeger-operator
   version: 2.30.0
   repo: https://jaegertracing.github.io/helm-charts

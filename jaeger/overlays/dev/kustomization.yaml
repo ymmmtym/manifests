@@ -4,10 +4,10 @@ kind: Kustomization
 namespace: monitoring
 
 helmCharts:
-- name: jaeger-operator
+- name: jaeger
   namespace: monitoring
   includeCRDs: false
-  releaseName: jaeger-operator
+  releaseName: jaeger
   version: 0.56.2
   repo: https://jaegertracing.github.io/helm-charts
   valuesFile: values.yaml
