@@ -1319,13 +1319,14 @@ operator:
   rollOutPods: false
 
   # -- cilium-operator image.
-  image:
-    override: ~
-    repository: rancher/mirrored-cilium-operator
-    tag: v1.11.4
-    useDigest: false
-    pullPolicy: IfNotPresent
-    suffix: ""
+  ### COMMENT OUT UNKWNOWN IMAGE for Renovate. ###
+  # image:
+  #   override: ~
+  #   repository: rancher/mirrored-cilium-operator
+  #   tag: v1.11.4
+  #   useDigest: false
+  #   pullPolicy: IfNotPresent
+  #   suffix: ""
 
   # -- Number of replicas to run for the cilium-operator deployment
   replicas: 2

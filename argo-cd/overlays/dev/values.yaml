@@ -1238,7 +1238,7 @@ server:
     info:
     - name: url
       value: https://argoproj.github.io/
-  # - name: cilium
+  # - name: rke2-cilium
   #   namespace: argocd
   #   additionalLabels:
   #     app.kubernetes.io/instance: argo-cd
@@ -1253,7 +1253,7 @@ server:
   #       valueFiles:
   #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/rke2-cilium/overlays/dev/values.yaml
   #     repoURL: https://rke2-charts.rancher.io/
-  #     targetRevision: 1.11.203
+  #     targetRevision: 1.11.401
   #   destination:
   #     namespace: kube-system
   #     server: https://kubernetes.default.svc

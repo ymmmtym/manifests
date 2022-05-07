@@ -3,12 +3,13 @@ kind: Kustomization
 
 namespace: kube-system
 
-helmCharts:
-- name: rke2-cilium
-  namespace: kube-system
-  includeCRDs: true
-  releaseName: cilium
-  # version: latest
-  repo: https://rke2-charts.rancher.io/
-  # valuesFile: values.yaml
+### COMMENT OUT UNKWNOWN IMAGE for Renovate. ###
+# helmCharts:
+# - name: rke2-cilium
+#   namespace: kube-system
+#   includeCRDs: true
+#   releaseName: rke2-cilium
+#   # version: latest
+#   repo: https://rke2-charts.rancher.io/
+#   # valuesFile: values.yaml
 
