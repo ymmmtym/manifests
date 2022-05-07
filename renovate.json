@@ -6,7 +6,7 @@
     ":prHourlyLimitNone",
     ":automergePatch"
   ],
-  "schedule": ["after 9am on monday", "before 12am on monday"],
-  "dependencyDashboard": true,
+  // "schedule": ["after 9am on monday", "before 12am on monday"],
+  "dependencyDashboard": "true",
   "ignorePaths": []
 }
