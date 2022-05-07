@@ -1796,7 +1796,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/speedtest-exporter/overlays/dev/values.yaml
       repoURL: https://k8s-at-home.com/charts/
-      targetRevision: 5.2.0
+      targetRevision: 5.3.2
     destination:
       namespace: monitoring
       server: https://kubernetes.default.svc
