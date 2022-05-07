@@ -1674,7 +1674,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/home-assistant/overlays/dev/values.yaml
       repoURL: https://k8s-at-home.com/charts/
-      targetRevision: 13.0.2
+      targetRevision: 13.1.2
     destination:
       namespace: k8s-at-home
       server: https://kubernetes.default.svc
