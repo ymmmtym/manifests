@@ -1,12 +1,19 @@
+.PHONY: build
 build:
-	for dir in */; do kustomize build --enable-helm $${dir}base/;done
+	for app in */; do kustomize build --enable-helm $${app}base/;done
 
+.PHONY: create
+create:
+	for app in */; do kustomize build --enable-helm $${app}base/ | kubectl create -f -; done
+
+.PHONY: apply
+apply:
+	for app in */; do kustomize build --enable-helm $${app}base/ | kubectl apply -f -; done
+
+.PHONY: update
 update: build
-	for dir in */; do \
-		name=$$(yq eval '.helmCharts[].name' $${dir}base/kustomization.yaml); \
-		valuesFile=$$(sed -e "s/# valuesFile/valuesFile/g" $${dir}base/kustomization.yaml | yq eval '.helmCharts[].valuesFile' -); \
-		cp $${dir}base/{charts/$${name}/values.yaml,$${valuesFile}}; \
-	done
+	for app in */; do bash update.sh $${app}; done
 
+.PHONY: clean
 clean:
 	rm -fr */base/charts/ */overlays/*/charts/

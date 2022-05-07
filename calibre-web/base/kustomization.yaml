@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: k8s-at-home
 
+resources:
+- namespace.yaml
+
 helmCharts:
 - name: calibre-web
   namespace: k8s-at-home

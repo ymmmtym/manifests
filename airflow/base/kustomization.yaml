@@ -1,14 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: k8s-at-home
+namespace: airflow
 
 helmCharts:
-- name: whoogle
-  namespace: k8s-at-home
+- name: airflow
+  namespace: airflow
   includeCRDs: false
-  releaseName: whoogle
+  releaseName: airflow
   # version: latest
-  repo: https://k8s-at-home.com/charts/
+  repo: https://airflow.apache.org/
   # valuesFile: values.yaml
 

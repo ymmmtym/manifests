@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: purelb
 
+resources:
+- namespace.yaml
+
 helmCharts:
 - name: purelb
   namespace: purelb

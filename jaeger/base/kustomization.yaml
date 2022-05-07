@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: monitoring
 
+resources:
+- namespace.yaml
+
 helmCharts:
 - name: jaeger
   namespace: monitoring
