@@ -1,14 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: argoproj
+namespace: argo
 
 resources:
 - namespace.yaml
 
 helmCharts:
 - name: argo-workflows
-  namespace: argoproj
+  namespace: argo
   includeCRDs: true
   releaseName: argo-workflows
   # version: latest

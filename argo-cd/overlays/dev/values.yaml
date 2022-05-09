@@ -1210,7 +1210,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "2"
+      argocd.argoproj.io/sync-wave: "0"
     finalizers: []
     project: default
     source:
@@ -1219,7 +1219,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/argo-cd/overlays/dev/values.yaml
       repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 4.5.10
+      targetRevision: 4.5.11
     destination:
       server: https://kubernetes.default.svc
       namespace: argocd
@@ -1266,7 +1266,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "3"
+      argocd.argoproj.io/sync-wave: "1"
     finalizers: []
     project: default
     source:
@@ -1283,6 +1283,12 @@ server:
       automated:
         prune: false
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=true
   # - name: external-secrets
@@ -1330,6 +1336,12 @@ server:
       automated:
         prune: false
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=false
   - name: cert-manager
@@ -1353,6 +1365,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=false
   - name: ingress-nginx
@@ -1378,6 +1396,12 @@ server:
       automated:
         prune: false
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=true
   - name: rook-ceph
@@ -1428,6 +1452,12 @@ server:
       automated:
         prune: false
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=true
   - name: kube-prometheus-stack-crds
@@ -1467,7 +1497,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "5"
+      argocd.argoproj.io/sync-wave: "6"
     finalizers: []
     project: default
     source:
@@ -1493,7 +1523,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "5"
+      argocd.argoproj.io/sync-wave: "7"
     finalizers: []
     project: default
     source:
@@ -1506,6 +1536,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=false
   - name: jaeger-operator
@@ -1514,7 +1550,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
+      argocd.argoproj.io/sync-wave: "7"
     finalizers: []
     project: default
     source:
@@ -1533,38 +1569,13 @@ server:
         selfHeal: true
       syncOptions:
       - CreateNamespace=true
-  # - name: loki
-  #   namespace: argocd
-  #   additionalLabels:
-  #     app.kubernetes.io/instance: argo-cd
-  #     argocd.argoproj.io/instance: argo-cd
-  #   additionalAnnotations:
-  #     argocd.argoproj.io/sync-wave: "6"
-  #   finalizers: []
-  #   project: default
-  #   source:
-  #     chart: loki
-  #     helm:
-  #       valueFiles:
-  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/loki/overlays/dev/values.yaml
-  #     repoURL: https://grafana.github.io/helm-charts
-  #     targetRevision: 2.11.1
-  #   destination:
-  #     namespace: monitoring
-  #     server: https://kubernetes.default.svc
-  #   syncPolicy:
-  #     automated:
-  #       prune: false
-  #       selfHeal: true
-  #     syncOptions:
-  #     - CreateNamespace=true
   - name: loki-stack
     namespace: argocd
     additionalLabels:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
+      argocd.argoproj.io/sync-wave: "7"
     finalizers: []
     project: default
     source:
@@ -1640,7 +1651,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
+      argocd.argoproj.io/sync-wave: "8"
     finalizers: []
     project: default
     source:
@@ -1657,6 +1668,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=false
   - name: home-assistant
@@ -1665,7 +1682,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
+      argocd.argoproj.io/sync-wave: "8"
     finalizers: []
     project: default
     source:
@@ -1682,6 +1699,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=true
   - name: calibre-web
@@ -1690,7 +1713,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
+      argocd.argoproj.io/sync-wave: "8"
     finalizers: []
     project: default
     source:
@@ -1707,6 +1730,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=true
   # - name: kubeview
@@ -1737,7 +1766,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
+      argocd.argoproj.io/sync-wave: "8"
     finalizers: []
     project: default
     source:
@@ -1754,6 +1783,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=true
   # - name: librespeed
@@ -1787,7 +1822,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
+      argocd.argoproj.io/sync-wave: "7"
     finalizers: []
     project: default
     source:
@@ -1804,6 +1839,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=false
   - name: whoogle
@@ -1812,7 +1853,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
+      argocd.argoproj.io/sync-wave: "8"
     finalizers: []
     project: default
     source:
@@ -1829,6 +1870,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
       syncOptions:
       - CreateNamespace=true
   # - name: airflow
@@ -1862,7 +1909,7 @@ server:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
+      argocd.argoproj.io/sync-wave: "7"
     finalizers: []
     project: default
     source:
@@ -1874,7 +1921,7 @@ server:
       targetRevision: 0.14.1
     destination:
       server: https://kubernetes.default.svc
-      namespace: argoproj
+      namespace: argo
     syncPolicy:
       automated:
         prune: true

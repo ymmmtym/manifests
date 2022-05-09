@@ -744,9 +744,9 @@ grafana:
   - name: Loki
     type: loki
     access: proxy
+    orgId: 1
     url: http://loki-stack:3100
     basicAuth: false
-    isDefault: false
 
   ## Passed to grafana subchart and used by servicemonitor below
   ##

@@ -3,8 +3,8 @@ kind: Namespace
 metadata:
   labels:
     kubernetes.io/metadata.name: argocd
-    name: argoproj
-  name: argoproj
+    name: argo
+  name: argo
 spec:
   finalizers:
   - kubernetes
