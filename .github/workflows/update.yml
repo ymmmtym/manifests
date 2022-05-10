@@ -12,6 +12,8 @@ jobs:
           mv kustomize /usr/local/bin/
       - name: Update
         run: make update
+      - name: diff dev
+        run: make diff-dev
       - name: Push auto-fixed files
         run: |
           # git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}

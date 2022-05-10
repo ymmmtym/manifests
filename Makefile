@@ -10,6 +10,10 @@ create:
 apply:
 	for app in */; do kustomize build --enable-helm $${app}base/ | kubectl apply -f -; done
 
+.PHONY: diff-dev
+diff-dev:
+	for app in */; do bash diff.sh dev $${app}; done
+
 .PHONY: update
 update: build
 	for app in */; do bash update.sh $${app}; done
