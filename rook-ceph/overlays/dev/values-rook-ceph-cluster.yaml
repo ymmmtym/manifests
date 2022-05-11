@@ -250,7 +250,7 @@ cephObjectStores:
         # sslCertificateRef:
         # caBundleRef:
         port: 80
-        securePort: 443
+        # securePort: 443
         instances: 1
         # A key/value list of annotations
         annotations:
