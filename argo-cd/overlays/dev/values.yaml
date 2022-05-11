@@ -1517,6 +1517,31 @@ server:
         selfHeal: true
       syncOptions:
       - CreateNamespace=true
+  - name: thanos
+    namespace: argocd
+    additionalLabels:
+      app.kubernetes.io/instance: argo-cd
+      argocd.argoproj.io/instance: argo-cd
+    additionalAnnotations:
+      argocd.argoproj.io/sync-wave: "6"
+    finalizers: []
+    project: default
+    source:
+      chart: thanos
+      helm:
+        valueFiles:
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/thanos/overlays/dev/values.yaml
+      repoURL: https://charts.bitnami.com/bitnami
+      targetRevision: 10.3.7
+    destination:
+      namespace: monitoring
+      server: https://kubernetes.default.svc
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
   - name: vmware-exporter
     namespace: argocd
     additionalLabels:
