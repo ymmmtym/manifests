@@ -294,5 +294,5 @@ cephObjectStores:
       allowVolumeExpansion: true
       # see https://github.com/rook/rook/blob/master/Documentation/ceph-block.md#provision-storage for available configuration
       parameters:
-        objectStoreName: object-store
+        objectStoreName: ceph-object-store
         objectStoreNamespace: rook-ceph
