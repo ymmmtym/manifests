@@ -234,7 +234,7 @@ cephBlockPools:
 cephFileSystems: []
 
 cephObjectStores:
-  - name: ceph-objectstores
+  - name: ceph-object-store
     spec:
       metadataPool:
         failureDomain: host
@@ -247,10 +247,13 @@ cephObjectStores:
           codingChunks: 1
       preservePoolsOnDelete: true
       gateway:
+        # type: s3
         # sslCertificateRef:
         # caBundleRef:
         port: 80
         # securePort: 443
+        # externalRgwEndpoints:
+        #   - ip: 192.168.100.129
         instances: 1
         # A key/value list of annotations
         annotations:
@@ -279,6 +282,10 @@ cephObjectStores:
         #    memory: "1024Mi"
       #zone:
         #name: zone-a
+      healthCheck:
+        bucket:
+          disabled: false
+          interval: 60s
     storageClass:
       enabled: true
       name: ceph-object
