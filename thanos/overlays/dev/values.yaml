@@ -42,12 +42,11 @@ extraDeploy:
 - apiVersion: objectbucket.io/v1alpha1
   kind: ObjectBucketClaim
   metadata:
-    name: ceph-bucket
-    namespace: monitoring
+    name: thanos
   spec:
-    bucketName: thanos-bucket
-    generateBucketName: ""
-    storageClassName: ceph-bucket
+    bucketName: thanos
+    generateBucketName: thanos
+    storageClassName: ceph-object
     additionalConfig:
       maxObjects: "100000"
       maxSize: "50G"
