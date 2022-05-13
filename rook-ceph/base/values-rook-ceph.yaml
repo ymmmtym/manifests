@@ -4,7 +4,7 @@
 
 image:
   repository: rook/ceph
-  tag: v1.9.2
+  tag: v1.9.3
   pullPolicy: IfNotPresent
 
 crds:
@@ -18,7 +18,7 @@ crds:
 resources:
   limits:
     cpu: 500m
-    memory: 256Mi
+    memory: 512Mi
   requests:
     cpu: 100m
     memory: 128Mi
@@ -63,7 +63,7 @@ csi:
   # Set to true to enable host networking for CSI CephFS and RBD nodeplugins. This may be necessary
   # in some network configurations where the SDN does not provide access to an external cluster or
   # there is significant drop in read/write performance.
-  # enableCSIHostNetwork: true
+  enableCSIHostNetwork: true
   # set to false to disable deployment of snapshotter container in CephFS provisioner pod.
   enableCephfsSnapshotter: true
   # set to false to disable deployment of snapshotter container in RBD provisioner pod.
