@@ -1473,7 +1473,7 @@ server:
     source:
       repoURL: https://github.com/prometheus-community/helm-charts.git
       path: charts/kube-prometheus-stack/crds/
-      targetRevision: kube-prometheus-stack-30.2.0
+      targetRevision: kube-prometheus-stack-35.0.3
       directory:
         recurse: true
     destination:
@@ -1507,7 +1507,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/kube-prometheus-stack/overlays/dev/values.yaml
       repoURL: https://prometheus-community.github.io/helm-charts
-      targetRevision: 30.2.0
+      targetRevision: 35.0.3
     destination:
       namespace: monitoring
       server: https://kubernetes.default.svc
