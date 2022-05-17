@@ -14,8 +14,8 @@ kustomize build --enable-helm ${app}overlays/${overlay} > "${TMP_DIR}/new_manife
 
 mv ${app}overlays/${overlay}/kustomization.yaml{.bak,}
 
-echo "#### ${app} diff start ####"
+echo "#### ${app}/overlays/${overlay} diff start ####"
 diff ${TMP_DIR}/{new,old}_manifests.yaml
-echo "#### ${app} diff end ####"
+echo "#### ${app}/overlays/${overlay} diff end ####"
 
 rm -fr "${TMP_DIR}"

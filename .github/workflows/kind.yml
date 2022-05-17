@@ -20,7 +20,7 @@ jobs:
           kubectl cluster-info
           kubectl get node -o wide
           kubectl get pods -n kube-system
-          make create # for CRD
+          make create-base # for CRD
           # make apply
           kubectl wait -n argocd --for=condition=available deployment --all --timeout=300s
           kubectl get pods -A
