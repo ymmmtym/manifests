@@ -21,7 +21,7 @@ operatorNamespace: rook-ceph
 # Installs a debugging toolbox deployment
 toolbox:
   enabled: false
-  image: rook/ceph:v1.9.3
+  image: rook/ceph:v1.9.4
   tolerations: []
   affinity: {}
   resources:
@@ -44,6 +44,9 @@ monitoring:
   # If you have multiple rook-ceph clusters in the same k8s cluster, choose the same namespace (ideally, namespace with prometheus
   # deployed) to set rulesNamespace for all the clusters. Otherwise, you will get duplicate alerts with multiple alert definitions.
   rulesNamespaceOverride:
+  # Monitoring settings for external clusters:
+  # externalMgrEndpoints: <list of endpoints>
+  # externalMgrPrometheusPort: <port>
 
 # If true, create & use PSP resources. Set this to the same value as the rook-ceph chart.
 pspEnable: true
@@ -62,7 +65,7 @@ cephClusterSpec:
     # versions running within the cluster. See tags available at https://hub.docker.com/r/ceph/ceph/tags/.
     # If you want to be more precise, you can always use a timestamp tag such quay.io/ceph/ceph:v15.2.11-20200419
     # This tag might not contain a new Ceph version, just security fixes from the underlying operating system, which will reduce vulnerabilities
-    image: quay.io/ceph/ceph:v16.2.7
+    image: quay.io/ceph/ceph:v16.2.9
     # Whether to allow unsupported versions of Ceph. Currently `octopus` and `pacific` are supported.
     # Future versions such as `pacific` would require this to be set to `true`.
     # Do not set to true in production.

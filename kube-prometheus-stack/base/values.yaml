@@ -38,8 +38,9 @@ defaultRules:
     configReloaders: true
     general: true
     k8s: true
-    kubeApiserver: true
     kubeApiserverAvailability: true
+    kubeApiserverBurnrate: true
+    kubeApiserverHistogram: true
     kubeApiserverSlos: true
     kubelet: true
     kubeProxy: true
@@ -121,6 +122,8 @@ global:
   ##
   imagePullSecrets: []
   # - name: "image-pull-secret"
+  # or
+  # - "image-pull-secret"
 
 ## Configuration for alertmanager
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
@@ -171,9 +174,9 @@ alertmanager:
       repeat_interval: 12h
       receiver: 'null'
       routes:
-      - match:
-          alertname: Watchdog
-        receiver: 'null'
+      - receiver: 'null'
+        matchers:
+          - alertname =~ "InfoInhibitor|Watchdog"
     receivers:
     - name: 'null'
     templates:
@@ -2201,6 +2204,10 @@ prometheus:
     ## External labels to add to any time series or alerts when communicating with external systems
     ##
     externalLabels: {}
+
+    ## enable --web.enable-remote-write-receiver flag on prometheus-server
+    ##
+    enableRemoteWriteReceiver: false
 
     ## Name of the external label used to denote replica name
     ##
