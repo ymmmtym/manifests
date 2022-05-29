@@ -5,7 +5,7 @@ namespace: monitoring
 
 helmCharts:
 - name: thanos
-  namespace: thanos
+  namespace: monitoring
   includeCRDs: false
   releaseName: thanos
   # version: latest
