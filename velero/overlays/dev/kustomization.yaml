@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: velero
+
+helmCharts:
+- name: velero
+  namespace: velero
+  includeCRDs: true
+  releaseName: velero
+  version: 2.29.7
+  repo: https://vmware-tanzu.github.io/helm-charts
+  valuesFile: values.yaml
+

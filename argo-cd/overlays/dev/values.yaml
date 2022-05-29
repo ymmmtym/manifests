@@ -1962,6 +1962,37 @@ server:
     info:
     - name: url
       value: https://argoproj.github.io/
+  - name: velero
+    namespace: velero
+    additionalLabels:
+      app.kubernetes.io/instance: argo-cd
+      argocd.argoproj.io/instance: argo-cd
+    additionalAnnotations:
+      argocd.argoproj.io/sync-wave: "7"
+    finalizers: []
+    project: default
+    source:
+      chart: velero
+      helm:
+        valueFiles:
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/velero/overlays/dev/values.yaml
+      repoURL: https://argoproj.github.io/argo-helm
+      targetRevision: 2.27.7
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: velero
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 3
+      syncOptions:
+      - CreateNamespace=true
 
   # -- Deploy Argo CD Projects within this helm release
   # @default -- `[]` (See [values.yaml])
