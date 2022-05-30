@@ -58,12 +58,12 @@ initContainers:
   #   volumeMounts:
   #     - mountPath: /target
   #       name: plugins
-  # - name: velero-plugin-for-aws
-  #   image: velero/velero-plugin-for-aws:v1.4.1
-  #   imagePullPolicy: IfNotPresent
-  #   volumeMounts:
-  #     - mountPath: /target
-  #       name: plugins
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.4.1
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
 
 # SecurityContext to use for the Velero deployment. Optional.
 # Set fsGroup for `AWS IAM Roles for Service Accounts`
@@ -99,30 +99,18 @@ extraVolumes: []
 extraVolumeMounts: []
 
 # Extra K8s manifests to deploy
-extraObjects: []
-  # - apiVersion: secrets-store.csi.x-k8s.io/v1
-  #   kind: SecretProviderClass
-  #   metadata:
-  #     name: velero-secrets-store
-  #   spec:
-  #     provider: aws
-  #     parameters:
-  #       objects: |
-  #         - objectName: "velero"
-  #           objectType: "secretsmanager"
-  #           jmesPath:
-  #               - path: "access_key"
-  #                 objectAlias: "access_key"
-  #               - path: "secret_key"
-  #                 objectAlias: "secret_key"
-  #     secretObjects:
-  #       - data:
-  #         - key: access_key
-  #           objectName: client-id
-  #         - key: client-secret
-  #           objectName: client-secret
-  #         secretName: velero-secrets-store
-  #         type: Opaque
+extraObjects:
+- apiVersion: objectbucket.io/v1alpha1
+  kind: ObjectBucketClaim
+  metadata:
+    name: velero-bucket
+  spec:
+    bucketName: velero-bucket
+    generateBucketName: velero-bucket
+    storageClassName: ceph-object
+    additionalConfig:
+      maxObjects: "100000"
+      maxSize: "100G"
 
 # Settings for Velero's prometheus metrics. Enabled by default.
 metrics:
@@ -183,19 +171,19 @@ cleanUpCRDs: false
 ##
 configuration:
   # Cloud provider being used (e.g. aws, azure, gcp).
-  provider:
+  provider: aws
 
   # Parameters for the `default` BackupStorageLocation. See
   # https://velero.io/docs/v1.6/api-types/backupstoragelocation/
   backupStorageLocation:
     # name is the name of the backup storage location where backups should be stored. If a name is not provided,
     # a backup storage location will be created with the name "default". Optional.
-    name:
+    name: default
     # provider is the name for the backup storage location provider. If omitted
     # `configuration.provider` will be used instead.
-    provider:
+    provider: aws
     # bucket is the name of the bucket to store backups in. Required.
-    bucket:
+    bucket: velero-bucket
     # caCert defines a base64 encoded CA bundle to use when verifying TLS connections to the provider. Optional.
     caCert:
     # prefix is the directory under which all Velero data should be stored within the bucket. Optional.
@@ -207,10 +195,10 @@ configuration:
     accessMode: ReadWrite
     # Additional provider-specific configuration. See link above
     # for details of required/optional fields for your provider.
-    config: {}
-    #  region:
-    #  s3ForcePathStyle:
-    #  s3Url:
+    config:
+     region: us-east-1
+     s3ForcePathStyle: true
+     s3Url: http://rook-ceph-rgw-ceph-object-store.rook-ceph.svc
     #  kmsKeyId:
     #  resourceGroup:
     #  The ID of the subscription containing the storage account, if different from the cluster’s subscription. (Azure only)
@@ -334,22 +322,25 @@ credentials:
   #    aws_secret_access_key=<REDACTED>
   # additional key/value pairs to be used as environment variables such as "DIGITALOCEAN_TOKEN: <your-key>". Values will be stored in the secret.
   extraEnvVars: {}
+    # BUCKET_HOST: rook-ceph-rgw-ceph-object-store.rook-ceph.svc
+    # BUCKET_PORT: 80
+
   # Name of a pre-existing secret (if any) in the Velero namespace
   # that will be used to load environment variables into velero and restic.
   # Secret should be in format - https://kubernetes.io/docs/concepts/configuration/secret/#use-case-as-container-environment-variables
-  extraSecretRef: ""
+  extraSecretRef: "velero-bucket"
 
 # Whether to create backupstoragelocation crd, if false => do not create a default backup location
 backupsEnabled: true
 # Whether to create volumesnapshotlocation crd, if false => disable snapshot feature
-snapshotsEnabled: true
+snapshotsEnabled: false
 
 # Whether to deploy the restic daemonset.
-deployRestic: false
+deployRestic: true
 
 restic:
   podVolumePath: /var/lib/kubelet/pods
-  privileged: false
+  privileged: true
   # Pod priority class name to use for the Restic daemonset. Optional.
   priorityClassName: ""
   # Resource requests/limits to specify for the Restic daemonset deployment. Optional.
@@ -401,21 +392,21 @@ restic:
   nodeSelector: {}
 
 # Backup schedules to create.
-# Eg:
-# schedules:
-#   mybackup:
-#     disabled: false
-#     labels:
-#       myenv: foo
-#     annotations:
-#       myenv: foo
-#     schedule: "0 0 * * *"
-#     useOwnerReferencesInBackup: false
-#     template:
-#       ttl: "240h"
-#       includedNamespaces:
-#       - foo
-schedules: {}
+schedules:
+  daily:
+    disabled: false
+    labels:
+      name: daily
+      env: dev
+    annotations:
+      name: daily
+      env: dev
+    schedule: "0 15 * * *"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "168h"
+      includedNamespaces:
+      - '*'
 
 # Velero ConfigMaps.
 # Eg:

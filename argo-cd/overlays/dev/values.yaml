@@ -1390,7 +1390,7 @@ server:
       repoURL: https://kubernetes.github.io/ingress-nginx
       targetRevision: 4.1.0
     destination:
-      namespace: ingress-nginx
+      namespace: kube-system
       server: https://kubernetes.default.svc
     syncPolicy:
       automated:
@@ -1403,7 +1403,7 @@ server:
           maxDuration: 5m0s
         limit: 3
       syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=false
   - name: rook-ceph
     namespace: argocd
     additionalLabels:
@@ -1467,7 +1467,7 @@ server:
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
       argocd.argoproj.io/hook: PreSync
-      argocd.argoproj.io/sync-wave: "0"
+      argocd.argoproj.io/sync-wave: "1"
     finalizers: []
     project: default
     source:
@@ -1963,7 +1963,7 @@ server:
     - name: url
       value: https://argoproj.github.io/
   - name: velero
-    namespace: velero
+    namespace: argocd
     additionalLabels:
       app.kubernetes.io/instance: argo-cd
       argocd.argoproj.io/instance: argo-cd
@@ -1976,8 +1976,8 @@ server:
       helm:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/velero/overlays/dev/values.yaml
-      repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 2.27.7
+      repoURL: https://vmware-tanzu.github.io/helm-charts
+      targetRevision: 2.29.7
     destination:
       server: https://kubernetes.default.svc
       namespace: velero
