@@ -817,7 +817,7 @@ hubble:
       # -- Hubble-ui backend image.
       image:
         override: ~
-        repository: quay.io/cilium/hubble-ui-backend
+        repository: cilium/hubble-ui-backend
         tag: v0.8.5@sha256:2bce50cf6c32719d072706f7ceccad654bfa907b2745a496da99610776fe31ed
         pullPolicy: IfNotPresent
       # [Example]
