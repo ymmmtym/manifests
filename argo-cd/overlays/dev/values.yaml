@@ -1248,7 +1248,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=true
     info:
@@ -1297,14 +1297,14 @@ server:
       server: https://kubernetes.default.svc
     syncPolicy:
       automated:
-        prune: false
+        prune: true
         selfHeal: true
       retry:
         backoff:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   # - name: external-secrets
@@ -1357,7 +1357,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=false
   - name: cert-manager
@@ -1386,7 +1386,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=false
   - name: ingress-nginx
@@ -1417,7 +1417,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=false
   - name: rook-ceph
@@ -1473,7 +1473,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   - name: kube-prometheus-stack-crds
@@ -1505,7 +1505,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 3m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - Replace=true
   - name: kube-prometheus-stack
@@ -1532,6 +1532,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 3m0s
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   - name: thanos
@@ -1557,6 +1563,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 3m0s
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   - name: vmware-exporter
@@ -1583,9 +1595,9 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
-      - CreateNamespace=false
+      - CreateNamespace=true
   - name: jaeger-operator
     namespace: argocd
     additionalLabels:
@@ -1609,6 +1621,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   - name: loki-stack
@@ -1634,6 +1652,12 @@ server:
       automated:
         prune: true
         selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   # - name: chaos-mesh
@@ -1715,7 +1739,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=false
   - name: home-assistant
@@ -1746,7 +1770,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   - name: calibre-web
@@ -1777,7 +1801,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   # - name: kubeview
@@ -1830,7 +1854,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   # - name: librespeed
@@ -1886,7 +1910,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=false
   - name: whoogle
@@ -1917,7 +1941,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=true
   # - name: airflow
@@ -1973,7 +1997,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=true
     info:
@@ -2007,7 +2031,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 3
+        limit: 5
       syncOptions:
       - CreateNamespace=true
 
