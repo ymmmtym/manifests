@@ -1167,6 +1167,22 @@ server:
           jsonPointers:
           - /webhooks/0/clientConfig/caBundle
 
+    resource.customizations: |
+      argoproj.io/Application:
+        health.lua: |
+          hs = {}
+          hs.status = "Progressing"
+          hs.message = ""
+          if obj.status ~= nil then
+            if obj.status.health ~= nil then
+              hs.status = obj.status.health.status
+              if obj.status.health.message ~= nil then
+                hs.message = obj.status.health.message
+              end
+            end
+          end
+          return hs
+
   # -- Annotations to be added to Argo CD ConfigMap
   configAnnotations: {}
 
@@ -1467,7 +1483,8 @@ server:
       argocd.argoproj.io/instance: argo-cd
     additionalAnnotations:
       argocd.argoproj.io/hook: PreSync
-      argocd.argoproj.io/sync-wave: "1"
+      argocd.argoproj.io/hook-delete-policy: HookSucceeded
+      argocd.argoproj.io/sync-wave: "0"
     finalizers: []
     project: default
     source:
