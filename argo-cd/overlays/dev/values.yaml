@@ -1419,7 +1419,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/rook-ceph/overlays/dev/values-rook-ceph.yaml
       repoURL: https://charts.rook.io/release
-      targetRevision: v1.8.2
+      targetRevision: v1.9.4
     destination:
       namespace: rook-ceph
       server: https://kubernetes.default.svc
@@ -1444,7 +1444,7 @@ server:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/rook-ceph/overlays/dev/values-rook-ceph-cluster.yaml
       repoURL: https://charts.rook.io/release
-      targetRevision: v1.8.2
+      targetRevision: v1.9.4
     destination:
       namespace: rook-ceph
       server: https://kubernetes.default.svc
