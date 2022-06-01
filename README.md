@@ -1,3 +1,5 @@
+[![Renovate](https://img.shields.io/badge/renovate-enabled-blue.svg?logo=renovatebot)](https://app.renovatebot.com/dashboard#github/ymmmtym/manifests)
+
 # manifests
 
 My manifests
