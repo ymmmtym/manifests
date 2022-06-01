@@ -1,8 +1,6 @@
 name: "CI"
 on:
   push:
-    branches:
-      - main
 
 jobs:
   update:
@@ -15,9 +13,8 @@ jobs:
           mv kustomize /usr/local/bin/
       - name: Update
         run: make update
-      - name: diff dev
-        run: make diff
       - name: Push auto-fixed files
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           # git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           git config --global user.name "${GITHUB_ACTOR}"
