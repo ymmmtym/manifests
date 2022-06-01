@@ -1,4 +1,4 @@
-name: "Update base values"
+name: "CI"
 on:
   push:
     branches:
@@ -27,4 +27,26 @@ jobs:
             git commit -m "👕 Fixed auto-fixable helm values by github-actions"; \
             git push origin ${GITHUB_REF_NAME}; \
           fi
-
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+          mv kustomize /usr/local/bin/
+          wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+          tar xf kubeval-linux-amd64.tar.gz
+          mv kubeval /usr/local/bin/
+      - name: eval
+        run: make eval
+  diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+          mv kustomize /usr/local/bin/
+      - name: diff
+        run: make diff
