@@ -8,5 +8,10 @@
   ],
   // "schedule": ["after 9am on monday", "before 12am on monday"],
   "dependencyDashboard": "true",
-  "ignorePaths": []
+  "ignorePaths": [
+    "cilium",
+    "jaeger-operator",
+    "rke2-cilium",
+    "vmware-exporter"
+  ]
 }
