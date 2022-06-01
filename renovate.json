@@ -1,5 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "hostRules": [
+    {
+      "hostType": "docker",
+      "abortOnError": false
+    }
+  ],
   "extends": [
     "config:base",
     ":timezone(Asia/Tokyo)",
@@ -8,10 +14,5 @@
   ],
   // "schedule": ["after 9am on monday", "before 12am on monday"],
   "dependencyDashboard": "true",
-  "ignorePaths": [
-    "cilium",
-    "jaeger-operator",
-    "rke2-cilium",
-    "vmware-exporter"
-  ]
+  "ignorePaths": []
 }
