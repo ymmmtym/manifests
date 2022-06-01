@@ -8,7 +8,7 @@ helmCharts:
   namespace: kube-system
   includeCRDs: true
   releaseName: rke2-cilium
-  version: 1.11.401
+  version: 1.11.501
   repo: https://rke2-charts.rancher.io/
   valuesFile: values.yaml
 
