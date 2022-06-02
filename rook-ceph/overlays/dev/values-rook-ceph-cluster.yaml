@@ -1,3 +1,8 @@
+# Default values for a single rook-ceph cluster
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Namespace of the main rook operator
 operatorNamespace: rook-ceph
 clusterName: rook-ceph
 
@@ -5,22 +10,32 @@ clusterName: rook-ceph
 toolbox:
   enabled: true
 
+# monitoring requires Prometheus to be pre-installed
 monitoring:
   # requires Prometheus to be pre-installed
   # enabling will also create RBAC rules to allow Operator to create ServiceMonitors
   enabled: true
   # rulesNamespaceOverride:
 
+# If true, create & use PSP resources. Set this to the same value as the rook-ceph chart.
+pspEnable: true
+
+# imagePullSecrets option allow to pull docker images from private docker registry. Option will be passed to all service accounts.
+# imagePullSecrets:
+# - name: my-registry-secret
+
+# All values below are taken from the CephCluster CRD
+# More information can be found at [Ceph Cluster CRD](/Documentation/ceph-cluster-crd.md)
 cephClusterSpec:
   cephVersion:
     # The container image used to launch the Ceph daemon pods (mon, mgr, osd, mds, rgw).
-    # v14 is nautilus, v15 is octopus, and v16 is pacific.
-    # RECOMMENDATION: In production, use a specific version tag instead of the general v14 flag, which pulls the latest release and could result in different
+    # v15 is octopus, and v16 is pacific.
+    # RECOMMENDATION: In production, use a specific version tag instead of the general v16 flag, which pulls the latest release and could result in different
     # versions running within the cluster. See tags available at https://hub.docker.com/r/ceph/ceph/tags/.
     # If you want to be more precise, you can always use a timestamp tag such quay.io/ceph/ceph:v15.2.11-20200419
     # This tag might not contain a new Ceph version, just security fixes from the underlying operating system, which will reduce vulnerabilities
-    image: quay.io/ceph/ceph:v16.2.6
-    # Whether to allow unsupported versions of Ceph. Currently `nautilus` and `octopus` are supported.
+    image: quay.io/ceph/ceph:v16.2.9
+    # Whether to allow unsupported versions of Ceph. Currently `octopus` and `pacific` are supported.
     # Future versions such as `pacific` would require this to be set to `true`.
     # Do not set to true in production.
     allowUnsupported: false
@@ -33,7 +48,7 @@ cephClusterSpec:
   # Whether or not upgrade should continue even if a check fails
   # This means Ceph's status could be degraded and we don't recommend upgrading but you might decide otherwise
   # Use at your OWN risk
-  # To understand Rook's upgrade process of Ceph, read https://rook.io/docs/rook/master/ceph-upgrade.html#ceph-version-upgrades
+  # To understand Rook's upgrade process of Ceph, read https://rook.io/docs/rook/latest/ceph-upgrade.html#ceph-version-upgrades
   skipUpgradeChecks: false
 
   # Whether or not continue if PGs are not clean during an upgrade
@@ -58,7 +73,8 @@ cephClusterSpec:
     # When higher availability of the mgr is needed, increase the count to 2.
     # In that case, one mgr will be active and one in standby. When Ceph updates which
     # mgr is active, Rook will update the mgr services to match the active mgr.
-    count: 1
+    count: 2
+    allowMultiplePerNode: false
     modules:
       # Several modules should not need to be included in this list. The "dashboard" and "monitoring" modules
       # are already enabled by other settings in the cluster CR.
@@ -68,7 +84,35 @@ cephClusterSpec:
   # enable the ceph dashboard for viewing cluster status
   dashboard:
     enabled: true
-    ssl: false
+    # serve the dashboard under a subpath (useful when you are accessing the dashboard via a reverse proxy)
+    # urlPrefix: /ceph-dashboard
+    # serve the dashboard at the given port.
+    # port: 8443
+    # Serve the dashboard using SSL (if using ingress to expose the dashboard and `ssl: true` you need to set
+    # the corresponding "backend protocol" annotation(s) for your ingress controller of choice)
+    ssl: true
+
+  # Network configuration, see: https://github.com/rook/rook/blob/master/Documentation/ceph-cluster-crd.md#network-configuration-settings
+  # network:
+  #   # enable host networking
+  #   provider: host
+  #   # EXPERIMENTAL: enable the Multus network provider
+  #   provider: multus
+  #   selectors:
+  #     # The selector keys are required to be `public` and `cluster`.
+  #     # Based on the configuration, the operator will do the following:
+  #     #   1. if only the `public` selector key is specified both public_network and cluster_network Ceph settings will listen on that interface
+  #     #   2. if both `public` and `cluster` selector keys are specified the first one will point to 'public_network' flag and the second one to 'cluster_network'
+  #     #
+  #     # In order to work, each selector value must match a NetworkAttachmentDefinition object in Multus
+  #     #
+  #     # public: public-conf --> NetworkAttachmentDefinition object name in Multus
+  #     # cluster: cluster-conf --> NetworkAttachmentDefinition object name in Multus
+  #   # Provide internet protocol version. IPv6, IPv4 or empty string are valid options. Empty string would mean IPv4
+  #   ipFamily: "IPv6"
+  #   # Ceph daemons to listen on both IPv4 and Ipv6 networks
+  #   dualStack: false
+
   # enable the crash collector for ceph daemon crash collection
   crashCollector:
     disable: false
@@ -106,8 +150,121 @@ cephClusterSpec:
     # If set to true, cephCluster deletion does not wait for the PVs to be deleted.
     allowUninstallWithVolumes: false
 
+  # To control where various services will be scheduled by kubernetes, use the placement configuration sections below.
+  # The example under 'all' would have all services scheduled on kubernetes nodes labeled with 'role=storage-node' and
+  # tolerate taints with a key of 'storage-node'.
+  # placement:
+  #   all:
+  #     nodeAffinity:
+  #       requiredDuringSchedulingIgnoredDuringExecution:
+  #         nodeSelectorTerms:
+  #           - matchExpressions:
+  #             - key: role
+  #               operator: In
+  #               values:
+  #               - storage-node
+  #     podAffinity:
+  #     podAntiAffinity:
+  #     topologySpreadConstraints:
+  #     tolerations:
+  #     - key: storage-node
+  #       operator: Exists
+  #   # The above placement information can also be specified for mon, osd, and mgr components
+  #   mon:
+  #   # Monitor deployments may contain an anti-affinity rule for avoiding monitor
+  #   # collocation on the same node. This is a required rule when host network is used
+  #   # or when AllowMultiplePerNode is false. Otherwise this anti-affinity rule is a
+  #   # preferred rule with weight: 50.
+  #   osd:
+  #   mgr:
+  #   cleanup:
+
+  # annotations:
+  #   all:
+  #   mon:
+  #   osd:
+  #   cleanup:
+  #   prepareosd:
+  #   # If no mgr annotations are set, prometheus scrape annotations will be set by default.
+  #   mgr:
+
+  # labels:
+  #   all:
+  #   mon:
+  #   osd:
+  #   cleanup:
+  #   mgr:
+  #   prepareosd:
+  #   # monitoring is a list of key-value pairs. It is injected into all the monitoring resources created by operator.
+  #   # These labels can be passed as LabelSelector to Prometheus
+  #   monitoring:
+
+  resources: {}
+    # mgr:
+    #   limits:
+    #     cpu: "1000m"
+    #     memory: "1Gi"
+    #   requests:
+    #     cpu: "500m"
+    #     memory: "512Mi"
+    # mon:
+    #   limits:
+    #     cpu: "2000m"
+    #     memory: "2Gi"
+    #   requests:
+    #     cpu: "1000m"
+    #     memory: "1Gi"
+    # osd:
+    #   limits:
+    #     cpu: "2000m"
+    #     memory: "4Gi"
+    #   requests:
+    #     cpu: "1000m"
+    #     memory: "4Gi"
+    # prepareosd:
+    #   limits:
+    #     cpu: "500m"
+    #     memory: "200Mi"
+    #   requests:
+    #     cpu: "500m"
+    #     memory: "50Mi"
+    # mgr-sidecar:
+    #   limits:
+    #     cpu: "500m"
+    #     memory: "100Mi"
+    #   requests:
+    #     cpu: "100m"
+    #     memory: "40Mi"
+    # crashcollector:
+    #   limits:
+    #     cpu: "500m"
+    #     memory: "60Mi"
+    #   requests:
+    #     cpu: "100m"
+    #     memory: "60Mi"
+    # logcollector:
+    #   limits:
+    #     cpu: "500m"
+    #     memory: "1Gi"
+    #   requests:
+    #     cpu: "100m"
+    #     memory: "100Mi"
+    # cleanup:
+    #   limits:
+    #     cpu: "500m"
+    #     memory: "1Gi"
+    #   requests:
+    #     cpu: "500m"
+    #     memory: "100Mi"
+
   # The option to automatically remove OSDs that are out and are safe to destroy.
   removeOSDsIfOutAndSafeToRemove: false
+
+  # priority classes to apply to ceph resources
+  priorityClassNames:
+    mon: system-node-critical
+    osd: system-node-critical
+    mgr: system-cluster-critical
 
   storage: # cluster level storage configuration and selection
     useAllNodes: true
@@ -199,6 +356,7 @@ cephBlockPools:
       isDefault: true
       reclaimPolicy: Delete
       allowVolumeExpansion: true
+      mountOptions: []
       # see https://github.com/rook/rook/blob/master/Documentation/ceph-block.md#provision-storage for available configuration
       parameters:
         # (optional) mapOptions is a comma-separated list of map options.
@@ -232,6 +390,71 @@ cephBlockPools:
         csi.storage.k8s.io/fstype: ext4
 
 cephFileSystems: []
+  # - name: ceph-filesystem
+  #   # see https://github.com/rook/rook/blob/master/Documentation/ceph-filesystem-crd.md#filesystem-settings for available configuration
+  #   spec:
+  #     metadataPool:
+  #       replicated:
+  #         size: 3
+  #     dataPools:
+  #       - failureDomain: host
+  #         replicated:
+  #           size: 3
+  #         # Optional and highly recommended, 'data0' by default, see https://github.com/rook/rook/blob/master/Documentation/ceph-filesystem-crd.md#pools
+  #         name: data0
+  #     metadataServer:
+  #       activeCount: 1
+  #       activeStandby: true
+  #       resources:
+  #         limits:
+  #           cpu: "2000m"
+  #           memory: "4Gi"
+  #         requests:
+  #           cpu: "1000m"
+  #           memory: "4Gi"
+  #       priorityClassName: system-cluster-critical
+  #   storageClass:
+  #     enabled: true
+  #     isDefault: false
+  #     name: ceph-filesystem
+  #     # (Optional) specify a data pool to use, must be the name of one of the data pools above, 'data0' by default
+  #     pool: data0
+  #     reclaimPolicy: Delete
+  #     allowVolumeExpansion: true
+  #     mountOptions: []
+  #     # see https://github.com/rook/rook/blob/master/Documentation/ceph-filesystem.md#provision-storage for available configuration
+  #     parameters:
+  #       # The secrets contain Ceph admin credentials.
+  #       csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+  #       csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+  #       csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+  #       csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+  #       csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+  #       csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+  #       # Specify the filesystem type of the volume. If not specified, csi-provisioner
+  #       # will set default as `ext4`. Note that `xfs` is not recommended due to potential deadlock
+  #       # in hyperconverged settings where the volume is mounted on the same node as the osds.
+  #       csi.storage.k8s.io/fstype: ext4
+
+cephFileSystemVolumeSnapshotClass:
+  enabled: false
+  name: ceph-filesystem
+  isDefault: true
+  deletionPolicy: Delete
+  annotations: {}
+  labels: {}
+  # see https://rook.io/docs/rook/latest/ceph-csi-snapshot.html#cephfs-snapshots for available configuration
+  parameters: {}
+
+cephBlockPoolsVolumeSnapshotClass:
+  enabled: false
+  name: ceph-block
+  isDefault: false
+  deletionPolicy: Delete
+  annotations: {}
+  labels: {}
+  # see https://rook.io/docs/rook/latest/ceph-csi-snapshot.html#rbd-snapshots for available configuration
+  parameters: {}
 
 cephObjectStores:
   - name: ceph-object-store
