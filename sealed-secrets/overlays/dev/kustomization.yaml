@@ -8,7 +8,7 @@ helmCharts:
   namespace: kube-system
   includeCRDs: true
   releaseName: sealed-secrets
-  version: 2.1.8
+  version: 2.2.0
   repo: https://bitnami-labs.github.io/sealed-secrets
   valuesFile: values.yaml
 
