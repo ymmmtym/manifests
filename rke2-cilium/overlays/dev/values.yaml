@@ -83,7 +83,7 @@ rollOutCiliumPods: false
 image:
   override: ~
   repository: rancher/mirrored-cilium-cilium
-  tag: v1.11.4
+  tag: v1.11.5
   pullPolicy: IfNotPresent
   useDigest: false
 
@@ -1537,7 +1537,7 @@ preflight:
   image:
     override: ~
     repository: rancher/mirrored-cilium-cilium
-    tag: v1.11.4
+    tag: v1.11.5
     useDigest: false
     pullPolicy: IfNotPresent
 
