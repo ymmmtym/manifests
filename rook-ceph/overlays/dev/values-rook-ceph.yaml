@@ -67,7 +67,7 @@ csi:
   # set to false to disable deployment of snapshotter container in CephFS provisioner pod.
   enableCephfsSnapshotter: false
   # set to false to disable deployment of snapshotter container in RBD provisioner pod.
-  enableRBDSnapshotter: true
+  enableRBDSnapshotter: false
   # set to false if the selinux is not enabled or unavailable in cluster nodes.
   enablePluginSelinuxHostMount: false
   # set to true to enable Ceph CSI pvc encryption support.
