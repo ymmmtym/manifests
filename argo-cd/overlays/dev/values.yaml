@@ -104,10 +104,10 @@ controller:
 
   # -- The number of application controller pods to run.
   # If changing the number of replicas you must pass the number as `ARGOCD_CONTROLLER_REPLICAS` as an environment variable
-  replicas: 2
+  replicas: 1
 
   # -- Deploy the application controller as a StatefulSet instead of a Deployment, this is required for HA capability.
-  enableStatefulSet: true
+  enableStatefulSet: false
 
   ## Application controller commandline flags
   args:
@@ -1598,37 +1598,37 @@ server:
         limit: 5
       syncOptions:
       - CreateNamespace=true
-  - name: jaeger-operator
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "7"
-    finalizers: []
-    project: default
-    source:
-      chart: jaeger-operator
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/jaeger-operator/overlays/dev/values.yaml
-      repoURL: https://jaegertracing.github.io/helm-charts
-      targetRevision: 2.30.0
-    destination:
-      namespace: monitoring
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 5
-      syncOptions:
-      - CreateNamespace=true
+  # - name: jaeger-operator
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "7"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: jaeger-operator
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/jaeger-operator/overlays/dev/values.yaml
+  #     repoURL: https://jaegertracing.github.io/helm-charts
+  #     targetRevision: 2.30.0
+  #   destination:
+  #     namespace: monitoring
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: true
+  #       selfHeal: true
+  #     retry:
+  #       backoff:
+  #         duration: 20s
+  #         factor: 2
+  #         maxDuration: 5m0s
+  #       limit: 5
+  #     syncOptions:
+  #     - CreateNamespace=true
   - name: loki-stack
     namespace: argocd
     additionalLabels:
@@ -1711,37 +1711,37 @@ server:
   #   syncPolicy:
   #     syncOptions:
   #     - CreateNamespace=true
-  - name: kubernetes-dashboard
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "8"
-    finalizers: []
-    project: default
-    source:
-      chart: kubernetes-dashboard
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/kubernetes-dashboard/overlays/dev/values.yaml
-      repoURL: https://kubernetes.github.io/dashboard
-      targetRevision: 5.4.1
-    destination:
-      namespace: kube-system
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 5
-      syncOptions:
-      - CreateNamespace=false
+  # - name: kubernetes-dashboard
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "8"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: kubernetes-dashboard
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/kubernetes-dashboard/overlays/dev/values.yaml
+  #     repoURL: https://kubernetes.github.io/dashboard
+  #     targetRevision: 5.4.1
+  #   destination:
+  #     namespace: kube-system
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: true
+  #       selfHeal: true
+  #     retry:
+  #       backoff:
+  #         duration: 20s
+  #         factor: 2
+  #         maxDuration: 5m0s
+  #       limit: 5
+  #     syncOptions:
+  #     - CreateNamespace=false
   - name: home-assistant
     namespace: argocd
     additionalLabels:

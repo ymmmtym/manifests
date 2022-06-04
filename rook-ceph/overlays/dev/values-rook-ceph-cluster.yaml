@@ -38,7 +38,7 @@ cephClusterSpec:
     # Whether to allow unsupported versions of Ceph. Currently `octopus` and `pacific` are supported.
     # Future versions such as `pacific` would require this to be set to `true`.
     # Do not set to true in production.
-    allowUnsupported: false
+    allowUnsupported: true
 
   # The path on the host where configuration files will be persisted. Must be specified.
   # Important: if you reinstall the cluster, make sure you delete this directory from each host or else the mons will fail to start on the new cluster.
@@ -90,7 +90,7 @@ cephClusterSpec:
     # port: 8443
     # Serve the dashboard using SSL (if using ingress to expose the dashboard and `ssl: true` you need to set
     # the corresponding "backend protocol" annotation(s) for your ingress controller of choice)
-    ssl: true
+    ssl: false
 
   # Network configuration, see: https://github.com/rook/rook/blob/master/Documentation/ceph-cluster-crd.md#network-configuration-settings
   # network:
@@ -199,63 +199,63 @@ cephClusterSpec:
   #   # These labels can be passed as LabelSelector to Prometheus
   #   monitoring:
 
-  resources: {}
-    # mgr:
-    #   limits:
-    #     cpu: "1000m"
-    #     memory: "1Gi"
-    #   requests:
-    #     cpu: "500m"
-    #     memory: "512Mi"
-    # mon:
-    #   limits:
-    #     cpu: "2000m"
-    #     memory: "2Gi"
-    #   requests:
-    #     cpu: "1000m"
-    #     memory: "1Gi"
-    # osd:
-    #   limits:
-    #     cpu: "2000m"
-    #     memory: "4Gi"
-    #   requests:
-    #     cpu: "1000m"
-    #     memory: "4Gi"
-    # prepareosd:
-    #   limits:
-    #     cpu: "500m"
-    #     memory: "200Mi"
-    #   requests:
-    #     cpu: "500m"
-    #     memory: "50Mi"
-    # mgr-sidecar:
-    #   limits:
-    #     cpu: "500m"
-    #     memory: "100Mi"
-    #   requests:
-    #     cpu: "100m"
-    #     memory: "40Mi"
-    # crashcollector:
-    #   limits:
-    #     cpu: "500m"
-    #     memory: "60Mi"
-    #   requests:
-    #     cpu: "100m"
-    #     memory: "60Mi"
-    # logcollector:
-    #   limits:
-    #     cpu: "500m"
-    #     memory: "1Gi"
-    #   requests:
-    #     cpu: "100m"
-    #     memory: "100Mi"
-    # cleanup:
-    #   limits:
-    #     cpu: "500m"
-    #     memory: "1Gi"
-    #   requests:
-    #     cpu: "500m"
-    #     memory: "100Mi"
+  resources:
+    mgr:
+      limits:
+        cpu: "1000m"
+        memory: "1Gi"
+      requests:
+        cpu: "256m"
+        memory: "256Mi"
+    mon:
+      limits:
+        cpu: "2000m"
+        memory: "2Gi"
+      requests:
+        cpu: "500m"
+        memory: "500Mi"
+    osd:
+      limits:
+        cpu: "2000m"
+        memory: "4Gi"
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+    prepareosd:
+      limits:
+        cpu: "500m"
+        memory: "200Mi"
+      requests:
+        cpu: "200m"
+        memory: "50Mi"
+    mgr-sidecar:
+      limits:
+        cpu: "500m"
+        memory: "100Mi"
+      requests:
+        cpu: "100m"
+        memory: "40Mi"
+    crashcollector:
+      limits:
+        cpu: "500m"
+        memory: "60Mi"
+      requests:
+        cpu: "100m"
+        memory: "60Mi"
+    logcollector:
+      limits:
+        cpu: "500m"
+        memory: "1Gi"
+      requests:
+        cpu: "100m"
+        memory: "100Mi"
+    cleanup:
+      limits:
+        cpu: "500m"
+        memory: "1Gi"
+      requests:
+        cpu: "100m"
+        memory: "100Mi"
 
   # The option to automatically remove OSDs that are out and are safe to destroy.
   removeOSDsIfOutAndSafeToRemove: false
