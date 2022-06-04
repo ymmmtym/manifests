@@ -476,8 +476,8 @@ cephObjectStores:
         # caBundleRef:
         port: 80
         # securePort: 443
-        # externalRgwEndpoints:
-        #   - ip: 192.168.100.129
+        externalRgwEndpoints:
+          - ip: 192.168.100.129
         instances: 1
         # A key/value list of annotations
         annotations:
