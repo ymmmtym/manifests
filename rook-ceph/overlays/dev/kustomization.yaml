@@ -8,14 +8,14 @@ helmCharts:
   namespace: rook-ceph
   includeCRDs: true
   releaseName: rook-ceph
-  version: v1.8.9
+  version: v1.8.2
   repo: https://charts.rook.io/release
   valuesFile: values-rook-ceph.yaml
 - name: rook-ceph-cluster
   namespace: rook-ceph
   includeCRDs: true
   releaseName: rook-ceph-cluster
-  version: v1.8.9
+  version: v1.8.2
   repo: https://charts.rook.io/release
   valuesFile: values-rook-ceph-cluster.yaml
 

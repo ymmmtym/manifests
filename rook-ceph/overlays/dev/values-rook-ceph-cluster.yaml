@@ -21,16 +21,16 @@ operatorNamespace: rook-ceph
 # Installs a debugging toolbox deployment
 toolbox:
   enabled: true
-  image: rook/ceph:v1.9.4
-  tolerations: []
-  affinity: {}
-  resources:
-    limits:
-      cpu: "500m"
-      memory: "1Gi"
-    requests:
-      cpu: "50m"
-      memory: "128Mi"
+  # image: rook/ceph:v1.9.4
+  # tolerations: []
+  # affinity: {}
+  # resources:
+  #   limits:
+  #     cpu: "500m"
+  #     memory: "1Gi"
+  #   requests:
+  #     cpu: "50m"
+  #     memory: "128Mi"
   # Set the priority class for the toolbox if desired
   # priorityClassName: class
 
@@ -490,7 +490,6 @@ cephBlockPoolsVolumeSnapshotClass:
 
 cephObjectStores:
   - name: ceph-object-store
-    namespace: rook-ceph
     spec:
       metadataPool:
         failureDomain: host
@@ -549,4 +548,6 @@ cephObjectStores:
       reclaimPolicy: Delete
       allowVolumeExpansion: true
       # see https://github.com/rook/rook/blob/master/Documentation/ceph-block.md#provision-storage for available configuration
-      parameters: {}
+      parameters:
+        objectStoreName: ceph-object-store
+        objectStoreNamespace: rook-ceph
