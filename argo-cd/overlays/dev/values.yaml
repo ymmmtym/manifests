@@ -1420,32 +1420,63 @@ server:
         limit: 10
       syncOptions:
       - CreateNamespace=false
-  - name: rook-ceph
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
-    finalizers: []
-    project: default
-    source:
-      chart: rook-ceph
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/rook-ceph/overlays/dev/values-rook-ceph.yaml
-      repoURL: https://charts.rook.io/release
-      targetRevision: v1.9.4
-    destination:
-      namespace: rook-ceph
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: false
-        selfHeal: true
-      syncOptions:
-      - CreateNamespace=true
-  - name: rook-ceph-cluster
+  # - name: rook-ceph
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "4"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: rook-ceph
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/rook-ceph/overlays/dev/values-rook-ceph.yaml
+  #     repoURL: https://charts.rook.io/release
+  #     targetRevision: v1.9.4
+  #   destination:
+  #     namespace: rook-ceph
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: false
+  #       selfHeal: true
+  #     syncOptions:
+  #     - CreateNamespace=true
+  # - name: rook-ceph-cluster
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "5"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: rook-ceph-cluster
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/rook-ceph/overlays/dev/values-rook-ceph-cluster.yaml
+  #     repoURL: https://charts.rook.io/release
+  #     targetRevision: v1.9.4
+  #   destination:
+  #     namespace: rook-ceph
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: false
+  #       selfHeal: true
+  #     retry:
+  #       backoff:
+  #         duration: 20s
+  #         factor: 2
+  #         maxDuration: 5m0s
+  #       limit: 10
+  #     syncOptions:
+  #     - CreateNamespace=true
+  - name: longhorn
     namespace: argocd
     additionalLabels:
       app.kubernetes.io/instance: argo-cd
@@ -1455,14 +1486,14 @@ server:
     finalizers: []
     project: default
     source:
-      chart: rook-ceph-cluster
+      chart: longhorn
       helm:
         valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/rook-ceph/overlays/dev/values-rook-ceph-cluster.yaml
-      repoURL: https://charts.rook.io/release
-      targetRevision: v1.9.4
+        - https://raw.githubusercontent.com/ymmmtym/manifests/main/longhorn/overlays/dev/values.yaml
+      repoURL: https://charts.longhorn.io
+      targetRevision: 1.2.4
     destination:
-      namespace: rook-ceph
+      namespace: longhorn-system
       server: https://kubernetes.default.svc
     syncPolicy:
       automated:
