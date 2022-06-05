@@ -1248,7 +1248,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
     info:
@@ -1304,7 +1304,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   # - name: external-secrets
@@ -1357,7 +1357,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=false
   - name: cert-manager
@@ -1386,7 +1386,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=false
   - name: ingress-nginx
@@ -1417,7 +1417,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=false
   - name: rook-ceph
@@ -1473,7 +1473,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   - name: kube-prometheus-stack-crds
@@ -1490,7 +1490,7 @@ server:
     source:
       repoURL: https://github.com/prometheus-community/helm-charts.git
       path: charts/kube-prometheus-stack/crds/
-      targetRevision: kube-prometheus-stack-35.5.3
+      targetRevision: kube-prometheus-stack-35.5.1
       directory:
         recurse: true
     destination:
@@ -1505,7 +1505,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 3m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - Replace=true
   - name: kube-prometheus-stack
@@ -1537,7 +1537,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 3m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   - name: thanos
@@ -1568,7 +1568,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 3m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   - name: vmware-exporter
@@ -1595,7 +1595,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   # - name: jaeger-operator
@@ -1626,7 +1626,7 @@ server:
   #         duration: 20s
   #         factor: 2
   #         maxDuration: 5m0s
-  #       limit: 5
+  #       limit: 10
   #     syncOptions:
   #     - CreateNamespace=true
   - name: loki-stack
@@ -1657,7 +1657,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   # - name: chaos-mesh
@@ -1688,7 +1688,7 @@ server:
   #         duration: 60s
   #         factor: 2
   #         maxDuration: 3m0s
-  #       limit: 3
+  #       limit: 10
   #     syncOptions:
   #     - Replace=true
   #     - CreateNamespace=true
@@ -1739,7 +1739,7 @@ server:
   #         duration: 20s
   #         factor: 2
   #         maxDuration: 5m0s
-  #       limit: 5
+  #       limit: 10
   #     syncOptions:
   #     - CreateNamespace=false
   - name: home-assistant
@@ -1770,7 +1770,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   - name: calibre-web
@@ -1801,7 +1801,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   # - name: kubeview
@@ -1854,7 +1854,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   # - name: librespeed
@@ -1910,7 +1910,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=false
   - name: whoogle
@@ -1941,7 +1941,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
   # - name: airflow
@@ -1997,7 +1997,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
     info:
@@ -2031,7 +2031,7 @@ server:
           duration: 20s
           factor: 2
           maxDuration: 5m0s
-        limit: 5
+        limit: 10
       syncOptions:
       - CreateNamespace=true
 
