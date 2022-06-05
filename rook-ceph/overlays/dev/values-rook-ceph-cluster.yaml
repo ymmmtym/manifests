@@ -4,18 +4,49 @@
 
 # Namespace of the main rook operator
 operatorNamespace: rook-ceph
-clusterName: rook-ceph
+
+# The metadata.name of the CephCluster CR. The default name is the same as the namespace.
+# clusterName: rook-ceph
+
+# Ability to override the kubernetes version used in rendering the helm chart
+# kubeVersion: 1.21
+
+# Ability to override ceph.conf
+# configOverride: |
+#   [global]
+#   mon_allow_pool_delete = true
+#   osd_pool_default_size = 3
+#   osd_pool_default_min_size = 2
 
 # Installs a debugging toolbox deployment
 toolbox:
   enabled: true
+  image: rook/ceph:v1.9.4
+  tolerations: []
+  affinity: {}
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+  # Set the priority class for the toolbox if desired
+  # priorityClassName: class
 
 # monitoring requires Prometheus to be pre-installed
 monitoring:
-  # requires Prometheus to be pre-installed
   # enabling will also create RBAC rules to allow Operator to create ServiceMonitors
   enabled: true
-  # rulesNamespaceOverride:
+  # whether to create the prometheus rules
+  createPrometheusRules: true
+  # the namespace in which to create the prometheus rules, if different from the rook cluster namespace
+  # If you have multiple rook-ceph clusters in the same k8s cluster, choose the same namespace (ideally, namespace with prometheus
+  # deployed) to set rulesNamespace for all the clusters. Otherwise, you will get duplicate alerts with multiple alert definitions.
+  rulesNamespaceOverride:
+  # Monitoring settings for external clusters:
+  # externalMgrEndpoints: <list of endpoints>
+  # externalMgrPrometheusPort: <port>
 
 # If true, create & use PSP resources. Set this to the same value as the rook-ceph chart.
 pspEnable: true
@@ -38,7 +69,7 @@ cephClusterSpec:
     # Whether to allow unsupported versions of Ceph. Currently `octopus` and `pacific` are supported.
     # Future versions such as `pacific` would require this to be set to `true`.
     # Do not set to true in production.
-    allowUnsupported: true
+    allowUnsupported: false
 
   # The path on the host where configuration files will be persisted. Must be specified.
   # Important: if you reinstall the cluster, make sure you delete this directory from each host or else the mons will fail to start on the new cluster.
@@ -121,9 +152,9 @@ cephClusterSpec:
     # daysToRetain: 30
 
   # enable log collector, daemons will log on files and rotate
-  # logCollector:
-  #   enabled: true
-  #   periodicity: 24h # SUFFIX may be 'h' for hours or 'd' for days.
+  logCollector:
+    enabled: true
+    periodicity: 24h # SUFFIX may be 'h' for hours or 'd' for days.
 
   # automate [data cleanup process](https://github.com/rook/rook/blob/master/Documentation/ceph-teardown.md#delete-the-data-on-hosts) in cluster destruction.
   cleanupPolicy:
@@ -132,7 +163,7 @@ cephClusterSpec:
     # This value should only be set when the cluster is about to be deleted. After the confirmation is set,
     # Rook will immediately stop configuring the cluster and only wait for the delete command.
     # If the empty string is set, Rook will not destroy any data on hosts during uninstall.
-    confirmation: ""
+    confirmation: "yes-really-destroy-data"
     # sanitizeDisks represents settings for sanitizing OSD disks on cluster deletion
     sanitizeDisks:
       # method indicates if the entire disk should be sanitized or simply ceph's metadata
@@ -148,7 +179,7 @@ cephClusterSpec:
       iteration: 1
     # allowUninstallWithVolumes defines how the uninstall should be performed
     # If set to true, cephCluster deletion does not wait for the PVs to be deleted.
-    allowUninstallWithVolumes: true
+    allowUninstallWithVolumes: false
 
   # To control where various services will be scheduled by kubernetes, use the placement configuration sections below.
   # The example under 'all' would have all services scheduled on kubernetes nodes labeled with 'role=storage-node' and
