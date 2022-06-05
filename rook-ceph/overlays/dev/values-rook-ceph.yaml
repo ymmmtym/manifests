@@ -372,8 +372,8 @@ csi:
     #image: "quay.io/csiaddons/volumereplication-operator:v0.3.0"
   # Enable the CSIAddons sidecar.
   csiAddons:
-    enabled: false
-    #image: "quay.io/csiaddons/k8s-sidecar:v0.2.1"
+    enabled: true
+    image: "quay.io/csiaddons/k8s-sidecar:v0.2.1"
   # Enable the nfs csi driver.
   nfs:
     enabled: false
