@@ -37,7 +37,7 @@ toolbox:
 # monitoring requires Prometheus to be pre-installed
 monitoring:
   # enabling will also create RBAC rules to allow Operator to create ServiceMonitors
-  enabled: true
+  enabled: false ### DEBUG
   # whether to create the prometheus rules
   createPrometheusRules: true
   # the namespace in which to create the prometheus rules, if different from the rook cluster namespace
