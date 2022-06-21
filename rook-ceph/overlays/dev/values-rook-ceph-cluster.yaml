@@ -241,18 +241,18 @@ cephClusterSpec:
         memory: "256Mi"
     mon:
       limits:
-        cpu: "2000m"
-        memory: "2Gi"
+        cpu: "1000m"
+        memory: "1Gi"
       requests:
-        cpu: "500m"
-        memory: "500Mi"
+        cpu: "200m"
+        memory: "200Mi"
     osd:
       limits:
-        cpu: "2000m"
-        memory: "4Gi"
+        cpu: "1000m"
+        memory: "2Gi"
       requests:
-        cpu: "500m"
-        memory: "500Mi"
+        cpu: "100m"
+        memory: "200Mi"
     prepareosd:
       limits:
         cpu: "500m"
