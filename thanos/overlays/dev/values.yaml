@@ -14,7 +14,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  storageClass: "ceph-block"
 
 ## @section Common parameters
 
@@ -1852,7 +1852,7 @@ compactor:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass: ""
+    storageClass: "ceph-block"
     ## @param compactor.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
@@ -2191,7 +2191,7 @@ storegateway:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass: ""
+    storageClass: "ceph-block"
     ## @param storegateway.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
@@ -2767,7 +2767,7 @@ ruler:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass: ""
+    storageClass: "ceph-block"
     ## @param ruler.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
@@ -3268,7 +3268,7 @@ receive:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass: ""
+    storageClass: "ceph-block"
     ## @param receive.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
