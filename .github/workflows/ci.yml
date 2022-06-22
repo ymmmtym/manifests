@@ -36,7 +36,12 @@ jobs:
           tar xf kubeval-linux-amd64.tar.gz
           mv kubeval /usr/local/bin/
       - name: eval
-        run: make eval
+        run: make eval | tee make-eval-output.txt
+      - name: upload eval output to artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: make-eval-output
+          path: make-eval-output.txt
   diff:
     runs-on: ubuntu-latest
     steps:
@@ -46,4 +51,9 @@ jobs:
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
           mv kustomize /usr/local/bin/
       - name: diff
-        run: make diff
+        run: make diff | tee make-diff-output.txt
+      - name: upload diff output to artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: make-diff-output
+          path: make-diff-output.txt
