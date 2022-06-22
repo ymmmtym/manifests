@@ -9,7 +9,7 @@ image:
   # -- image repository
   repository: ghcr.io/miguelndecarvalho/speedtest-exporter
   # -- image tag
-  tag: v3.5.1
+  tag: v3.2.2
   # -- image pull policy
   pullPolicy: IfNotPresent
 
