@@ -16,13 +16,13 @@
   ],
   "automerge": true,
   // "schedule": ["after 9am on monday", "before 12am on monday"],
+  "ignorePaths": [
+    "argo-cd/base"
+  ],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
     }
-  ],
-  "ignorePaths": [
-    "argo-cd"
   ]
 }
