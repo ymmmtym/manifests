@@ -11,21 +11,15 @@
   "extends": [
     "config:base",
     ":timezone(Asia/Tokyo)",
-    ":prHourlyLimitNone"
+    ":prHourlyLimitNone",
+    ":automergePatch"
   ],
   "automerge": true,
   // "schedule": ["after 9am on monday", "before 12am on monday"],
   "packageRules": [
     {
-      "matchDepTypes": ["devDependencies"],
-      "groupName": "devDependencies",
-      "rangeStrategy": "update-lockfile"
-    },
-    {
-      "matchDepTypes": ["dependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "dependencies (non-major)",
-      "rangeStrategy": "pin"
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
     }
   ],
   "ignorePaths": [
