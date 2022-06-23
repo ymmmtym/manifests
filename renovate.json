@@ -8,6 +8,9 @@
   ],
   "labels": ["dependencies"],
   "dependencyDashboard": "true",
+  "argocd": {
+    "fileMatch": ["argo-cd/.+\\.yaml$"]
+  },
   "extends": [
     "config:base",
     ":timezone(Asia/Tokyo)",
