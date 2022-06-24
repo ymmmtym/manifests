@@ -15,6 +15,7 @@
     "config:base",
     ":timezone(Asia/Tokyo)",
     ":prHourlyLimitNone",
+    "docker:disable", // To prevent upgrading docker image tag in helm values.yaml
     ":automergePatch"
   ],
   "automerge": true,
