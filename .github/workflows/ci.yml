@@ -38,7 +38,7 @@ jobs:
       - name: eval
         run: make eval | tee make-eval-output.txt
       - name: upload eval output to artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: make-eval-output
           path: make-eval-output.txt
@@ -53,7 +53,7 @@ jobs:
       - name: diff
         run: make diff | tee make-diff-output.txt
       - name: upload diff output to artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: make-diff-output
           path: make-diff-output.txt
