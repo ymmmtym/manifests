@@ -21,7 +21,7 @@ operatorNamespace: rook-ceph
 # Installs a debugging toolbox deployment
 toolbox:
   enabled: false
-  image: rook/ceph:v1.9.5
+  image: rook/ceph:v1.9.6
   tolerations: []
   affinity: {}
   resources:
@@ -255,7 +255,7 @@ cephClusterSpec:
     prepareosd:
       limits:
         cpu: "500m"
-        memory: "200Mi"
+        memory: "400Mi"
       requests:
         cpu: "500m"
         memory: "50Mi"
