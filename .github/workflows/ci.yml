@@ -32,6 +32,7 @@ jobs:
       - name: Install kube-score
         run: brew install kube-score
       - name: Score manifests
+        continue-on-error: true
         run: |
           for overlay in */overlays/dev; do kustomize build --enable-helm ${overlay} > ${overlay}/raw.yaml ; done
           kube-score score */overlays/dev/raw.yaml > score.txt
