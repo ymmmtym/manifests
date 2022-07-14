@@ -1,29 +1,8 @@
 name: "CI"
 on:
-  push:
+  pull_request:
 
 jobs:
-  update:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install kustomize
-        run: |
-          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
-          mv kustomize /usr/local/bin/
-      - name: Update
-        run: make update
-      - name: Push auto-fixed files
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: |
-          # git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          if (git diff --shortstat | grep '[0-9]'); then \
-            git add .; \
-            git commit -m "👕 Fixed auto-fixable helm values by github-actions"; \
-            git push origin ${GITHUB_REF_NAME}; \
-          fi
   eval:
     runs-on: ubuntu-latest
     steps:
@@ -42,6 +21,43 @@ jobs:
         with:
           name: make-eval-output
           path: make-eval-output.txt
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+          mv kustomize /usr/local/bin/
+      - name: Install kube-score
+        run: brew install kube-score
+      - name: Score manifests
+        continue-on-error: true
+        run: |
+          for overlay in */overlays/dev; do kustomize build --enable-helm ${overlay} > ${overlay}/raw.yaml ; done
+          kube-score score */overlays/dev/raw.yaml > score.txt
+      - name: Post comments
+        run: |
+          cat << EOF > comment.md
+          ## kube-score
+
+          $(cat score.txt | grep -E "^\S" | xargs -I{} echo - {})
+
+          <details>
+          <summary>details</summary>
+
+          \`\`\`txt
+          $(cat score.txt)
+          \`\`\`
+
+
+          </details>
+          EOF
+
+          gh pr comment -F ./comment.md "${URL}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ github.event.pull_request.html_url }}
   diff:
     runs-on: ubuntu-latest
     steps:

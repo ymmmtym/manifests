@@ -14,7 +14,7 @@ rbac:
   create: true
 
 # -- Configure image pull secrets for pulling container images
-imagePullSecrets:
+# imagePullSecrets:
 # - name: "image-pull-secret"
 
 # kubeConfigPath: ~/.kube/config
