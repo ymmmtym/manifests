@@ -21,7 +21,7 @@ operatorNamespace: rook-ceph
 # Installs a debugging toolbox deployment
 toolbox:
   enabled: false
-  image: rook/ceph:v1.9.7
+  image: rook/ceph:v1.9.8
   tolerations: []
   affinity: {}
   resources:
@@ -47,6 +47,10 @@ monitoring:
   # Monitoring settings for external clusters:
   # externalMgrEndpoints: <list of endpoints>
   # externalMgrPrometheusPort: <port>
+  # allow adding custom labels and annotations to the prometheus rule
+  prometheusRule:
+    labels: {}
+    annotations: {}
 
 # If true, create & use PSP resources. Set this to the same value as the rook-ceph chart.
 pspEnable: true
@@ -65,7 +69,7 @@ cephClusterSpec:
     # versions running within the cluster. See tags available at https://hub.docker.com/r/ceph/ceph/tags/.
     # If you want to be more precise, you can always use a timestamp tag such quay.io/ceph/ceph:v15.2.11-20200419
     # This tag might not contain a new Ceph version, just security fixes from the underlying operating system, which will reduce vulnerabilities
-    image: quay.io/ceph/ceph:v16.2.9
+    image: quay.io/ceph/ceph:v16.2.10
     # Whether to allow unsupported versions of Ceph. Currently `octopus` and `pacific` are supported.
     # Future versions such as `pacific` would require this to be set to `true`.
     # Do not set to true in production.
@@ -87,7 +91,7 @@ cephClusterSpec:
 
   # WaitTimeoutForHealthyOSDInMinutes defines the time (in minutes) the operator would wait before an OSD can be stopped for upgrade or restart.
   # If the timeout exceeds and OSD is not ok to stop, then the operator would skip upgrade for the current OSD and proceed with the next one
-  # if `continueUpgradeAfterChecksEvenIfNotHealthy` is `false`. If `continueUpgradeAfterChecksEvenIfNotHealthy` is `true`, then opertor would
+  # if `continueUpgradeAfterChecksEvenIfNotHealthy` is `false`. If `continueUpgradeAfterChecksEvenIfNotHealthy` is `true`, then operator would
   # continue with the upgrade of an OSD even if its not ok to stop after the timeout. This timeout won't be applied if `skipUpgradeChecks` is `true`.
   # The default wait timeout is 10 minutes.
   waitTimeoutForHealthyOSDInMinutes: 10
