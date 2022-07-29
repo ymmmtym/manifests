@@ -48,7 +48,7 @@ images:
   # images.registry is the global container registry for the images, you could replace it with your self-hosted container registry.
   registry: "ghcr.io"
   # images.tag is the global image tag (for example, semiVer with prefix v, or latest).
-  tag: "latest"
+  tag: "v2.3.0"
 
 ## Optional array of imagePullSecrets containing private registry credentials
 ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -431,7 +431,7 @@ prometheus:
   # The serviceAccount for prometheus
   serviceAccount: prometheus
   # Docker image for prometheus
-  image: prom/prometheus:v2.37.0
+  image: prom/prometheus:v2.18.1
   # Image pull policy
   imagePullPolicy: IfNotPresent
   # Custom priorityClassName for using pod priorities
