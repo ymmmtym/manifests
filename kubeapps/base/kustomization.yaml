@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: kube-system
+
+helmCharts:
+- name: kubeapps
+  namespace: kube-system
+  includeCRDs: true
+  releaseName: kubeapps
+  # version: latest
+  repo: https://charts.bitnami.com/bitnami
+  # valuesFile: values.yaml
+
