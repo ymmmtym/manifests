@@ -2075,7 +2075,7 @@ server:
     finalizers: []
     project: default
     source:
-      chart: bitnami
+      chart: kubeapps
       helm:
         valueFiles:
         - https://raw.githubusercontent.com/ymmmtym/manifests/main/kubeapps/overlays/dev/values.yaml
