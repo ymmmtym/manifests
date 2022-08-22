@@ -2,7 +2,7 @@
 
 # manifests
 *secret.yaml
-!*-sealed-secret.yaml
+!*sealed-secret.yaml
 
 # charts
 charts/
