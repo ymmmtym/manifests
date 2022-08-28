@@ -1008,4 +1008,3 @@ csi:
   # See https://www.vaultproject.io/docs/platform/k8s/csi/configurations#command-line-arguments
   # for the available command line flags.
   extraArgs: []
-
