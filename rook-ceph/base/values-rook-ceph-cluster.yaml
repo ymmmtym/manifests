@@ -21,7 +21,7 @@ operatorNamespace: rook-ceph
 # Installs a debugging toolbox deployment
 toolbox:
   enabled: false
-  image: rook/ceph:v1.9.9
+  image: rook/ceph:v1.9.10
   tolerations: []
   affinity: {}
   resources:
@@ -368,7 +368,8 @@ cephClusterSpec:
         disabled: false
 
 ingress:
-  dashboard: {}
+  dashboard:
+    {}
     # annotations:
     #   external-dns.alpha.kubernetes.io/hostname: dashboard.example.com
     #   nginx.ingress.kubernetes.io/rewrite-target: /ceph-dashboard/$2
