@@ -69,14 +69,7 @@ image:
 ## @param objstoreConfig The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)
 ## Specify content for objstore.yml
 ##
-objstoreConfig:
-  type: S3
-  config:
-    bucket: $(BUCKET_NAME)
-    endpoint: $(BUCKET_HOST):$(BUCKET_PORT)
-    access_key: $(AWS_ACCESS_KEY_ID)
-    secret_key: $(AWS_SECRET_ACCESS_KEY)
-    insecure: true
+objstoreConfig: ""
 
 ## @param indexCacheConfig The [index cache configuration](https://thanos.io/tip/components/store.md/)
 ## Specify content for index-cache.yml
@@ -3726,7 +3719,7 @@ minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation
   ## to be used as an objstore for Thanos
   ##
-  enabled: false
+  enabled: true
   ## MinIO&reg; authentication parameters
   ##
   auth:
