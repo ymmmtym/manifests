@@ -14,7 +14,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: "ceph-block"
+  storageClass: ""
 
 ## @section Common parameters
 
@@ -38,18 +38,7 @@ commonAnnotations: {}
 clusterDomain: cluster.yumenomatayume.home
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
-extraDeploy:
-- apiVersion: objectbucket.io/v1alpha1
-  kind: ObjectBucketClaim
-  metadata:
-    name: thanos-bucket
-  spec:
-    bucketName: thanos-bucket
-    generateBucketName: thanos-bucket
-    storageClassName: ceph-object
-    additionalConfig:
-      maxObjects: "100000"
-      maxSize: "50G"
+extraDeploy: []
 
 ## @section Thanos common parameters
 
@@ -80,14 +69,7 @@ image:
 ## @param objstoreConfig The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)
 ## Specify content for objstore.yml
 ##
-objstoreConfig:
-  type: S3
-  config:
-    bucket: $(BUCKET_NAME)
-    endpoint: $(BUCKET_HOST):$(BUCKET_PORT)
-    access_key: $(AWS_ACCESS_KEY_ID)
-    secret_key: $(AWS_SECRET_ACCESS_KEY)
-    insecure: true
+objstoreConfig: ""
 
 ## @param indexCacheConfig The [index cache configuration](https://thanos.io/tip/components/store.md/)
 ## Specify content for index-cache.yml
@@ -1852,7 +1834,7 @@ compactor:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass: "ceph-block"
+    storageClass: ""
     ## @param compactor.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
@@ -2191,7 +2173,7 @@ storegateway:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass: "ceph-block"
+    storageClass: ""
     ## @param storegateway.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
@@ -2767,7 +2749,7 @@ ruler:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass: "ceph-block"
+    storageClass: ""
     ## @param ruler.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
@@ -3268,7 +3250,7 @@ receive:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass: "ceph-block"
+    storageClass: ""
     ## @param receive.persistence.accessModes PVC Access Modes for data volume
     ##
     accessModes:
@@ -3737,7 +3719,7 @@ minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation
   ## to be used as an objstore for Thanos
   ##
-  enabled: false
+  enabled: true
   ## MinIO&reg; authentication parameters
   ##
   auth:
