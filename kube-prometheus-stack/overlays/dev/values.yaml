@@ -505,7 +505,6 @@ alertmanager:
     storage:
       volumeClaimTemplate:
         spec:
-          storageClassName: ceph-block
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
@@ -2451,7 +2450,6 @@ prometheus:
     ##
       volumeClaimTemplate:
         spec:
-          storageClassName: ceph-block
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
