@@ -32,6 +32,11 @@ global:
       seccomp.security.alpha.kubernetes.io/defaultProfileName:  runtime/default
       apparmor.security.beta.kubernetes.io/defaultProfileName:  runtime/default
 
+  serverTelemetry:
+    # Enable integration with the Prometheus Operator
+    # See the top level serverTelemetry section below before enabling this feature.
+    prometheusOperator: false
+
 injector:
   # True if you want to enable vault agent injection.
   # @default: global.enabled
@@ -57,7 +62,7 @@ injector:
   # image sets the repo and tag of the vault-k8s image to use for the injector.
   image:
     repository: "hashicorp/vault-k8s"
-    tag: "0.17.0"
+    tag: "1.0.0"
     pullPolicy: IfNotPresent
 
   # agentImage sets the repo and tag of the Vault image to use for the Vault Agent
@@ -65,7 +70,7 @@ injector:
   # required.
   agentImage:
     repository: "hashicorp/vault"
-    tag: "1.11.2"
+    tag: "1.11.3"
 
   # The default values for the injected Vault Agent containers.
   agentDefaults:
@@ -101,7 +106,7 @@ injector:
   webhook:
     # Configures failurePolicy of the webhook. The "unspecified" default behaviour depends on the
     # API Version of the WebHook.
-    # To block pod creation while webhook is unavailable, set the policy to `Fail` below.
+    # To block pod creation while the webhook is unavailable, set the policy to `Fail` below.
     # See https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#failure-policy
     #
     failurePolicy: Ignore
@@ -192,7 +197,7 @@ injector:
 
     # caBundle is a base64-encoded PEM-encoded certificate bundle for the CA
     # that signed the TLS certificate that the webhook serves. This must be set
-    # if secretName is non-null, unless an external service like cert-manager is
+    # if secretName is non-null unless an external service like cert-manager is
     # keeping the caBundle updated.
     caBundle: ""
 
@@ -232,7 +237,7 @@ injector:
     # KUBERNETES_SERVICE_HOST: kubernetes.default.svc
 
   # Affinity Settings for injector pods
-  # This can either be multi-line string or YAML matching the PodSpec's affinity field.
+  # This can either be a multi-line string or YAML matching the PodSpec's affinity field.
   # Commenting out or setting as empty the affinity variable, will allow
   # deployment of multiple replicas to single node services such as Minikube.
   affinity: |
@@ -327,7 +332,7 @@ server:
 
   image:
     repository: "hashicorp/vault"
-    tag: "1.11.2"
+    tag: "1.11.3"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
@@ -442,7 +447,7 @@ server:
   extraContainers: null
 
   # shareProcessNamespace enables process namespace sharing between Vault and the extraContainers
-  # This is useful if Vault must be signaled, e.g. to send a SIGHUP for log rotation
+  # This is useful if Vault must be signaled, e.g. to send a SIGHUP for a log rotation
   shareProcessNamespace: false
 
   # extraArgs is a string containing additional Vault server arguments.
@@ -592,10 +597,10 @@ server:
   service:
     enabled: true
     # clusterIP controls whether a Cluster IP address is attached to the
-    # Vault service within Kubernetes.  By default the Vault service will
+    # Vault service within Kubernetes.  By default, the Vault service will
     # be given a Cluster IP address, set to None to disable.  When disabled
     # Kubernetes will create a "headless" service.  Headless services can be
-    # used to communicate with pods directly through DNS instead of a round robin
+    # used to communicate with pods directly through DNS instead of a round-robin
     # load balancer.
     # clusterIP: None
 
@@ -653,7 +658,7 @@ server:
     annotations: {}
 
   # This configures the Vault Statefulset to create a PVC for audit
-  # logs.  Once Vault is deployed, initialized and unsealed, Vault must
+  # logs.  Once Vault is deployed, initialized, and unsealed, Vault must
   # be configured to use this for audit logs.  This will be mounted to
   # /vault/audit
   # See https://www.vaultproject.io/docs/audit/index.html to know more
@@ -705,6 +710,10 @@ server:
         tls_disable = 1
         address = "[::]:8200"
         cluster_address = "[::]:8201"
+        # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+        #telemetry {
+        #  unauthenticated_metrics_access = "true"
+        #}
       }
       storage "file" {
         path = "/vault/data"
@@ -720,7 +729,13 @@ server:
       #   crypto_key  = "vault-helm-unseal-key"
       #}
 
-  # Run Vault in "HA" mode. There are no storage requirements unless audit log
+      # Example configuration for enabling Prometheus metrics in your config.
+      #telemetry {
+      #  prometheus_retention_time = "30s",
+      #  disable_hostname = true
+      #}
+
+  # Run Vault in "HA" mode. There are no storage requirements unless the audit log
   # persistence is required.  In HA mode Vault will configure itself to use Consul
   # for its storage backend.  The default configuration provided will work the Consul
   # Helm project by default.  It is possible to manually configure Vault to use a
@@ -761,6 +776,10 @@ server:
           tls_disable = 1
           address = "[::]:8200"
           cluster_address = "[::]:8201"
+          # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+          #telemetry {
+          #  unauthenticated_metrics_access = "true"
+          #}
         }
 
         storage "raft" {
@@ -802,6 +821,14 @@ server:
       #   crypto_key  = "vault-helm-unseal-key"
       #}
 
+      # Example configuration for enabling Prometheus metrics.
+      # If you are using Prometheus Operator you can enable a ServiceMonitor resource below.
+      # You may wish to enable unauthenticated metrics in the listener block above.
+      #telemetry {
+      #  prometheus_retention_time = "30s",
+      #  disable_hostname = true
+      #}
+
     # A disruption budget limits the number of pods of a replicated application
     # that are down simultaneously from voluntary disruptions
     disruptionBudget:
@@ -839,12 +866,12 @@ server:
     #   runAsGroup: {{ .Values.server.gid | default 1000 }}
     #   runAsUser: {{ .Values.server.uid | default 100 }}
     #   fsGroup: {{ .Values.server.gid | default 1000 }}
-    # container: {}
+    # container:
+    #   allowPrivilegeEscalation: false
     #
     # If not set, these will default to, and for OpenShift:
     # pod: {}
-    # container:
-    #   allowPrivilegeEscalation: false
+    # container: {}
     securityContext:
       pod: {}
       container: {}
@@ -1008,3 +1035,85 @@ csi:
   # See https://www.vaultproject.io/docs/platform/k8s/csi/configurations#command-line-arguments
   # for the available command line flags.
   extraArgs: []
+
+# Vault is able to collect and publish various runtime metrics.
+# Enabling this feature requires setting adding `telemetry{}` stanza to
+# the Vault configuration. There are a few examples included in the `config` sections above.
+#
+# For more information see:
+# https://www.vaultproject.io/docs/configuration/telemetry
+# https://www.vaultproject.io/docs/internals/telemetry
+serverTelemetry:
+  # Enable support for the Prometheus Operator. Currently, this chart does not support
+  # authenticating to Vault's metrics endpoint, so the following `telemetry{}` must be included
+  # in the `listener "tcp"{}` stanza
+  #  telemetry {
+  #    unauthenticated_metrics_access = "true"
+  #  }
+  #
+  # See the `standalone.config` for a more complete example of this.
+  #
+  # In addition, a top level `telemetry{}` stanza must also be included in the Vault configuration:
+  #
+  # example:
+  #  telemetry {
+  #    prometheus_retention_time = "30s",
+  #    disable_hostname = true
+  #  }
+  #
+  # Configuration for monitoring the Vault server.
+  serviceMonitor:
+    # The Prometheus operator *must* be installed before enabling this feature,
+    # if not the chart will fail to install due to missing CustomResourceDefinitions
+    # provided by the operator.
+    #
+    # Instructions on how to install the Helm chart can be found here:
+    #  https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+    # More information can be found here:
+    #  https://github.com/prometheus-operator/prometheus-operator
+    #  https://github.com/prometheus-operator/kube-prometheus
+
+    # Enable deployment of the Vault Server ServiceMonitor CustomResource.
+    enabled: false
+
+    # Selector labels to add to the ServiceMonitor.
+    # When empty, defaults to:
+    #  release: prometheus
+    selectors: {}
+
+    # Interval at which Prometheus scrapes metrics
+    interval: 30s
+
+    # Timeout for Prometheus scrapes
+    scrapeTimeout: 10s
+
+  prometheusRules:
+      # The Prometheus operator *must* be installed before enabling this feature,
+      # if not the chart will fail to install due to missing CustomResourceDefinitions
+      # provided by the operator.
+
+      # Deploy the PrometheusRule custom resource for AlertManager based alerts.
+      # Requires that AlertManager is properly deployed.
+      enabled: false
+
+      # Selector labels to add to the PrometheusRules.
+      # When empty, defaults to:
+      #  release: prometheus
+      selectors: {}
+
+      # Some example rules.
+      rules: {}
+      #  - alert: vault-HighResponseTime
+      #    annotations:
+      #      message: The response time of Vault is over 500ms on average over the last 5 minutes.
+      #    expr: vault_core_handle_request{quantile="0.5", namespace="mynamespace"} > 500
+      #    for: 5m
+      #    labels:
+      #      severity: warning
+      #  - alert: vault-HighResponseTime
+      #    annotations:
+      #      message: The response time of Vault is over 1s on average over the last 5 minutes.
+      #    expr: vault_core_handle_request{quantile="0.5", namespace="mynamespace"} > 1000
+      #    for: 5m
+      #    labels:
+      #      severity: critical
