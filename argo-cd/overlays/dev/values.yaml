@@ -1424,6 +1424,33 @@ server:
         limit: 10
       syncOptions:
       - CreateNamespace=false
+  - name: synology-csi
+    namespace: argocd
+    additionalLabels:
+      app.kubernetes.io/instance: argo-cd
+      argocd.argoproj.io/instance: argo-cd
+    additionalAnnotations:
+      argocd.argoproj.io/sync-wave: "4"
+    finalizers: []
+    project: default
+    source:
+      repoURL: https://github.com/ymmmtym/manifests.git
+      path: synology-csi/overlays/dev/
+    destination:
+      namespace: synology-csi
+      server: https://kubernetes.default.svc
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      retry:
+        backoff:
+          duration: 20s
+          factor: 2
+          maxDuration: 5m0s
+        limit: 10
+      syncOptions:
+      - CreateNamespace=true
   # - name: rook-ceph
   #   namespace: argocd
   #   additionalLabels:
