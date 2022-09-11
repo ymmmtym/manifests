@@ -1,24 +1,26 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: vmware-exporter
+  name: vault
   labels:
     app.kubernetes.io/instance: argo-cd
     argocd.argoproj.io/instance: argo-cd
   annotations:
-    argocd.argoproj.io/sync-wave: "7"
+    argocd.argoproj.io/sync-wave: "2"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: https://github.com/ymmmtym/manifests.git
-    path: vmware-exporter/overlays/dev/
-    plugin:
-      name: argocd-vault-plugin
+    chart: vault
+    helm:
+      valueFiles:
+      - https://raw.githubusercontent.com/ymmmtym/manifests/main/vault/overlays/dev/values.yaml
+    repoURL: https://helm.releases.hashicorp.com
+    targetRevision: 0.21.0
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: kube-system
   syncPolicy:
     automated:
       prune: false
