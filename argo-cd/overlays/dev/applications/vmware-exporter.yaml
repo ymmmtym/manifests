@@ -15,7 +15,7 @@ spec:
     repoURL: https://github.com/ymmmtym/manifests.git
     path: vmware-exporter/overlays/dev/
     plugin:
-      name: kustomize-build-enable-helm
+      name: argocd-vault-plugin
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring

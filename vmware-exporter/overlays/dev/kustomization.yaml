@@ -5,8 +5,8 @@ namespace: monitoring
 
 resources:
 - ../../base
-- vmware-exporter-sealed-secret.yaml
-- vmware-exporter-service-monitor.yaml
+- secret.yaml
+- service-monitor.yaml
 
 images:
 - name: pryorda/vmware_exporter
