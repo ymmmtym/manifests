@@ -1224,40 +1224,6 @@ server:
   # @default -- `[]` (See [values.yaml])
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/
   additionalApplications:
-  - name: argo-cd
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "0"
-    finalizers: []
-    project: default
-    source:
-      chart: argo-cd
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/argo-cd/overlays/dev/values.yaml
-      repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 4.5.11
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: argocd
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=true
-    info:
-    - name: url
-      value: https://argoproj.github.io/
   # - name: rke2-cilium
   #   namespace: argocd
   #   additionalLabels:
@@ -1280,37 +1246,6 @@ server:
   #   syncPolicy:
   #     syncOptions:
   #     - CreateNamespace=false
-  - name: purelb
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "1"
-    finalizers: []
-    project: default
-    source:
-      chart: purelb
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/purelb/overlays/dev/values.yaml
-      repoURL: https://gitlab.com/api/v4/projects/20400619/packages/helm/stable
-      targetRevision: v0.6.1
-    destination:
-      namespace: purelb
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=true
   # - name: external-secrets
   #   namespace: argocd
   #   additionalLabels:
@@ -1333,124 +1268,6 @@ server:
   #       selfHeal: true
   #     syncOptions:
   #     - CreateNamespace=true
-  - name: sealed-secrets
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "1"
-    finalizers: []
-    project: default
-    source:
-      chart: sealed-secrets
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/sealed-secrets/overlays/dev/values.yaml
-      repoURL: https://bitnami-labs.github.io/sealed-secrets
-      targetRevision: 2.2.0
-    destination:
-      namespace: kube-system
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: false
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=false
-  - name: cert-manager
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "2"
-    finalizers: []
-    project: default
-    source:
-      repoURL: https://github.com/ymmmtym/manifests.git
-      path: cert-manager/overlays/dev/
-      plugin:
-        name: kustomize-build-enable-helm
-    destination:
-      namespace: kube-system
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=false
-  - name: ingress-nginx
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "3"
-    finalizers: []
-    project: default
-    source:
-      chart: ingress-nginx
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/ingress-nginx/overlays/dev/values.yaml
-      repoURL: https://kubernetes.github.io/ingress-nginx
-      targetRevision: 4.1.0
-    destination:
-      namespace: kube-system
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: false
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=false
-  - name: synology-csi
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "4"
-    finalizers: []
-    project: default
-    source:
-      repoURL: https://github.com/ymmmtym/manifests.git
-      path: synology-csi/overlays/dev/
-    destination:
-      namespace: synology-csi
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=true
   # - name: rook-ceph
   #   namespace: argocd
   #   additionalLabels:
@@ -1538,128 +1355,37 @@ server:
   #       limit: 10
   #     syncOptions:
   #     - CreateNamespace=true
-  - name: kube-prometheus-stack-crds
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/hook: PreSync
-      argocd.argoproj.io/hook-delete-policy: HookSucceeded
-      argocd.argoproj.io/sync-wave: "0"
-    finalizers: []
-    project: default
-    source:
-      repoURL: https://github.com/prometheus-community/helm-charts.git
-      path: charts/kube-prometheus-stack/crds/
-      targetRevision: kube-prometheus-stack-36.0.3
-      directory:
-        recurse: true
-    destination:
-      namespace: monitoring
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 3m0s
-        limit: 10
-      syncOptions:
-      - Replace=true
-  - name: kube-prometheus-stack
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
-    finalizers: []
-    project: default
-    source:
-      chart: kube-prometheus-stack
-      helm:
-        skipCrds: true
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/kube-prometheus-stack/overlays/dev/values.yaml
-      repoURL: https://prometheus-community.github.io/helm-charts
-      targetRevision: 36.0.3
-    destination:
-      namespace: monitoring
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 3m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=true
-  - name: thanos
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "6"
-    finalizers: []
-    project: default
-    source:
-      chart: thanos
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/thanos/overlays/dev/values.yaml
-      repoURL: https://charts.bitnami.com/bitnami
-      targetRevision: 10.5.1
-    destination:
-      namespace: monitoring
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 3m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=true
-  - name: vmware-exporter
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "7"
-    finalizers: []
-    project: default
-    source:
-      repoURL: https://github.com/ymmmtym/manifests.git
-      path: vmware-exporter/overlays/dev/
-    destination:
-      namespace: monitoring
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=true
+  # - name: thanos
+  #   namespace: argocd
+  #   additionalLabels:
+  #     app.kubernetes.io/instance: argo-cd
+  #     argocd.argoproj.io/instance: argo-cd
+  #   additionalAnnotations:
+  #     argocd.argoproj.io/sync-wave: "6"
+  #   finalizers: []
+  #   project: default
+  #   source:
+  #     chart: thanos
+  #     helm:
+  #       valueFiles:
+  #       - https://raw.githubusercontent.com/ymmmtym/manifests/main/thanos/overlays/dev/values.yaml
+  #     repoURL: https://charts.bitnami.com/bitnami
+  #     targetRevision: 10.5.1
+  #   destination:
+  #     namespace: monitoring
+  #     server: https://kubernetes.default.svc
+  #   syncPolicy:
+  #     automated:
+  #       prune: true
+  #       selfHeal: true
+  #     retry:
+  #       backoff:
+  #         duration: 20s
+  #         factor: 2
+  #         maxDuration: 3m0s
+  #       limit: 10
+  #     syncOptions:
+  #     - CreateNamespace=true
   # - name: jaeger-operator
   #   namespace: argocd
   #   additionalLabels:
@@ -1691,37 +1417,6 @@ server:
   #       limit: 10
   #     syncOptions:
   #     - CreateNamespace=true
-  - name: loki-stack
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "7"
-    finalizers: []
-    project: default
-    source:
-      chart: loki-stack
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/loki-stack/overlays/dev/values.yaml
-      repoURL: https://grafana.github.io/helm-charts
-      targetRevision: 2.6.4
-    destination:
-      namespace: monitoring
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=true
   # - name: chaos-mesh
   #   namespace: argocd
   #   additionalLabels:
@@ -2031,71 +1726,6 @@ server:
   #       selfHeal: true
   #     syncOptions:
   #     - CreateNamespace=true
-  - name: argo-workflows
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "7"
-    finalizers: []
-    project: default
-    source:
-      chart: argo-workflows
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/argo-workflows/overlays/dev/values.yaml
-      repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 0.14.1
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: argo
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=true
-    info:
-    - name: url
-      value: https://argoproj.github.io/
-  - name: velero
-    namespace: argocd
-    additionalLabels:
-      app.kubernetes.io/instance: argo-cd
-      argocd.argoproj.io/instance: argo-cd
-    additionalAnnotations:
-      argocd.argoproj.io/sync-wave: "7"
-    finalizers: []
-    project: default
-    source:
-      chart: velero
-      helm:
-        valueFiles:
-        - https://raw.githubusercontent.com/ymmmtym/manifests/main/velero/overlays/dev/values.yaml
-      repoURL: https://vmware-tanzu.github.io/helm-charts
-      targetRevision: 2.29.7
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: velero
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      retry:
-        backoff:
-          duration: 20s
-          factor: 2
-          maxDuration: 5m0s
-        limit: 10
-      syncOptions:
-      - CreateNamespace=true
   # - name: kubeapps
   #   namespace: argocd
   #   additionalLabels:

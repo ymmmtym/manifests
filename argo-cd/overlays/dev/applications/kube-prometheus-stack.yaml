@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  labels:
+    app.kubernetes.io/instance: argo-cd
+    argocd.argoproj.io/instance: argo-cd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: kube-prometheus-stack
+    helm:
+      skipCrds: true
+      valueFiles:
+      - https://raw.githubusercontent.com/ymmmtym/manifests/main/kube-prometheus-stack/overlays/dev/values.yaml
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 36.0.3
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    retry:
+      backoff:
+        duration: 20s
+        factor: 2
+        maxDuration: 5m0s
+      limit: 10
+    syncOptions:
+    - CreateNamespace=true

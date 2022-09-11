@@ -12,3 +12,6 @@ helmCharts:
   repo: https://argoproj.github.io/argo-helm
   valuesFile: values.yaml
 
+resources:
+- namespace.yaml
+- applications

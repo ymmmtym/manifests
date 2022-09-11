@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vmware-exporter
+  labels:
+    app.kubernetes.io/instance: argo-cd
+    argocd.argoproj.io/instance: argo-cd
+  annotations:
+    argocd.argoproj.io/sync-wave: "7"
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ymmmtym/manifests.git
+    path: vmware-exporter/overlays/dev/
+    plugin:
+      name: kustomize-build-enable-helm
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    retry:
+      backoff:
+        duration: 20s
+        factor: 2
+        maxDuration: 5m0s
+      limit: 10
+    syncOptions:
+    - CreateNamespace=true

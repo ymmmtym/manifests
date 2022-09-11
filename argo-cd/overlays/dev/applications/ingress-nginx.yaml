@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx
+  labels:
+    app.kubernetes.io/instance: argo-cd
+    argocd.argoproj.io/instance: argo-cd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: ingress-nginx
+    helm:
+      valueFiles:
+      - https://raw.githubusercontent.com/ymmmtym/manifests/main/ingress-nginx/overlays/dev/values.yaml
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    targetRevision: 4.1.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    retry:
+      backoff:
+        duration: 20s
+        factor: 2
+        maxDuration: 5m0s
+      limit: 10
+    syncOptions:
+    - CreateNamespace=true

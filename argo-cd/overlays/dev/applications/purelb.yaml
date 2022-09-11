@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: purelb
+  labels:
+    app.kubernetes.io/instance: argo-cd
+    argocd.argoproj.io/instance: argo-cd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: purelb
+    helm:
+      valueFiles:
+      - https://raw.githubusercontent.com/ymmmtym/manifests/main/purelb/overlays/dev/values.yaml
+    repoURL: https://gitlab.com/api/v4/projects/20400619/packages/helm/stable
+    targetRevision: v0.6.1
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    retry:
+      backoff:
+        duration: 20s
+        factor: 2
+        maxDuration: 5m0s
+      limit: 10
+    syncOptions:
+    - CreateNamespace=true
