@@ -2648,4 +2648,3 @@ notifications:
 
       # -- [Node selector]
       nodeSelector: {}
-
