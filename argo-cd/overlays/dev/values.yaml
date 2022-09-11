@@ -68,6 +68,17 @@ server:
         generate:
           command: ["argocd-vault-plugin"]
           args: ["generate", "./"]
+      - name: argocd-vault-plugin-kustomize
+        generate:
+          command: ["sh", "-c"]
+          args: ["kustomize build . | argocd-vault-plugin generate -"]
+      - name: argocd-vault-plugin-helm
+        init:
+          command: [sh, -c]
+          args: ["helm dependency build"]
+        generate:
+          command: ["sh", "-c"]
+          args: ["helm template $ARGOCD_APP_NAME . ${helm_args} | argocd-vault-plugin generate -"]
     resource.customizations: |
       admissionregistration.k8s.io/MutatingWebhookConfiguration:
         ignoreDifferences: |

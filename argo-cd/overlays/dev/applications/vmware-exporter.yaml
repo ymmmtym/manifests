@@ -15,7 +15,7 @@ spec:
     repoURL: https://github.com/ymmmtym/manifests.git
     path: vmware-exporter/overlays/dev/
     plugin:
-      name: argocd-vault-plugin
+      name: argocd-vault-plugin-kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
