@@ -21,7 +21,7 @@ operatorNamespace: rook-ceph
 # Installs a debugging toolbox deployment
 toolbox:
   enabled: false
-  image: rook/ceph:v1.10.2
+  image: rook/ceph:v1.10.3
   tolerations: []
   affinity: {}
   resources:
@@ -257,9 +257,8 @@ cephClusterSpec:
         cpu: "1000m"
         memory: "4Gi"
     prepareosd:
-      limits:
-        cpu: "500m"
-        memory: "400Mi"
+      # limits: It is not recommended to set limits on the OSD prepare job since it's a one-time burst for memory
+      # that must be allowed to complete without an OOM kill
       requests:
         cpu: "500m"
         memory: "50Mi"
