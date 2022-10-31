@@ -415,16 +415,10 @@ configs:
       # LDAP_PASSWORD: "mypassword"
 
     # -- Argo TLS Data
-    argocdServerTlsConfig:
-      {}
-      # key:
-      # crt: |
-      #   -----BEGIN CERTIFICATE-----
-      #   <cert data>
-      #   -----END CERTIFICATE-----
-      #   -----BEGIN CERTIFICATE-----
-      #   <ca cert data>
-      #   -----END CERTIFICATE-----
+    # DEPRECATED - Use server.certificate or server.certificateSecret
+    # argocdServerTlsConfig:
+    #  key: ''
+    #  crt: ''
 
     # -- Bcrypt hashed admin password
     ## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
@@ -558,31 +552,23 @@ controller:
   podLabels: {}
 
   # -- Application controller container-level security context
+  # @default -- See [values.yaml]
   containerSecurityContext:
-    {}
-    # capabilities:
-    #   drop:
-    #     - all
-    # readOnlyRootFilesystem: true
-    # runAsNonRoot: true
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+      - ALL
 
   # -- Application controller listening port
   containerPort: 8082
 
-  ## Readiness and liveness probes for default backend
+  # Rediness probe for application controller
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
   readinessProbe:
-    # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
-    failureThreshold: 3
-    # -- Number of seconds after the container has started before [probe] is initiated
-    initialDelaySeconds: 10
-    # -- How often (in seconds) to perform the [probe]
-    periodSeconds: 10
-    # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
-    successThreshold: 1
-    # -- Number of seconds after which the [probe] times out
-    timeoutSeconds: 1
-  livenessProbe:
     # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
     failureThreshold: 3
     # -- Number of seconds after the container has started before [probe] is initiated
@@ -825,6 +811,7 @@ dex:
   # @default -- `[]` (defaults to global.imagePullSecrets)
   imagePullSecrets: []
 
+  # Argo CD init image that creates Dex config
   initImage:
     # -- Argo CD init image repository
     # @default -- `""` (defaults to global.image.repository)
@@ -847,11 +834,40 @@ dex:
   # - secretRef:
   #     name: secret-name
 
+  # TLS certificate configuration via Secret
+  ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/tls/#configuring-tls-to-argocd-dex-server
+  ## Note: Issuing certificates via cert-manager in not supported right now because it's not possible to restart Dex automatically without extra controllers.
+  certificateSecret:
+    # -- Create argocd-dex-server-tls secret
+    enabled: false
+    # -- Labels to be added to argocd-dex-server-tls secret
+    labels: {}
+    # -- Annotations to be added to argocd-dex-server-tls secret
+    annotations: {}
+    # -- Certificate authority. Required for self-signed certificates.
+    ca: ''
+    # -- Certificate private key
+    key: ''
+    # -- Certificate data. Must contain SANs of Dex service (ie: argocd-dex-server, argocd-dex-server.argo-cd.svc)
+    crt: ''
+
   # -- Annotations to be added to the Dex server pods
   podAnnotations: {}
 
   # -- Labels to be added to the Dex server pods
   podLabels: {}
+
+  # -- Dex container-level security context
+  # @default -- See [values.yaml]
+  containerSecurityContext:
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+      - ALL
 
   ## Probes for Dex server
   ## Supported from Dex >= 2.28.0
@@ -932,14 +948,6 @@ dex:
 
   # -- Priority class for dex
   priorityClassName: ""
-
-  # -- Dex container-level security context
-  containerSecurityContext:
-    {}
-    # capabilities:
-    #   drop:
-    #     - all
-    # readOnlyRootFilesystem: true
 
   # -- Resource limits and requests for dex
   resources: {}
@@ -1032,6 +1040,22 @@ redis:
   # -- Labels to be added to the Redis server pods
   podLabels: {}
 
+  # -- Redis pod-level security context
+  # @default -- See [values.yaml]
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 999
+    seccompProfile:
+      type: RuntimeDefault
+
+  # -- Redis container-level security context
+  # @default -- See [values.yaml]
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+
   # -- [Node selector]
   nodeSelector: {}
   # -- [Tolerations] for use with node taints
@@ -1049,19 +1073,6 @@ redis:
 
   # -- Priority class for redis
   priorityClassName: ""
-
-  # -- Redis container-level security context
-  containerSecurityContext:
-    {}
-    # capabilities:
-    #   drop:
-    #     - all
-    # readOnlyRootFilesystem: true
-
-  # -- Redis pod-level security context
-  securityContext:
-    runAsNonRoot: true
-    runAsUser: 999
 
   serviceAccount:
     # -- Create a service account for the redis pod
@@ -1124,6 +1135,19 @@ redis:
       imagePullPolicy: IfNotPresent
     # -- Port to use for redis-exporter sidecar
     containerPort: 9121
+
+    # -- Redis exporter security context
+    # @default -- See [values.yaml]
+    containerSecurityContext:
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+        - ALL
+
     # -- Resource limits and requests for redis-exporter sidecar
     resources: {}
       # limits:
@@ -1382,13 +1406,17 @@ server:
   # -- Priority class for the Argo CD server
   priorityClassName: ""
 
-  # -- Servers container-level security context
+  # -- Server container-level security context
+  # @default -- See [values.yaml]
   containerSecurityContext:
-    {}
-    # capabilities:
-    #   drop:
-    #     - all
-    # readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+      - ALL
 
   # -- Resource limits and requests for the Argo CD server
   resources: {}
@@ -1399,16 +1427,34 @@ server:
   #    cpu: 50m
   #    memory: 64Mi
 
-  ## Certificate configuration
+  # TLS certificate configuration via cert-manager
+  ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/tls/#tls-certificates-used-by-argocd-server
   certificate:
     # -- Deploy a Certificate resource (requires cert-manager)
     enabled: false
+    # -- The name of the Secret that will be automatically created and managed by this Certificate resource
+    secretName: argocd-server-tls
     # -- Certificate primary domain (commonName)
     domain: argocd.example.com
-    # -- The requested 'duration' (i.e. lifetime) of the Certificate. Value must be in units accepted by Go time.ParseDuration
+    # -- Certificate Subject Alternate Names (SANs)
+    additionalHosts: []
+    # -- The requested 'duration' (i.e. lifetime) of the certificate.
+    # @default -- `""` (defaults to 2160h = 90d if not specified)
+    ## Ref: https://cert-manager.io/docs/usage/certificate/#renewal
     duration: ""
-    # -- How long before the currently issued certificate's expiry cert-manager should renew the certificate. Value must be in units accepted by Go time.ParseDuration
+    # -- How long before the expiry a certificate should be renewed.
+    # @default -- `""` (defaults to 360h = 15d if not specified)
+    ## Ref: https://cert-manager.io/docs/usage/certificate/#renewal
     renewBefore: ""
+    # Certificate issuer
+    ## Ref: https://cert-manager.io/docs/concepts/issuer
+    issuer:
+      # -- Certificate issuer group. Set if using an external issuer. Eg. `cert-manager.io`
+      group: ""
+      # -- Certificate issuer kind. Either `Issuer` or `ClusterIssuer`
+      kind: ""
+      # -- Certificate isser name. Eg. `letsencrypt`
+      name: ""
     # Private key of the certificate
     privateKey:
       # -- Rotation policy of private key when certificate is re-issued. Either: `Never` or `Always`
@@ -1419,17 +1465,20 @@ server:
       algorithm: RSA
       # -- Key bit size of the private key. If algorithm is set to `Ed25519`, size is ignored.
       size: 2048
-    issuer:
-      # -- Certificate issuer group. Set if using an external issuer. Eg. `cert-manager.io`
-      group: ""
-      # -- Certificate issuer kind. Either `Issuer` or `ClusterIssuer`
-      kind: ""
-      # -- Certificate isser name. Eg. `letsencrypt`
-      name: ""
-    # -- Certificate manager additional hosts
-    additionalHosts: []
-    # -- The name of the Secret that will be automatically created and managed by this Certificate resource
-    secretName: argocd-server-tls
+
+  # TLS certificate configuration via Secret
+  ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/tls/#tls-certificates-used-by-argocd-server
+  certificateSecret:
+    # -- Create argocd-server-tls secret
+    enabled: false
+    # -- Annotations to be added to argocd-server-tls secret
+    annotations: {}
+    # -- Labels to be added to argocd-server-tls secret
+    labels: {}
+    # -- Private Key of the certificate
+    key: ''
+    # -- Certificate data
+    crt: ''
 
   ## Server service configuration
   service:
@@ -1557,7 +1606,7 @@ server:
     # -- Ingress TLS configuration
     tls:
       []
-      # - secretName: argocd-tls-certificate
+      # - secretName: your-certificate-name
       #   hosts:
       #     - argocd.example.com
 
@@ -1623,7 +1672,7 @@ server:
     # -- Ingress TLS configuration for dedicated [gRPC-ingress]
     tls:
       []
-      # - secretName: argocd-tls-certificate
+      # - secretName: your-certificate-name
       #   hosts:
       #     - argocd.example.com
 
@@ -1742,6 +1791,18 @@ server:
       tag: "v0.1.0"
       # -- Image pull policy for extensions
       imagePullPolicy: IfNotPresent
+
+    # -- Server UI extensions container-level security context
+    # @default -- See [values.yaml]
+    containerSecurityContext:
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+        - ALL
 
     # -- Resource limits and requests for the argocd-extensions container
     resources: {}
@@ -1906,12 +1967,16 @@ repoServer:
   priorityClassName: ""
 
   # -- Repo server container-level security context
+  # @default -- See [values.yaml]
   containerSecurityContext:
-    {}
-    # capabilities:
-    #   drop:
-    #     - all
-    # readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+      - ALL
 
   # -- Resource limits and requests for the repo server pods
   resources: {}
@@ -2160,18 +2225,47 @@ applicationSet:
   # -- Labels for the controller pods
   podLabels: {}
 
-  # -- Pod Security Context
-  podSecurityContext: {}
-    # fsGroup: 2000
+  # -- ApplicationSet controller container-level security context
+  # @default -- See [values.yaml]
+  containerSecurityContext:
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+      - ALL
 
-  # -- Security Context
-  securityContext: {}
-    # capabilities:
-    #   drop:
-    #   - ALL
-    # readOnlyRootFilesystem: true
-    # runAsNonRoot: true
-    # runAsUser: 1000
+  ## Probes for ApplicationSet controller (optional)
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+  readinessProbe:
+    # -- Enable Kubernetes liveness probe for ApplicationSet controller
+    enabled: false
+    # -- Number of seconds after the container has started before [probe] is initiated
+    initialDelaySeconds: 10
+    # -- How often (in seconds) to perform the [probe]
+    periodSeconds: 10
+    # -- Number of seconds after which the [probe] times out
+    timeoutSeconds: 1
+    # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+    successThreshold: 1
+    # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+    failureThreshold: 3
+
+  livenessProbe:
+    # -- Enable Kubernetes liveness probe for ApplicationSet controller
+    enabled: false
+    # -- Number of seconds after the container has started before [probe] is initiated
+    initialDelaySeconds: 10
+    # -- How often (in seconds) to perform the [probe]
+    periodSeconds: 10
+    # -- Number of seconds after which the [probe] times out
+    timeoutSeconds: 1
+    # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+    successThreshold: 1
+    # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+    failureThreshold: 3
 
   # -- Resource limits and requests for the controller pods.
   resources: {}
@@ -2421,8 +2515,17 @@ notifications:
   # -- Labels to be applied to the controller Pods
   podLabels: {}
 
-  # -- Container Security Context
-  containerSecurityContext: {}
+  # -- Notification controller container-level security Context
+  # @default -- See [values.yaml]
+  containerSecurityContext:
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+      - ALL
 
   # -- Priority class for the controller pods
   priorityClassName: ""
@@ -2791,12 +2894,17 @@ notifications:
         # -- Annotations applied to created service account
         annotations: {}
 
-      # -- Pod Security Context
-      securityContext:
+      # -- Slack bot container-level security Context
+      # @default -- See [values.yaml]
+      containerSecurityContext:
         runAsNonRoot: true
-
-      # -- Container Security Context
-      containerSecurityContext: {}
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop:
+          - ALL
 
       # -- Resource limits and requests for the Slack bot
       resources: {}
