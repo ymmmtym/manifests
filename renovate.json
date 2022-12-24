@@ -15,11 +15,9 @@
     "config:base",
     ":timezone(Asia/Tokyo)",
     ":prHourlyLimitNone",
-    // "docker:disable", // To prevent upgrading docker image tag in helm values.yaml
     ":automergePatch"
   ],
   "automerge": true,
-  // "schedule": ["after 9am on monday", "before 12am on monday"],
   "ignorePaths": [
     "argo-cd/base"
   ],
