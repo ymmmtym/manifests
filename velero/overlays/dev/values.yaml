@@ -100,17 +100,16 @@ extraVolumeMounts: []
 
 # Extra K8s manifests to deploy
 extraObjects:
-- apiVersion: objectbucket.io/v1alpha1
-  kind: ObjectBucketClaim
+- apiVersion: v1
+  kind: Secret
   metadata:
-    name: velero-bucket
-  spec:
-    bucketName: velero-bucket
-    generateBucketName: velero-bucket
-    storageClassName: ceph-object
-    additionalConfig:
-      maxObjects: "100000"
-      maxSize: "100G"
+    name: velero
+    annotations:
+      avp.kubernetes.io/path: "kv/data/avp/dev/minio"
+  type: Opaque
+  data:
+    AWS_ACCESS_KEY_ID: <access_key | base64encode>
+    AWS_SECRET_ACCESS_KEY: <secret_key | base64encode>
 
 # Settings for Velero's prometheus metrics. Enabled by default.
 metrics:
@@ -183,7 +182,7 @@ configuration:
     # `configuration.provider` will be used instead.
     provider: aws
     # bucket is the name of the bucket to store backups in. Required.
-    bucket: velero-bucket
+    bucket: velero
     # caCert defines a base64 encoded CA bundle to use when verifying TLS connections to the provider. Optional.
     caCert:
     # prefix is the directory under which all Velero data should be stored within the bucket. Optional.
@@ -198,7 +197,7 @@ configuration:
     config:
      region: us-east-1
      s3ForcePathStyle: true
-     s3Url: http://rook-ceph-rgw-ceph-object-store.rook-ceph.svc
+     s3Url: https://minio
     #  kmsKeyId:
     #  resourceGroup:
     #  The ID of the subscription containing the storage account, if different from the cluster’s subscription. (Azure only)
@@ -328,7 +327,7 @@ credentials:
   # Name of a pre-existing secret (if any) in the Velero namespace
   # that will be used to load environment variables into velero and restic.
   # Secret should be in format - https://kubernetes.io/docs/concepts/configuration/secret/#use-case-as-container-environment-variables
-  extraSecretRef: "velero-bucket"
+  extraSecretRef: "velero"
 
 # Whether to create backupstoragelocation crd, if false => do not create a default backup location
 backupsEnabled: true
