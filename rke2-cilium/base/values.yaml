@@ -90,7 +90,7 @@ rollOutCiliumPods: false
 image:
   override: ~
   repository: "rancher/mirrored-cilium-cilium"
-  tag: "v1.12.1"
+  tag: "v1.12.4"
   pullPolicy: "IfNotPresent"
   useDigest: false
 
@@ -359,7 +359,9 @@ cni:
   #  - flannel
   #  - generic-veth
   #  - portmap
-  chainingMode: none
+
+  # Otherwise rke2 hostPort does not work! Used for nginx
+  chainingMode: portmap
 
   # -- Make Cilium take ownership over the `/etc/cni/net.d` directory on the
   # node, renaming all non-Cilium CNI configurations to `*.cilium_bak`.
@@ -479,6 +481,10 @@ ingressController:
   # Incoming traffic to http listener will return 308 http error code with respective location in header.
   enforceHttps: true
 
+  # -- IngressLBAnnotations are the annotation prefixes, which are used to filter annotations to propagate
+  # from Ingress to the Load Balancer service
+  ingressLBAnnotationPrefixes: ['service.beta.kubernetes.io', 'service.kubernetes.io', 'cloud.google.com']
+
   # -- SecretsNamespace is the namespace in which envoy SDS will retrieve TLS secrets from.
   secretsNamespace:
     # -- Create secrets namespace for Ingress.
@@ -550,7 +556,7 @@ endpointHealthChecking:
   enabled: true
 
 # -- Enable endpoint status.
-# Status can be: policy, health, controllers, logs and / or state. For 2 or more options use a comma.
+# Status can be: policy, health, controllers, log and / or state. For 2 or more options use a space.
 endpointStatus:
   enabled: false
   status: ""
@@ -633,8 +639,8 @@ socketLB:
 certgen:
   image:
     override: ~
-    repository: "quay.io/cilium/certgen"
-    tag: "v0.1.8@sha256:4a456552a5f192992a6edcec2febb1c54870d665173a33dc7d876129b199ddbd"
+    repository: "rancher/mirrored-cilium-certgen"
+    tag: "v0.1.8"
     pullPolicy: "IfNotPresent"
   # -- Seconds after which the completed job pod will be deleted
   ttlSecondsAfterFinished: 1800
@@ -692,6 +698,8 @@ hubble:
       labels: {}
       # -- Annotations to add to ServiceMonitor hubble
       annotations: {}
+      # -- Metrics relabeling configs for the ServiceMonitor hubble
+      metricRelabelings: ~
 
   # -- Unix domain socket path to listen to when Hubble is enabled.
   socketPath: /var/run/cilium/hubble.sock
@@ -783,11 +791,10 @@ hubble:
     # -- Hubble-relay container image.
     image:
       override: ~
-      repository: "quay.io/cilium/hubble-relay"
-      tag: "v1.12.1"
+      repository: "rancher/mirrored-cilium-hubble-relay"
+      tag: "v1.12.4"
        # hubble-relay-digest
-      digest: "sha256:646582b22bf41ad29dd7739b12aae77455ee5757b9ee087f2d45d684afef5fa1"
-      useDigest: true
+      useDigest: false
       pullPolicy: "IfNotPresent"
 
     # -- Specifies the resources for the hubble-relay pods
@@ -922,6 +929,8 @@ hubble:
         # -- Specify the Kubernetes namespace where Prometheus expects to find
         # service monitors configured.
         # namespace: ""
+        # -- Metrics relabeling configs for the ServiceMonitor hubble-relay
+        metricRelabelings: ~
 
   ui:
     # -- Whether to enable the Hubble UI.
@@ -967,8 +976,8 @@ hubble:
       # -- Hubble-ui backend image.
       image:
         override: ~
-        repository: "quay.io/cilium/hubble-ui-backend"
-        tag: "v0.9.1@sha256:c4b86e0d7a38d52c6ea3d9d7b17809e5212efd97494e8bd37c8466ddd68d42d0"
+        repository: "rancher/mirrored-cilium-hubble-ui-backend"
+        tag: "v0.9.2"
         pullPolicy: "IfNotPresent"
 
       # -- Additional hubble-ui backend environment variables.
@@ -987,8 +996,8 @@ hubble:
       # -- Hubble-ui frontend image.
       image:
         override: ~
-        repository: "quay.io/cilium/hubble-ui"
-        tag: "v0.9.1@sha256:baff611b975cb12307a163c0e547e648da211384eabdafd327707ff2ec31cc24"
+        repository: "rancher/mirrored-cilium-hubble-ui"
+        tag: "v0.9.2"
         pullPolicy: "IfNotPresent"
 
       # -- Additional hubble-ui frontend environment variables.
@@ -1002,6 +1011,10 @@ hubble:
       #   requests:
       #     cpu: 100m
       #     memory: 64Mi
+      server:
+        # -- Controls server listener for ipv6
+        ipv6:
+          enabled: true
 
     # -- The number of replicas of Hubble UI to deploy.
     replicas: 1
@@ -1338,6 +1351,8 @@ prometheus:
     # -- Specify the Kubernetes namespace where Prometheus expects to find
     # service monitors configured.
     # namespace: ""
+    # -- Metrics relabeling configs for the ServiceMonitor cilium-agent
+    metricRelabelings: ~
   # -- Metrics that should be enabled or disabled from the default metric
   # list. (+metric_foo to enable metric_foo , -metric_bar to disable
   # metric_bar).
@@ -1433,8 +1448,8 @@ etcd:
   # -- cilium-etcd-operator image.
   image:
     override: ~
-    repository: "quay.io/cilium/cilium-etcd-operator"
-    tag: "v2.0.7@sha256:04b8327f7f992693c2cb483b999041ed8f92efc8e14f2a5f3ab95574a65ea2dc"
+    repository: "rancher/mirrored-cilium-cilium-etcd-operator"
+    tag: "v2.0.7"
     pullPolicy: "IfNotPresent"
 
   # -- The priority class to use for cilium-etcd-operator
@@ -1522,7 +1537,7 @@ operator:
   image:
     override: ~
     repository: "rancher/mirrored-cilium-operator"
-    tag: "v1.12.1"
+    tag: "v1.12.4"
     useDigest: false
     pullPolicy: "IfNotPresent"
     suffix: ""
@@ -1645,6 +1660,8 @@ operator:
       labels: {}
       # -- Annotations to add to ServiceMonitor cilium-operator
       annotations: {}
+      # -- Metrics relabeling configs for the ServiceMonitor cilium-operator
+      metricRelabelings: ~
 
   # -- Skip CRDs creation for cilium-operator
   skipCRDCreation: false
@@ -1747,7 +1764,7 @@ preflight:
   image:
     override: ~
     repository: "rancher/mirrored-cilium-cilium"
-    tag: "v1.12.1"
+    tag: "v1.12.4"
     useDigest: false
     pullPolicy: "IfNotPresent"
 
@@ -1881,19 +1898,18 @@ clustermesh:
     # -- Clustermesh API server image.
     image:
       override: ~
-      repository: "quay.io/cilium/clustermesh-apiserver"
-      tag: "v1.12.1"
+      repository: "rancher/mirrored-cilium-clustermesh-apiserver"
+      tag: "v1.12.4"
       # clustermesh-apiserver-digest
-      digest: "sha256:c80a8d6ffdf7cab4699441496f628a09a31d0300e623cadb2837c86fa368c02f"
-      useDigest: true
+      useDigest: false
       pullPolicy: "IfNotPresent"
 
     etcd:
       # -- Clustermesh API server etcd image.
       image:
         override: ~
-        repository: "quay.io/coreos/etcd"
-        tag: "v3.5.4@sha256:795d8660c48c439a7c3764c2330ed9222ab5db5bb524d8d0607cac76f7ba82a3"
+        repository: "rancher/mirrored-coreos-etcd"
+        tag: "v3.5.4"
         pullPolicy: "IfNotPresent"
 
     service:
@@ -2098,6 +2114,11 @@ dnsProxy:
   proxyPort: 0
   # -- The maximum time the DNS proxy holds an allowed DNS response before sending it along. Responses are sent as soon as the datapath is updated with the new IP information.
   proxyResponseMaxDelay: 100ms
+
+portmapPlugin:
+  image:
+    repository: "rancher/hardened-cni-plugins"
+    tag: "v1.0.1-build20221011"
 
 global:
   systemDefaultRegistry: ""
