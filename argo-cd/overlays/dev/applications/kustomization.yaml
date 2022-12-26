@@ -13,5 +13,6 @@ resources:
 - purelb.yaml
 - sealed-secrets.yaml
 - synology-csi.yaml
+- vault.yaml
 - velero.yaml
 - vmware-exporter.yaml
