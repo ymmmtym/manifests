@@ -62,7 +62,7 @@ server:
     configManagementPlugins: |
       - name: kustomize-build-enable-helm
         generate:
-          command: [ "sh", "-c" ]
+          command: [ "bash", "-c" ]
           args: [ "kustomize build --enable-helm" ]
       - name: argocd-vault-plugin
         generate:
@@ -70,15 +70,15 @@ server:
           args: ["generate", "./"]
       - name: argocd-vault-plugin-kustomize
         generate:
-          command: ["sh", "-c"]
-          args: ["kustomize build . | argocd-vault-plugin generate -"]
+          command: ["bash", "-c"]
+          args: ["kustomize build --enable-helm . | argocd-vault-plugin generate -"]
       - name: argocd-vault-plugin-helm
         init:
-          command: [sh, -c]
+          command: ["bash", "-c"]
           args: ["helm dependency build"]
         generate:
-          command: ["sh", "-c"]
-          args: ["helm template $ARGOCD_APP_NAME . ${helm_args} | argocd-vault-plugin generate -"]
+          command: ["bash", "-c"]
+          args: ["helm template $ARGOCD_APP_NAME . ${helm_args} -f <(echo $HELM_VALUES) | argocd-vault-plugin generate -"]
     resource.customizations: |
       admissionregistration.k8s.io/MutatingWebhookConfiguration:
         ignoreDifferences: |
