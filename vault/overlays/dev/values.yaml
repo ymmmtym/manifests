@@ -16,7 +16,7 @@ server:
     enabled: true
     size: 10Gi
     mountPath: "/vault/data"
-    storageClass: null
+    storageClass: longhorn
     accessMode: ReadWriteOnce
     annotations: {}
   auditStorage:
