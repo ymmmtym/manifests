@@ -9,6 +9,7 @@ resources:
 - kube-prometheus-stack-crds.yaml
 - kube-prometheus-stack.yaml
 - loki-stack.yaml
+- longhorn.yaml
 - purelb.yaml
 - sealed-secrets.yaml
 - synology-csi.yaml

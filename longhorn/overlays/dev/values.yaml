@@ -98,7 +98,7 @@ defaultSettings:
   backupTargetCredentialSecret: ~
   allowRecurringJobWhileVolumeDetached: ~
   createDefaultDiskLabeledNodes: ~
-  defaultDataPath: ~
+  defaultDataPath: /mnt/disk01
   defaultDataLocality: ~
   replicaSoftAntiAffinity: ~
   replicaAutoBalance: ~
