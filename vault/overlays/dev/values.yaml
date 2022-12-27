@@ -4,7 +4,9 @@ injector:
 server:
   image:
     pullPolicy: Always
+
   updateStrategyType: "RollingUpdate"
+
   ingress:
     enabled: true
     ingressClassName: "nginx"
@@ -12,49 +14,16 @@ server:
       - host: cluster.yumenomatayume.home
         paths:
           - /
+
   dataStorage:
     enabled: true
     size: 10Gi
-    mountPath: "/vault/data"
     storageClass: longhorn
-    accessMode: ReadWriteOnce
-    annotations: {}
-  auditStorage:
-    enabled: false
-    size: 10Gi
-    mountPath: "/vault/audit"
-    storageClass: null
-    accessMode: ReadWriteOnce
-    annotations: {}
-  dev:
-    enabled: false
-    devRootToken: "root"
-  standalone:
-    enabled: false
+
   ha:
     enabled: true
     raft:
       enabled: true
-      config: |
-        ui = true
 
-        listener "tcp" {
-          tls_disable = 1
-          address = "[::]:8200"
-          cluster_address = "[::]:8201"
-        }
-
-        storage "raft" {
-          path = "/vault/data"
-        }
-
-        service_registration "kubernetes" {}
-
-        # seal "gcpckms" {
-        #    project     = "vault-helm-dev-246514"
-        #    region      = "global"
-        #    key_ring    = "vault-helm-unseal-kr"
-        #    crypto_key  = "vault-helm-unseal-key"
-        # }
 ui:
   enabled: true
