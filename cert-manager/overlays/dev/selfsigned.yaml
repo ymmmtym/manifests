@@ -60,7 +60,7 @@ spec:
     - server auth
     - client auth
   dnsNames:
-    - '*.home.yumenomatayume.net'
+    - '*.yumenomatayume.home'
   issuerRef:
     name: selfsigned
     kind: ClusterIssuer
