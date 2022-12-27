@@ -14,5 +14,5 @@ helmCharts:
 
 resources:
 - selfsigned.yaml
-# - letsencrypt-stg.yaml
+- letsencrypt-stg.yaml
 # - letsencrypt-prod.yaml
