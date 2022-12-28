@@ -10,5 +10,5 @@ resources:
 
 images:
 - name: pryorda/vmware_exporter
-  newTag: v0.18.3
+  newTag: v0.18.4
 
