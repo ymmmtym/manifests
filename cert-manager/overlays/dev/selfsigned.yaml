@@ -14,7 +14,7 @@ metadata:
   namespace: kube-system
 spec:
   isCA: true
-  commonName: yumenomatayume.home
+  commonName: "*.yumenomatayume.home"
   duration: 438000h # 50y
   secretName: root-ca
   privateKey:
@@ -50,7 +50,7 @@ spec:
   subject:
     organizations:
       - yumenomatayume
-  commonName: '*.yumenomatayume.home'
+  commonName: "*.yumenomatayume.home"
   isCA: false
   privateKey:
     algorithm: RSA
@@ -60,7 +60,7 @@ spec:
     - server auth
     - client auth
   dnsNames:
-    - '*.yumenomatayume.home'
+    - "*.yumenomatayume.home"
   issuerRef:
     name: selfsigned
     kind: ClusterIssuer
