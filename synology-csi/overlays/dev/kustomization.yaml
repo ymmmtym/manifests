@@ -5,5 +5,5 @@ namespace: synology-csi
 
 resources:
 - ../../base
-- sealed-secret.yaml
+- secret.yaml
 - storage-class.yaml
