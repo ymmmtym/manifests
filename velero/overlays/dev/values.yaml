@@ -105,7 +105,7 @@ extraObjects:
   metadata:
     name: velero
     annotations:
-      avp.kubernetes.io/path: "kv/data/avp/dev/minio"
+      avp.kubernetes.io/path: "kv/data/local/minio"
   type: Opaque
   data:
     AWS_ACCESS_KEY_ID: <access_key | base64encode>
