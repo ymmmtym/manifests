@@ -14,6 +14,8 @@ spec:
   source:
     repoURL: https://github.com/ymmmtym/manifests.git
     path: synology-csi/overlays/dev/
+    plugin:
+      name: argocd-vault-plugin-kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
