@@ -15,6 +15,65 @@ server:
         paths:
           - /
 
+  extraInitContainers:
+    - name: install-plugins
+      image: "alpine:latest"
+      command: [sh, -c]
+      args:
+        - wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/local/libexec/vault/jq &&
+          chmod +x /usr/local/libexec/vault/*
+      volumeMounts:
+        - name: plugins
+          mountPath: /usr/local/libexec/vault
+
+  postStart:
+    - /bin/ash
+    - -c
+    - |
+      sleep 20
+      vault operator init -status && exit 0
+
+      if [[ ${HOSTNAME: -1} -ne 0 ]]; then
+        sleep 10
+        vault operator raft join -retry=true http://vault-0.vault-internal:8200
+        exit 0
+      fi
+
+      plugin_path=${PLUGIN_PATH:-"/usr/local/libexec/vault"}
+      PATH="${PATH}:${plugin_path}"
+
+      vault_operator_init_json=$(vault operator init -recovery-shares=1 -recovery-threshold=1 -format=json)
+      vault login $(echo $vault_operator_init_json | jq -r ".root_token")
+
+      vault auth enable kubernetes
+      vault write auth/kubernetes/config \
+      kubernetes_host=https://kubernetes.default \
+      kubernetes_ca_cert=@ca.crt
+
+      vault write auth/kubernetes/role/argocd \
+      bound_service_account_names=argo-cd-argocd-repo-server \
+      bound_service_account_namespaces=argocd \
+      policies=argocd \
+      ttl=1h
+
+      vault secrets enable -path kv -version=2 kv
+
+      echo 'path "kv/*" {capabilities = ["create", "read", "update", "delete", "list"]}' | vault policy write argocd -
+      echo $vault_operator_init_json > /vault/init.json
+
+  extraSecretEnvironmentVars:
+    - envName: VAULT_TOKEN
+      secretName: vault
+      secretKey: VAULT_TOKEN
+
+  volumes:
+    - name: plugins
+      emptyDir: {}
+
+  volumeMounts:
+    - name: plugins
+      mountPath: /usr/local/libexec/vault
+
   dataStorage:
     enabled: true
     size: 10Gi
@@ -24,6 +83,35 @@ server:
     enabled: true
     raft:
       enabled: true
+      setNodeId: true
+      config: |
+        ui = true
+
+        api_addr = "[::]:8200"
+        cluster_addr = "[::]:8201"
+
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+        }
+
+        storage "raft" {
+          path = "/vault/data"
+        }
+
+        seal "transit" {
+          address            = "https://vault.yumenomatayume.home"
+          # token              = "" # Use VAULT_TOKEN from env
+          disable_renewal    = "false"
+
+          key_name           = "unseal_key"
+          mount_path         = "transit/"
+
+          tls_skip_verify    = "true"
+        }
+
+        service_registration "kubernetes" {}
 
 ui:
   enabled: true
