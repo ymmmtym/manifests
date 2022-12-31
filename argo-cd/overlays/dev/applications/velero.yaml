@@ -12,12 +12,10 @@ metadata:
 spec:
   project: default
   source:
-    chart: velero
-    helm:
-      valueFiles:
-      - https://raw.githubusercontent.com/ymmmtym/manifests/main/velero/overlays/dev/values.yaml
-    repoURL: https://vmware-tanzu.github.io/helm-charts
-    targetRevision: 2.29.8
+    repoURL: https://github.com/ymmmtym/manifests.git
+    path: velero/overlays/dev/
+    plugin:
+      name: argocd-vault-plugin-kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: velero
