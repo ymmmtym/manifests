@@ -1,6 +1,8 @@
 global:
   image:
     imagePullPolicy: Always
+  additionalLabels:
+    argocd.argoproj.io/instance: argo-cd
 dex:
   enabled: false
 server:
