@@ -6,6 +6,7 @@ loki:
     accessModes:
     - ReadWriteOnce
     size: 10Gi
+    storageClass: longhorn
 
 promtail:
   enabled: true
