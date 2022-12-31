@@ -11,4 +11,3 @@ helmCharts:
   version: 2.30.2
   repo: https://vmware-tanzu.github.io/helm-charts
   valuesFile: values.yaml
-
