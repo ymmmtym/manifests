@@ -43,12 +43,13 @@ server:
       PATH="${PATH}:${plugin_path}"
 
       vault_operator_init_json=$(vault operator init -recovery-shares=1 -recovery-threshold=1 -format=json)
-      vault login $(echo $vault_operator_init_json | jq -r ".root_token")
+      VAULT_TOKEN=$(echo $vault_operator_init_json | jq -r ".root_token")
+      vault login $VAULT_TOKEN
 
       vault auth enable kubernetes
       vault write auth/kubernetes/config \
       kubernetes_host=https://kubernetes.default \
-      kubernetes_ca_cert=@ca.crt
+      kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 
       vault write auth/kubernetes/role/argocd \
       bound_service_account_names=argo-cd-argocd-repo-server \
