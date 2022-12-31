@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: argocd
 
+commonLabels:
+  argocd.argoproj.io/instance: argo-cd
+
 helmCharts:
 - name: argo-cd
   namespace: argocd
