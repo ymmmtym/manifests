@@ -8,7 +8,7 @@ helmCharts:
   namespace: k8s-at-home
   includeCRDs: true
   releaseName: home-assistant
-  version: 13.3.0
+  version: 13.4.2
   repo: https://k8s-at-home.com/charts/
   valuesFile: values.yaml
 
