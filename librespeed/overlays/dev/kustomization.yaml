@@ -8,7 +8,7 @@ helmCharts:
   namespace: k8s-at-home
   includeCRDs: true
   releaseName: librespeed
-  version: 5.3.2
+  version: 5.4.2
   repo: https://k8s-at-home.com/charts/
   valuesFile: values.yaml
 
