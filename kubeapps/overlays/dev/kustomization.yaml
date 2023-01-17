@@ -8,7 +8,7 @@ helmCharts:
   namespace: kube-system
   includeCRDs: true
   releaseName: kubeapps
-  version: 9.0.3
+  version: 12.1.5
   repo: https://charts.bitnami.com/bitnami
   valuesFile: values.yaml
 
