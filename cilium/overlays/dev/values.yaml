@@ -854,7 +854,7 @@ hubble:
       image:
         override: ~
         repository: docker.io/envoyproxy/envoy
-        tag: v1.24.1@sha256:1f07971d83e470d6f87583044ddb2b7aefac9ba1f14239479ea936599166f638
+        tag: v1.25.0@sha256:88b063f29998cab24a7d4449f15581aa56b0afa5597343f8937ae96de572fd34
         pullPolicy: IfNotPresent
       # [Example]
       # resources:
