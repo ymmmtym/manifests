@@ -18,6 +18,9 @@
     ":automergePatch"
   ],
   "automerge": true,
+  "ignoreDeps": [
+    "helm-values"
+  ],
   "ignorePaths": [
     "argo-cd/base"
   ],
