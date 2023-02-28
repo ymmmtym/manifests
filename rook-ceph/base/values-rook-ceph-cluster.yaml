@@ -145,7 +145,24 @@ cephClusterSpec:
     ssl: true
 
   # Network configuration, see: https://github.com/rook/rook/blob/master/Documentation/CRDs/ceph-cluster-crd.md#network-configuration-settings
-  # network:
+  network:
+    connections:
+      # Whether to encrypt the data in transit across the wire to prevent eavesdropping the data on the network.
+      # The default is false. When encryption is enabled, all communication between clients and Ceph daemons, or between Ceph daemons will be encrypted.
+      # When encryption is not enabled, clients still establish a strong initial authentication and data integrity is still validated with a crc check.
+      # IMPORTANT: Encryption requires the 5.11 kernel for the latest nbd and cephfs drivers. Alternatively for testing only,
+      # you can set the "mounter: rbd-nbd" in the rbd storage class, or "mounter: fuse" in the cephfs storage class.
+      # The nbd and fuse drivers are *not* recommended in production since restarting the csi driver pod will disconnect the volumes.
+      encryption:
+        enabled: false
+      # Whether to compress the data in transit across the wire. The default is false.
+      # Requires Ceph Quincy (v17) or newer. Also see the kernel requirements above for encryption.
+      compression:
+        enabled: false
+      # Whether to require communication over msgr2. If true, the msgr v1 port (6789) will be disabled
+      # and clients will be required to connect to the Ceph cluster with the v2 port (3300).
+      # Requires a kernel that supports msgr v2 (kernel 5.11 or CentOS 8.4 or newer).
+      requireMsgr2: false
   #   # enable host networking
   #   provider: host
   #   # EXPERIMENTAL: enable the Multus network provider
@@ -286,13 +303,6 @@ cephClusterSpec:
       requests:
         cpu: "500m"
         memory: "50Mi"
-    mgr-sidecar:
-      limits:
-        cpu: "500m"
-        memory: "100Mi"
-      requests:
-        cpu: "100m"
-        memory: "40Mi"
     crashcollector:
       limits:
         cpu: "500m"
@@ -362,11 +372,6 @@ cephClusterSpec:
     # Operator will continue with the next drain if the timeout exceeds. It only works if `managePodBudgets` is `true`.
     # No values or 0 means that the operator will wait until the placement groups are healthy before unblocking the next drain.
     pgHealthCheckTimeout: 0
-    # If true, the operator will create and manage MachineDisruptionBudgets to ensure OSDs are only fenced when the cluster is healthy.
-    # Only available on OpenShift.
-    manageMachineDisruptionBudgets: false
-    # Namespace in which to watch for the MachineDisruptionBudgets.
-    machineDisruptionBudgetNamespace: openshift-machine-api
 
   # Configure the healthcheck and liveness probes for ceph pods.
   # Valid values for daemons are 'mon', 'osd', 'status'
@@ -422,12 +427,16 @@ cephBlockPools:
       failureDomain: host
       replicated:
         size: 3
+      # Enables collecting RBD per-image IO statistics by enabling dynamic OSD performance counters. Defaults to false.
+      # For reference: https://docs.ceph.com/docs/master/mgr/prometheus/#rbd-io-statistics
+      # enableRBDStats: true
     storageClass:
       enabled: true
       name: ceph-block
       isDefault: true
       reclaimPolicy: Delete
       allowVolumeExpansion: true
+      volumeBindingMode: "Immediate"
       mountOptions: []
       # see https://kubernetes.io/docs/concepts/storage/storage-classes/#allowed-topologies
       allowedTopologies: []
@@ -506,6 +515,7 @@ cephFileSystems:
       pool: data0
       reclaimPolicy: Delete
       allowVolumeExpansion: true
+      volumeBindingMode: "Immediate"
       mountOptions: []
       # see https://github.com/rook/rook/blob/master/Documentation/ceph-filesystem.md#provision-storage for available configuration
       parameters:
@@ -574,13 +584,11 @@ cephObjectStores:
         # sslCertificateRef:
         instances: 1
         priorityClassName: system-cluster-critical
-      healthCheck:
-        bucket:
-          interval: 60s
     storageClass:
       enabled: true
       name: ceph-bucket
       reclaimPolicy: Delete
+      volumeBindingMode: "Immediate"
       # see https://github.com/rook/rook/blob/master/Documentation/ceph-object-bucket-claim.md#storageclass for available configuration
       parameters:
         # note: objectStoreNamespace and objectStoreName are configured by the chart

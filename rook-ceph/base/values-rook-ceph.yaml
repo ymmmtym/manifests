@@ -7,7 +7,7 @@ image:
   repository: rook/ceph
   # -- Image tag
   # @default -- `master`
-  tag: v1.10.11
+  tag: v1.11.0
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -112,6 +112,10 @@ csi:
   # By default OMAP generator is disabled and when enabled, it will be deployed as a
   # sidecar with CSI provisioner pod, to enable set it to true.
   enableOMAPGenerator: false
+
+  # -- Set CephFS Kernel mount options to use https://docs.ceph.com/en/latest/man/8/mount.ceph/#options.
+  # Set to "ms_mode=secure" when connections.encrypted is enabled in CephCluster CR
+  cephFSKernelMountOptions:
 
   # -- Enable adding volume metadata on the CephFS subvolumes and RBD images.
   # Not all users might be interested in getting volume/snapshot details as metadata on CephFS subvolume and RBD images.
@@ -452,7 +456,7 @@ csi:
 
   cephcsi:
     # -- Ceph CSI image
-    # @default -- `quay.io/cephcsi/cephcsi:v3.7.2`
+    # @default -- `quay.io/cephcsi/cephcsi:v3.8.0`
     image:
 
   registrar:
@@ -513,6 +517,17 @@ csi:
     # - kubernetes.io/hostname
     # - topology.kubernetes.io/zone
     # - topology.rook.io/rack
+
+  readAffinity:
+    # -- Enable read affinity for RBD volumes. Recommended to
+    # set to true if running kernel 5.8 or newer.
+    # @default -- `false`
+    enabled: false
+    # -- Define which node labels to use
+    # as CRUSH location. This should correspond to the values set
+    # in the CRUSH map.
+    # @default -- labels listed [here](../CRDs/Cluster/ceph-cluster-crd.md#osd-topology)
+    crushLocationLabels:
 
 # -- Enable discovery daemon
 enableDiscoveryDaemon: false
