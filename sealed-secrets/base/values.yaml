@@ -56,6 +56,12 @@ secretName: "sealed-secrets-key"
 ## @param updateStatus Specifies whether the Sealed Secrets controller should update the status subresource
 ##
 updateStatus: true
+## @param skipRecreate Specifies whether the Sealed Secrets controller should skip recreating removed secrets
+## Setting it to false allows to optionally restore backward compatibility in low priviledge
+## environments when old versions of the controller did not require watch permissions on secrets
+## for secret re-creation.
+##
+skipRecreate: false
 ## @param keyrenewperiod Specifies key renewal period. Default 30 days
 ## e.g
 ## keyrenewperiod: "720h30m"
@@ -151,7 +157,8 @@ podSecurityContext:
 ## @param containerSecurityContext.readOnlyRootFilesystem Whether the Sealed Secret container has a read-only root filesystem
 ## @param containerSecurityContext.runAsNonRoot Indicates that the Sealed Secret container must run as a non-root user
 ## @param containerSecurityContext.runAsUser Set Sealed Secret containers' Security Context runAsUser
-## @param containerSecurityContext.capabilities Adds and removes POSIX capabilities from running containers
+## @extra containerSecurityContext.capabilities Adds and removes POSIX capabilities from running containers (see `values.yaml`)
+## @skip  containerSecurityContext.capabilities.drop
 ##
 containerSecurityContext:
   enabled: true
@@ -163,7 +170,7 @@ containerSecurityContext:
       - ALL
 
 ## @param automountServiceAccountToken whether to automatically mount the service account API-token to a particular pod
-automountServiceAccountToken: ""
+automountServiceAccountToken: true
 
 ## @param podLabels [object] Extra labels for Sealed Secret pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -341,7 +348,7 @@ serviceAccount:
   ##
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Specifies, whether to mount the service account API-token
-  automountServiceAccountToken: ""
+  automountServiceAccountToken: true
 ## RBAC configuration
 ##
 rbac:
@@ -351,6 +358,9 @@ rbac:
   ## @param rbac.clusterRole Specifies whether the Cluster Role resource should be created
   ##
   clusterRole: true
+  ## @param rbac.clusterRoleName Specifies the name for the Cluster Role resource
+  ##
+  clusterRoleName: "secrets-unsealer"
   ## @param rbac.labels Extra labels to be added to RBAC resources
   ##
   labels: {}
