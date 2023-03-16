@@ -1,10 +1,10 @@
-# Copyright 2020 The Kubernetes Authors.
+# Copyright 2017 The Kubernetes Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@
 image:
   ## Repository for container
   repository: kubernetesui/dashboard
-  tag: v2.7.0
+  tag: ""  # If not defined, uses appVersion of Chart.yaml
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -344,6 +344,8 @@ networkPolicy:
   enabled: false
 
 ## podSecurityPolicy for fine-grained authorization of pod creation and updates
+## Note that PSP is deprecated and has been removed from kubernetes 1.25 onwards.
+## For 1.25+ consider enabling PodSecurityAdmission, refer to chart README.md.
 podSecurityPolicy:
   # Specifies whether a pod security policy should be created
   enabled: false
@@ -355,3 +357,8 @@ serviceMonitor:
   labels: {}
   ## Here annotations can be added to the serviceMonitor
   annotations: {}
+
+## Optional containers, i.e. for auth addons.
+optionalContainers:
+  enabled: false
+  containers: []
