@@ -9,7 +9,7 @@ image:
   # -- image repository
   repository: benbusby/whoogle-search
   # -- image tag
-  tag: 0.8.1
+  tag: 0.8.2
   # -- image pull policy
   pullPolicy: IfNotPresent
 
