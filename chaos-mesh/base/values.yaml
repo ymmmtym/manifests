@@ -48,7 +48,7 @@ images:
   # images.registry is the global container registry for the images, you could replace it with your self-hosted container registry.
   registry: "ghcr.io"
   # images.tag is the global image tag (for example, semiVer with prefix v, or latest).
-  tag: "v2.5.2"
+  tag: "v2.6.0"
 
 ## Optional array of imagePullSecrets containing private registry credentials
 ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -81,8 +81,12 @@ controllerManager:
 
   # The keys within the "env" map are mounted as environment variables on the pod.
   env:
-    # WEBHOOK_PORT is configured the port for chaos-controller-manager provides webhooks
-    WEBHOOK_PORT: 9443
+    # WEBHOOK_PORT is configured the port for chaos-controller-manager provides webhooks.
+    # In GKE private clusters, by default kubernetes apiservers are allowed to
+    # talk to the cluster nodes only on 443 and 10250. so configuring
+    # WEBHOOK_PORT: 10250, will work out of the box without needing to add firewall
+    # rules or requiring NET_BIND_SERVICE capabilities to bind port numbers <1000
+    WEBHOOK_PORT: 10250
     # METRICS_PORT is configured the port for chaos-controller-manager exposing prometheus metrics
     METRICS_PORT: 10080
   # If enabled, only pods in the namespace annotated with `"chaos-mesh.org/inject": "enabled"` could be injected
@@ -135,6 +139,13 @@ controllerManager:
     retryPeriod: 2s
   # chaosdSecurityMode is enabled for mTLS connection between chaos-controller-manager and chaosd
   chaosdSecurityMode: true
+  # multi cluster install offline helm chart path
+  localHelmChart:
+    enabled: false
+    volume:
+      hostPath:
+        path: /data/helm
+        type: DirectoryOrCreate
 
 chaosDaemon:
   # image would be constructed by <registry>/<repository>:<tag>
@@ -165,16 +176,17 @@ chaosDaemon:
   # are essentially equivalent to root on the host.
   # If it is set to false, the following capabilities will be set. You can grant certain privileges
   # to a process without granting all the privileges of the root user.
-  ## capabilities:
-  ##   add:
-  ##     - SYS_PTRACE
-  ##     - NET_ADMIN
-  ##     - MKNOD
-  ##     - SYS_CHROOT
-  ##     - SYS_ADMIN
-  ##     - KILL
-  ##     # CAP_IPC_LOCK is used to lock memory
-  ##     - IPC_LOCK
+  capabilities:
+    add:
+      - SYS_PTRACE
+      - NET_ADMIN
+      - NET_RAW
+      - MKNOD
+      - SYS_CHROOT
+      - SYS_ADMIN
+      - KILL
+      # CAP_IPC_LOCK is used to lock memory
+      - IPC_LOCK
   privileged: true
   # Custom priorityClassName for using pod priorities
   priorityClassName: ""
@@ -390,11 +402,11 @@ dashboard:
 
 dnsServer:
   # Enable DNS Server which required by DNSChaos
-  create: false
+  create: true
   # Name of serviceaccount for chaos-dns-server.
   serviceAccount: chaos-dns-server
   # Image of DNS Server
-  image: pingcap/coredns:v0.2.1
+  image: ghcr.io/chaos-mesh/chaos-coredns:v0.2.6
   # Image pull policy
   imagePullPolicy: IfNotPresent
   # Customized priorityClassName for chaos-dns-server
