@@ -8,7 +8,7 @@ helmCharts:
   namespace: monitoring
   includeCRDs: true
   releaseName: jaeger-operator
-  version: 2.45.0
+  version: 2.46.0
   repo: https://jaegertracing.github.io/helm-charts
   valuesFile: values.yaml
 
