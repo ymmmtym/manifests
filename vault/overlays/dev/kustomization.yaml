@@ -8,6 +8,6 @@ helmCharts:
   namespace: kube-system
   includeCRDs: false
   releaseName: vault
-  version: 0.24.1
+  version: 0.25.0
   repo: https://helm.releases.hashicorp.com
   valuesFile: values.yaml
