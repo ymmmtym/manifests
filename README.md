@@ -7,12 +7,5 @@ My manifests
 ## Requirements
 
 - helm
-- helmfile
+- kustomize
 
-## Usage
-
-Use `helmfile`.
-
-```bash
-helmfile apply
-```
