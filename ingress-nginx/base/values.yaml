@@ -552,7 +552,7 @@ controller:
 
   opentelemetry:
     enabled: false
-    image: registry.k8s.io/ingress-nginx/opentelemetry:v20230527@sha256:fd7ec835f31b7b37187238eb4fdad4438806e69f413a203796263131f4f02ed0
+    image: registry.k8s.io/ingress-nginx/opentelemetry:v20230612@sha256:1c8fa555f66d016b27e230f0b9b8c2fd7c8fe86fef342bdf5be609b392bf121f
     containerSecurityContext:
       allowPrivilegeEscalation: false
   admissionWebhooks:
