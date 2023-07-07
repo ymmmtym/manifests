@@ -21,48 +21,53 @@ global:
         taintToleration: cattle.io/os=linux:NoSchedule
         systemManagedComponentsNodeSelector: kubernetes.io/os:linux
 
+networkPolicies:
+  enabled: false
+  # Available types: k3s, rke2, rke1
+  type: "k3s"
+
 image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.4.2
+      tag: v1.5.0
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.4.2
+      tag: v1.5.0
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.4.2
+      tag: v1.5.0
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1.4.2
+      tag: v1.5.0
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1.4.2
+      tag: v1.5.0
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v1.4.2
+      tag: v1.5.0
     supportBundleKit:
       repository: longhornio/support-bundle-kit
       tag: v0.0.24
   csi:
     attacher:
       repository: longhornio/csi-attacher
-      tag: v3.4.0
+      tag: v4.2.0
     provisioner:
       repository: longhornio/csi-provisioner
-      tag: v2.1.2
+      tag: v3.4.1
     nodeDriverRegistrar:
       repository: longhornio/csi-node-driver-registrar
-      tag: v2.5.0
+      tag: v2.7.0
     resizer:
       repository: longhornio/csi-resizer
-      tag: v1.3.0
+      tag: v1.7.0
     snapshotter:
       repository: longhornio/csi-snapshotter
-      tag: v5.0.1
+      tag: v6.2.1
     livenessProbe:
       repository: longhornio/livenessprobe
-      tag: v2.8.0
+      tag: v2.9.0
   pullPolicy: IfNotPresent
 
 service:
@@ -132,10 +137,7 @@ defaultSettings:
   disableSchedulingOnCordonedNode: ~
   replicaZoneSoftAntiAffinity: ~
   nodeDownPodDeletionPolicy: ~
-  allowNodeDrainWithLastHealthyReplica: ~
-  nodeDrainPolicy : ~
-  mkfsExt4Parameters: ~
-  disableReplicaRebuild: ~
+  nodeDrainPolicy: ~
   replicaReplenishmentWaitInterval: ~
   concurrentReplicaRebuildPerNodeLimit: ~
   concurrentVolumeBackupRestorePerNodeLimit: ~
@@ -159,6 +161,12 @@ defaultSettings:
   removeSnapshotsDuringFilesystemTrim: ~
   fastReplicaRebuildEnabled: ~
   replicaFileSyncHttpClientTimeout: ~
+  logLevel: ~
+  backupCompressionMethod: ~
+  backupConcurrentLimit: ~
+  restoreConcurrentLimit: ~
+  v2DataEngine: ~
+  offlineReplicaRebuilding: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
