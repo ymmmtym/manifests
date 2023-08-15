@@ -7,7 +7,7 @@ image:
   repository: rook/ceph
   # -- Image tag
   # @default -- `master`
-  tag: v1.12.1
+  tag: v1.12.2
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -149,6 +149,10 @@ csi:
   # -- CSI CephFS plugin daemonset update strategy, supported values are OnDelete and RollingUpdate
   # @default -- `RollingUpdate`
   cephFSPluginUpdateStrategy:
+
+  # -- A maxUnavailable parameter of CSI cephFS plugin daemonset update strategy.
+  # @default -- `1`
+  cephFSPluginUpdateStrategyMaxUnavailable:
 
   # -- CSI NFS plugin daemonset update strategy, supported values are OnDelete and RollingUpdate
   # @default -- `RollingUpdate`
@@ -463,6 +467,8 @@ csi:
     enabled: false
     # -- Service monitor scrape interval
     interval: 5s
+    # -- ServiceMonitor additional labels
+    labels: {}
 
   # -- Kubelet root directory path (if the Kubelet uses a different path for the `--root-dir` flag)
   # @default -- `/var/lib/kubelet`
