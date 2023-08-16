@@ -8,6 +8,6 @@ helmCharts:
   namespace: monitoring
   includeCRDs: false
   releaseName: loki
-  version: 5.11.0
+  version: 5.13.0
   repo: https://grafana.github.io/helm-charts
   valuesFile: values.yaml
