@@ -1735,7 +1735,7 @@ prometheusOperator:
   ##
   thanosImage:
     repository: quay.io/thanos/thanos
-    tag: v0.31.0
+    tag: v0.32.0
     sha: ""
 
   ## Set a Field Selector to filter watched secrets
