@@ -6,8 +6,8 @@ image:
   # -- Image
   repository: rook/ceph
   # -- Image tag
-  # @default -- `v1.12.3`
-  tag: v1.12.3
+  # @default -- `v1.12.4`
+  tag: v1.12.4
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -572,6 +572,8 @@ csi:
 
 # -- Enable discovery daemon
 enableDiscoveryDaemon: false
+# -- Set the discovery daemon device discovery interval (default to 60m)
+discoveryDaemonInterval: 60m
 
 # -- The timeout for ceph commands in seconds
 cephCommandsTimeoutSeconds: "15"
