@@ -6,8 +6,8 @@ image:
   # -- Image
   repository: rook/ceph
   # -- Image tag
-  # @default -- `v1.12.4`
-  tag: v1.12.4
+  # @default -- `v1.12.5`
+  tag: v1.12.5
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -54,6 +54,10 @@ logLevel: INFO
 
 # -- If true, create & use RBAC resources
 rbacEnable: true
+
+rbacAggregate:
+  # -- If true, create a ClusterRole aggregated to [user facing roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles) for objectbucketclaims
+  enableOBCs: false
 
 # -- If true, create & use PSP resources
 pspEnable: false
