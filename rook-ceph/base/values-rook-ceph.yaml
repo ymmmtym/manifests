@@ -6,8 +6,8 @@ image:
   # -- Image
   repository: rook/ceph
   # -- Image tag
-  # @default -- `v1.12.7`
-  tag: v1.12.7
+  # @default -- `v1.12.8`
+  tag: v1.12.8
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
