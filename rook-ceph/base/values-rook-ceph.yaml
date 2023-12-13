@@ -6,8 +6,8 @@ image:
   # -- Image
   repository: rook/ceph
   # -- Image tag
-  # @default -- `v1.12.9`
-  tag: v1.12.9
+  # @default -- `v1.13.0`
+  tag: v1.13.0
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -65,6 +65,13 @@ pspEnable: false
 # -- Set the priority class for the rook operator deployment if desired
 priorityClassName:
 
+# -- Set the container security context for the operator
+containerSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 2016
+  runAsGroup: 2016
+  capabilities:
+    drop: ["ALL"]
 # -- If true, loop devices are allowed to be used for osds in test clusters
 allowLoopDevices: false
 
@@ -75,8 +82,6 @@ csi:
   enableRbdDriver: true
   # -- Enable Ceph CSI CephFS driver
   enableCephfsDriver: true
-  # -- Enable Ceph CSI GRPC Metrics
-  enableGrpcMetrics: false
   # -- Enable host networking for CSI CephFS and RBD nodeplugins. This may be necessary
   # in some network configurations where the SDN does not provide access to an external cluster or
   # there is significant drop in read/write performance
@@ -441,17 +446,9 @@ csi:
   # -- Enable Ceph CSI Liveness sidecar deployment
   enableLiveness: false
 
-  # -- CSI CephFS driver GRPC metrics port
-  # @default -- `9091`
-  cephfsGrpcMetricsPort:
-
   # -- CSI CephFS driver metrics port
   # @default -- `9081`
   cephfsLivenessMetricsPort:
-
-  # -- Ceph CSI RBD driver GRPC metrics port
-  # @default -- `9090`
-  rbdGrpcMetricsPort:
 
   # -- CSI Addons server port
   # @default -- `9070`
@@ -473,6 +470,8 @@ csi:
     interval: 5s
     # -- ServiceMonitor additional labels
     labels: {}
+    # -- Use a different namespace for the ServiceMonitor
+    namespace:
 
   # -- Kubelet root directory path (if the Kubelet uses a different path for the `--root-dir` flag)
   # @default -- `/var/lib/kubelet`
@@ -480,32 +479,32 @@ csi:
 
   cephcsi:
     # -- Ceph CSI image
-    # @default -- `quay.io/cephcsi/cephcsi:v3.9.0`
+    # @default -- `quay.io/cephcsi/cephcsi:v3.10.0`
     image:
 
   registrar:
     # -- Kubernetes CSI registrar image
-    # @default -- `registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.8.0`
+    # @default -- `registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.9.1`
     image:
 
   provisioner:
     # -- Kubernetes CSI provisioner image
-    # @default -- `registry.k8s.io/sig-storage/csi-provisioner:v3.5.0`
+    # @default -- `registry.k8s.io/sig-storage/csi-provisioner:v3.6.2`
     image:
 
   snapshotter:
     # -- Kubernetes CSI snapshotter image
-    # @default -- `registry.k8s.io/sig-storage/csi-snapshotter:v6.2.2`
+    # @default -- `registry.k8s.io/sig-storage/csi-snapshotter:v6.3.2`
     image:
 
   attacher:
     # -- Kubernetes CSI Attacher image
-    # @default -- `registry.k8s.io/sig-storage/csi-attacher:v4.3.0`
+    # @default -- `registry.k8s.io/sig-storage/csi-attacher:v4.4.2`
     image:
 
   resizer:
     # -- Kubernetes CSI resizer image
-    # @default -- `registry.k8s.io/sig-storage/csi-resizer:v1.8.0`
+    # @default -- `registry.k8s.io/sig-storage/csi-resizer:v1.9.2`
     image:
 
   # -- Image pull policy
@@ -620,9 +619,6 @@ discover:
   #       cpu: 100m
   #       memory: 128Mi
 
-# -- Whether to disable the admission controller
-disableAdmissionController: true
-
 # -- Runs Ceph Pods as privileged to be able to write to `hostPaths` in OpenShift with SELinux restrictions.
 hostpathRequiresPrivileged: false
 
@@ -638,17 +634,6 @@ imagePullSecrets:
 
 # -- Whether the OBC provisioner should watch on the operator namespace or not, if not the namespace of the cluster will be used
 enableOBCWatchOperatorNamespace: true
-
-# -- Set tolerations and nodeAffinity [^1] for admission controller pod.
-# The admission controller would be best to start on the same nodes as other ceph daemons.
-admissionController:
-  # tolerations:
-  #    - key: key
-  #      operator: Exists
-  #      effect: NoSchedule
-  # nodeAffinity: key1=value1,value2; key2=value3
-
-# [^1]: `nodeAffinity` and `*NodeAffinity` options should have the format `"role=storage,rook; storage=ceph"` or `storage=;role=rook-example` or `storage=;` (_checks only for presence of key_)
 
 monitoring:
   # -- Enable monitoring. Requires Prometheus to be pre-installed.
