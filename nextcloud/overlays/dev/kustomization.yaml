@@ -8,7 +8,7 @@ helmCharts:
   namespace: nextcloud
   includeCRDs: false
   releaseName: nextcloud
-  version: 4.5.5
+  version: 4.5.8
   repo: https://nextcloud.github.io/helm/
   valuesFile: values.yaml
 
