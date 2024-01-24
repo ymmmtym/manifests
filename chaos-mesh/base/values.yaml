@@ -48,7 +48,7 @@ images:
   # images.registry is the global container registry for the images, you could replace it with your self-hosted container registry.
   registry: "ghcr.io"
   # images.tag is the global image tag (for example, semiVer with prefix v, or latest).
-  tag: "v2.6.2"
+  tag: "v2.6.3"
 
 ## Optional array of imagePullSecrets containing private registry credentials
 ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -488,12 +488,12 @@ webhook:
   certManager:
     # Setup the webhook using cert-manager
     enabled: false
-  # if empty and disable certManager, Helm will auto-generate these fields
-  caBundlePEM: |
+  # if certManager is disabled and PEMs are empty, Helm will auto-generate these fields.
+  caBundlePEM: ""
 
-  crtPEM: |
+  crtPEM: ""
 
-  keyPEM: |
+  keyPEM: ""
 
   # It is recommended that admission webhooks should evaluate as quickly as possible (typically in milliseconds),
   # since they add to API request latency. It is encouraged to use a small timeout for webhooks.
