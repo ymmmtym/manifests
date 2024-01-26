@@ -6,8 +6,8 @@ image:
   # -- Image
   repository: rook/ceph
   # -- Image tag
-  # @default -- `v1.13.2`
-  tag: v1.13.2
+  # @default -- `v1.13.3`
+  tag: v1.13.3
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -23,10 +23,10 @@ crds:
 # -- Pod resource requests & limits
 resources:
   limits:
-    cpu: 500m
+    cpu: 1500m
     memory: 512Mi
   requests:
-    cpu: 100m
+    cpu: 200m
     memory: 128Mi
 
 # -- Kubernetes [`nodeSelector`](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) to add to the Deployment.
@@ -477,6 +477,18 @@ csi:
   # @default -- `/var/lib/kubelet`
   kubeletDirPath:
 
+  # -- Duration in seconds that non-leader candidates will wait to force acquire leadership.
+  # @default -- `137s`
+  csiLeaderElectionLeaseDuration:
+
+  # -- Deadline in seconds that the acting leader will retry refreshing leadership before giving up.
+  # @default -- `107s`
+  csiLeaderElectionRenewDeadline:
+
+  # -- Retry period in seconds the LeaderElector clients should wait between tries of actions.
+  # @default -- `26s`
+  csiLeaderElectionRetryPeriod:
+
   cephcsi:
     # -- Ceph CSI image
     # @default -- `quay.io/cephcsi/cephcsi:v3.10.1`
@@ -489,7 +501,7 @@ csi:
 
   provisioner:
     # -- Kubernetes CSI provisioner image
-    # @default -- `registry.k8s.io/sig-storage/csi-provisioner:v3.6.2`
+    # @default -- `registry.k8s.io/sig-storage/csi-provisioner:v3.6.3`
     image:
 
   snapshotter:
