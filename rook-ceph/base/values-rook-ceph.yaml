@@ -6,8 +6,8 @@ image:
   # -- Image
   repository: rook/ceph
   # -- Image tag
-  # @default -- `v1.13.4`
-  tag: v1.13.4
+  # @default -- `v1.13.5`
+  tag: v1.13.5
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -469,7 +469,7 @@ csi:
 
   cephcsi:
     # -- Ceph CSI image
-    # @default -- `quay.io/cephcsi/cephcsi:v3.10.1`
+    # @default -- `quay.io/cephcsi/cephcsi:v3.10.2`
     image:
 
   registrar:
