@@ -6,8 +6,8 @@ image:
   # -- Image
   repository: rook/ceph
   # -- Image tag
-  # @default -- `v1.13.6`
-  tag: v1.13.6
+  # @default -- `v1.13.7`
+  tag: v1.13.7
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -445,7 +445,7 @@ csi:
     # -- Enable ServiceMonitor for Ceph CSI drivers
     enabled: false
     # -- Service monitor scrape interval
-    interval: 5s
+    interval: 10s
     # -- ServiceMonitor additional labels
     labels: {}
     # -- Use a different namespace for the ServiceMonitor
