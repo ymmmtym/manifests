@@ -55,6 +55,8 @@ app:
   # Common labels & annotations shared across all deployed resources
   labels: {}
   annotations: {}
+  # Common priority class used for all deployed resources
+  priorityClassName: null
   settings:
     ## Global dashboard settings
     global:
@@ -143,6 +145,7 @@ auth:
       limits:
         cpu: 250m
         memory: 400Mi
+  automountServiceAccountToken: true
   volumes:
     # Create on-disk volume to store exec logs (required)
     - name: tmp-volume
@@ -157,7 +160,7 @@ api:
   role: api
   image:
     repository: docker.io/kubernetesui/dashboard-api
-    tag: 1.4.0
+    tag: 1.4.1
   scaling:
     replicas: 1
     revisionHistoryLimit: 10
@@ -192,6 +195,7 @@ api:
       limits:
         cpu: 250m
         memory: 400Mi
+  automountServiceAccountToken: true
   # Additional volumes
   # - name: dashboard-kubeconfig
   #   secret:
@@ -246,6 +250,7 @@ web:
       limits:
         cpu: 250m
         memory: 400Mi
+  automountServiceAccountToken: true
   # Additional volumes
   # - name: dashboard-kubeconfig
   #   secret:
@@ -305,6 +310,7 @@ metricsScraper:
         port: 8000
       initialDelaySeconds: 30
       timeoutSeconds: 30
+  automountServiceAccountToken: true
   # Additional volumes
   # - name: dashboard-kubeconfig
   #   secret:
@@ -335,8 +341,11 @@ metrics-server:
 ## for our all containers.
 kong:
   enabled: true
+  ## Configuration reference: https://docs.konghq.com/gateway/3.6.x/reference/configuration
   env:
-    dns_order: A,CNAME,LAST,SRV
+    dns_order: A,CNAME,LAST,AAAA,SRV
+    plugins: 'off'
+    nginx_worker_processes: 1
   ingressController:
     enabled: false
   dblessConfig:
