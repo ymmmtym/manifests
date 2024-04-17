@@ -8,6 +8,6 @@ helmCharts:
   namespace: kube-system
   includeCRDs: true
   releaseName: kubernetes-dashboard
-  version: 7.1.3
+  version: 7.3.2
   repo: https://kubernetes.github.io/dashboard
   valuesFile: values.yaml
