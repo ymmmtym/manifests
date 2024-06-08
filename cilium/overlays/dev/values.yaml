@@ -1693,7 +1693,7 @@ clustermesh:
       image:
         override: ~
         repository: quay.io/coreos/etcd
-        tag: v3.5.13
+        tag: v3.5.14
         pullPolicy: IfNotPresent
 
     service:
