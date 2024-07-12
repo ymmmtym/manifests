@@ -68,7 +68,7 @@ injector:
   # image sets the repo and tag of the vault-k8s image to use for the injector.
   image:
     repository: "hashicorp/vault-k8s"
-    tag: "1.4.1"
+    tag: "1.4.2"
     pullPolicy: IfNotPresent
 
   # agentImage sets the repo and tag of the Vault image to use for the Vault Agent
@@ -76,7 +76,7 @@ injector:
   # required.
   agentImage:
     repository: "hashicorp/vault"
-    tag: "1.16.1"
+    tag: "1.17.2"
 
   # The default values for the injected Vault Agent containers.
   agentDefaults:
@@ -377,7 +377,7 @@ server:
 
   image:
     repository: "hashicorp/vault"
-    tag: "1.16.1"
+    tag: "1.17.2"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
@@ -881,7 +881,7 @@ server:
     # If set to null, this will be set to the Pod IP Address
     apiAddr: null
 
-    # Set the cluster_addr confuguration for Vault HA
+    # Set the cluster_addr configuration for Vault HA
     # See https://developer.hashicorp.com/vault/docs/configuration#cluster_addr
     # If set to null, this will be set to https://$(HOSTNAME).{{ template "vault.fullname" . }}-internal:8201
     clusterAddr: null
@@ -1087,7 +1087,7 @@ csi:
 
   image:
     repository: "hashicorp/vault-csi-provider"
-    tag: "1.4.2"
+    tag: "1.4.3"
     pullPolicy: IfNotPresent
 
   # volumes is a list of volumes made available to all containers. These are rendered
@@ -1172,7 +1172,7 @@ csi:
 
     image:
       repository: "hashicorp/vault"
-      tag: "1.16.1"
+      tag: "1.17.2"
       pullPolicy: IfNotPresent
 
     logFormat: standard
@@ -1241,8 +1241,8 @@ csi:
 # https://developer.hashicorp.com/vault/docs/configuration/telemetry
 # https://developer.hashicorp.com/vault/docs/internals/telemetry
 serverTelemetry:
-  # Enable support for the Prometheus Operator. Currently, this chart does not support
-  # authenticating to Vault's metrics endpoint, so the following `telemetry{}` must be included
+  # Enable support for the Prometheus Operator. If authorization is not set for authenticating
+  # to Vault's metrics endpoint, the following Vault server `telemetry{}` config must be included
   # in the `listener "tcp"{}` stanza
   #  telemetry {
   #    unauthenticated_metrics_access = "true"
@@ -1283,6 +1283,25 @@ serverTelemetry:
 
     # Timeout for Prometheus scrapes
     scrapeTimeout: 10s
+
+    # tlsConfig used for scraping the Vault metrics API.
+    # See API reference: https://prometheus-operator.dev/docs/operator/api/#monitoring.coreos.com/v1.TLSConfig
+    # example:
+    # tlsConfig:
+    #   ca:
+    #     secret:
+    #       name: vault-metrics-client
+    #       key: ca.crt
+    tlsConfig: {}
+
+    # authorization used for scraping the Vault metrics API.
+    # See API reference: https://prometheus-operator.dev/docs/operator/api/#monitoring.coreos.com/v1.SafeAuthorization
+    # example:
+    # authorization:
+    #   credentials:
+    #     name: vault-metrics-client
+    #     key: token
+    authorization: {}
 
   prometheusRules:
       # The Prometheus operator *must* be installed before enabling this feature,
