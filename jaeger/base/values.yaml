@@ -232,6 +232,7 @@ kafka:
 # use by Jaeger
 schema:
   annotations: {}
+  tolerations: []
   image:
     registry: ""
     repository: jaegertracing/jaeger-cassandra-schema
@@ -790,6 +791,8 @@ query:
 
 spark:
   enabled: false
+  securityContext: {}
+  podSecurityContext: {}
   annotations: {}
   image:
     registry: ""
