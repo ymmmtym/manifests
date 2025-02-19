@@ -818,7 +818,7 @@ hubble:
       image:
         override: ~
         repository: cilium/hubble-ui-backend
-        tag: v0.13.1@sha256:0e0eed917653441fded4e7cdb096b7be6a3bddded5a2dd10812a27b1fc6ed95b
+        tag: v0.13.2@sha256:a034b7e98e6ea796ed26df8f4e71f83fc16465a19d166eff67a03b822c0bfa15
         pullPolicy: IfNotPresent
       # [Example]
       # resources:
