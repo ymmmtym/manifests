@@ -2897,8 +2897,16 @@ prometheusOperator:
       # self-signed root certificate
       rootCert:
         duration: ""  # default to be 5y
+        # -- Set the revisionHistoryLimit on the Certificate. See
+        # https://cert-manager.io/docs/reference/api-docs/#cert-manager.io/v1.CertificateSpec
+        # Defaults to nil.
+        revisionHistoryLimit:
       admissionCert:
         duration: ""  # default to be 1y
+        # -- Set the revisionHistoryLimit on the Certificate. See
+        # https://cert-manager.io/docs/reference/api-docs/#cert-manager.io/v1.CertificateSpec
+        # Defaults to nil.
+        revisionHistoryLimit:
       # issuerRef:
       #   name: "issuer"
       #   kind: "ClusterIssuer"
@@ -4509,6 +4517,10 @@ prometheus:
     ## AllowOverlappingBlocks enables vertical compaction and vertical query merge in Prometheus. This is still experimental
     ## in Prometheus so it may change in any upcoming release.
     allowOverlappingBlocks: false
+
+    ## Specifies the validation scheme for metric and label names.
+    ## Supported values are: Legacy, UTF8
+    nameValidationScheme: ""
 
     ## Minimum number of seconds for which a newly created pod should be ready without any of its container crashing for it to
     ## be considered available. Defaults to 0 (pod will be considered available as soon as it is ready).
