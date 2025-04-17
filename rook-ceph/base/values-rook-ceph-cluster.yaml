@@ -25,7 +25,7 @@ toolbox:
   # -- Enable Ceph debugging pod deployment. See [toolbox](../Troubleshooting/ceph-toolbox.md)
   enabled: false
   # -- Toolbox image, defaults to the image used by the Ceph cluster
-  image: #quay.io/ceph/ceph:v19.2.1
+  image: #quay.io/ceph/ceph:v19.2.2
   # -- Toolbox tolerations
   tolerations: []
   # -- Toolbox affinity
@@ -94,9 +94,9 @@ cephClusterSpec:
     # v18 is Reef, v19 is Squid
     # RECOMMENDATION: In production, use a specific version tag instead of the general v18 flag, which pulls the latest release and could result in different
     # versions running within the cluster. See tags available at https://hub.docker.com/r/ceph/ceph/tags/.
-    # If you want to be more precise, you can always use a timestamp tag such as quay.io/ceph/ceph:v19.2.1-20250202
+    # If you want to be more precise, you can always use a timestamp tag such as quay.io/ceph/ceph:v19.2.2-20250409
     # This tag might not contain a new Ceph version, just security fixes from the underlying operating system, which will reduce vulnerabilities
-    image: quay.io/ceph/ceph:v19.2.1
+    image: quay.io/ceph/ceph:v19.2.2
     # Whether to allow unsupported versions of Ceph. Currently Reef and Squid are supported.
     # Future versions such as Tentacle (v20) would require this to be set to `true`.
     # Do not set to true in production.
@@ -417,6 +417,8 @@ ingress:
   # -- Enable an ingress for the ceph-dashboard
   dashboard:
     {}
+    # labels:
+    #   external-dns/private: "true"
     # annotations:
     #   external-dns.alpha.kubernetes.io/hostname: dashboard.example.com
     #   nginx.ingress.kubernetes.io/rewrite-target: /ceph-dashboard/$2
@@ -627,6 +629,9 @@ cephObjectStores:
     ingress:
       # Enable an ingress for the ceph-objectstore
       enabled: false
+      # The ingress port by default will be the object store's "securePort" (if set), or the gateway "port".
+      # To override those defaults, set this ingress port to the desired port.
+      # port: 80
       # annotations: {}
       # host:
       #   name: objectstore.example.com
