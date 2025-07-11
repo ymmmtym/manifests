@@ -1,6 +1,6 @@
 image:
   repository: grafana/loki
-  tag: 2.9.14
+  tag: 2.9.15
   pullPolicy: IfNotPresent
 
   ## Optionally specify an array of imagePullSecrets.
