@@ -8,7 +8,7 @@ image:
   repository: registry.gitlab.com/purelb/purelb
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v0.12.0
+  tag: v0.13.0
 
 nameOverride: ""
 fullnameOverride: ""
@@ -182,10 +182,9 @@ lbnodeagent:
   sendgarp: false
   podSecurityPolicy:
     enabled: false
-  resources:
-    limits:
-      memory: 100Mi
   containerSecurityContext:
+    runAsUser: 0
+    runAsGroup: 0
     capabilities:
       add:
       - NET_ADMIN
@@ -210,9 +209,6 @@ lbnodeagent:
 allocator:
   podSecurityPolicy:
     enabled: false
-  resources:
-    limits:
-      memory: 100Mi
   # Set the container security context
   containerSecurityContext:
     allowPrivilegeEscalation: false
