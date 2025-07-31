@@ -8,7 +8,7 @@ helmCharts:
   namespace: k8s-at-home
   includeCRDs: false
   releaseName: minecraft
-  version: 4.26.3
+  version: 4.26.4
   repo: https://itzg.github.io/minecraft-server-charts/
   valuesFile: values.yaml
 
