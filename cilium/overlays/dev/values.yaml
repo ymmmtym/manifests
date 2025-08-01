@@ -560,7 +560,7 @@ certgen:
   image:
     override: ~
     repository: quay.io/cilium/certgen
-    tag: v0.2.3
+    tag: v0.2.4
     pullPolicy: IfNotPresent
   # -- Seconds after which the completed job pod will be deleted
   ttlSecondsAfterFinished: 1800
