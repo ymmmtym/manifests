@@ -17,7 +17,7 @@ spec:
       valueFiles:
       - https://raw.githubusercontent.com/ymmmtym/manifests/main/vault/overlays/dev/values.yaml
     repoURL: https://helm.releases.hashicorp.com
-    targetRevision: 0.30.0
+    targetRevision: 0.30.1
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
