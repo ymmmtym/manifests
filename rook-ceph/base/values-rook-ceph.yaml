@@ -7,7 +7,7 @@ image:
   repository: docker.io/rook/ceph
   # -- Image tag
   # @default -- `master`
-  tag: v1.17.7
+  tag: v1.18.0
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -77,9 +77,18 @@ containerSecurityContext:
 # -- If true, loop devices are allowed to be used for osds in test clusters
 allowLoopDevices: false
 
+ceph-csi-operator:
+  nameOverride: ceph-csi
+  fullnameOverride: ceph-csi
+  controllerManager:
+    manager:
+      env:
+        csiServiceAccountPrefix: "ceph-csi-"
+
 # Settings for whether to disable the drivers or other daemons if they are not
 # needed
 csi:
+  rookUseCsiOperator: true
   # -- Enable Ceph CSI RBD driver
   enableRbdDriver: true
   # -- Enable Ceph CSI CephFS driver
@@ -489,7 +498,7 @@ csi:
     # -- Ceph CSI image repository
     repository: quay.io/cephcsi/cephcsi
     # -- Ceph CSI image tag
-    tag: v3.14.2
+    tag: v3.15.0
 
   registrar:
     # -- Kubernetes CSI registrar image repository
@@ -539,7 +548,7 @@ csi:
     # -- CSIAddons sidecar image repository
     repository: quay.io/csiaddons/k8s-sidecar
     # -- CSIAddons sidecar image tag
-    tag: v0.12.0
+    tag: v0.13.0
 
   nfs:
     # -- Enable the nfs csi driver
@@ -556,6 +565,10 @@ csi:
     # - kubernetes.io/hostname
     # - topology.kubernetes.io/zone
     # - topology.rook.io/rack
+
+  crossNamespaceVolumeDataSource:
+    # -- Enable cross namespace volume data source provisioning
+    enabled: false
 
   # -- Whether to skip any attach operation altogether for CephFS PVCs. See more details
   # [here](https://kubernetes-csi.github.io/docs/skip-attach.html#skip-attach-with-csi-driver-object).
