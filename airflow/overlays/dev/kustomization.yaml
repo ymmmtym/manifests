@@ -8,7 +8,7 @@ helmCharts:
   namespace: airflow
   includeCRDs: false
   releaseName: airflow
-  version: 1.15.0
+  version: 1.18.0
   repo: https://airflow.apache.org/
   valuesFile: values.yaml
 
