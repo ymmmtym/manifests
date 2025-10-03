@@ -1475,7 +1475,7 @@ prometheusOperator:
       enabled: true
       image:
         repository: registry.k8s.io/ingress-nginx/kube-webhook-certgen
-        tag: v1.3.0
+        tag: v1.6.3
         sha: ""
         pullPolicy: IfNotPresent
       resources: {}
