@@ -8,7 +8,7 @@ helmCharts:
   namespace: monitoring
   includeCRDs: false
   releaseName: jaeger
-  version: 0.74.1
+  version: 3.4.1
   repo: https://jaegertracing.github.io/helm-charts
   valuesFile: values.yaml
 
