@@ -490,7 +490,7 @@ prometheus:
   # The serviceAccount for prometheus
   serviceAccount: prometheus
   # Docker image for prometheus
-  image: prom/prometheus:v2.18.1
+  image: prom/prometheus:v3.6.0
   # Docker image for busybox
   busybox:
     image: busybox
