@@ -11,7 +11,7 @@ helmCharts:
   namespace: argocd
   includeCRDs: true
   releaseName: argo-cd
-  version: 8.5.9
+  version: 8.5.10
   repo: https://argoproj.github.io/argo-helm
   valuesFile: values.yaml
 
