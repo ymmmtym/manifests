@@ -1912,9 +1912,16 @@ redisSecretInit:
     # @default -- `""` (defaults to global.image.imagePullPolicy)
     imagePullPolicy: "" # IfNotPresent
 
+  # -- Additional command line arguments for the Redis secret-init Job
+  extraArgs: []
+
   # -- Secrets with credentials to pull images from a private registry
   # @default -- `[]` (defaults to global.imagePullSecrets)
   imagePullSecrets: []
+
+  # -- Runtime class name for the Redis secret-init Job
+  # @default -- `""` (defaults to global.runtimeClassName)
+  runtimeClassName: ""
 
   # -- Annotations to be added to the Redis secret-init Job
   jobAnnotations: {}
