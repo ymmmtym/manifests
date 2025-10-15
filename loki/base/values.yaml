@@ -332,9 +332,6 @@ loki:
     {{- if .Values.loki.ui.enabled }}
     ui:
       enabled: true
-      discovery:
-        join_peers:
-          - '{{ include "loki.queryFrontendFullname" . }}.{{ include "loki.namespace" . }}.svc.{{ .Values.global.clusterDomain }}'
     {{- end }}
     {{- with .Values.loki.querier }}
     querier:
@@ -3503,6 +3500,8 @@ memcached:
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
+  # -- Startup probe for memcached pods
+  startupProbe: {}
 
 memcachedExporter:
   # -- Whether memcached metrics should be exported
@@ -3548,6 +3547,8 @@ memcachedExporter:
     periodSeconds: 5
     timeoutSeconds: 3
     failureThreshold: 3
+  # -- Startup probe for memcached exporter
+  startupProbe: {}
 
 resultsCache:
   # -- Specifies whether memcached based results-cache should be enabled
@@ -4079,6 +4080,12 @@ monitoring:
     annotations: {}
     # -- Additional labels for the rules PrometheusRule resource
     labels: {}
+    # -- Additional annotations for PrometheusRule alerts
+    additionalRuleAnnotations: {}
+    # e.g.:
+    # additionalRuleAnnotations:
+    #   runbook_url: "https://runbooks.example.com/oncall/loki"
+    #   summary: "What this alert means and how to respond"
     # -- Additional labels for PrometheusRule alerts
     additionalRuleLabels: {}
     # -- Additional groups to add to the rules file
