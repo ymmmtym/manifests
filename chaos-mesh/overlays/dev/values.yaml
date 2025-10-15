@@ -414,7 +414,7 @@ prometheus:
   # The serviceAccount for prometheus
   serviceAccount: prometheus
   # Docker image for prometheus
-  image: prom/prometheus:v3.6.0
+  image: prom/prometheus:v3.7.0
   # Image pull policy
   imagePullPolicy: IfNotPresent
   # Custom priorityClassName for using pod priorities
