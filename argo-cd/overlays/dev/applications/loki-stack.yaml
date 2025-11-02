@@ -17,7 +17,7 @@ spec:
       valueFiles:
       - https://raw.githubusercontent.com/ymmmtym/manifests/main/loki-stack/overlays/dev/values.yaml
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 2.10.2
+    targetRevision: 2.10.3
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
