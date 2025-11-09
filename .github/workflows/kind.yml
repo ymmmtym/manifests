@@ -13,13 +13,19 @@ jobs:
         with:
           version: v0.20.0
           image: kindest/node:${{ matrix.tag }}
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: Install task
+        run: go install github.com/go-task/task/v3/cmd/task@latest
       - name: Test
         run: |
           kubectl version
           kubectl cluster-info
           kubectl get node -o wide
           kubectl get pods -n kube-system
-          make create-base # for CRD
+          task create-base # for CRD
           # make apply
           kubectl wait -n argocd --for=condition=available deployment --all --timeout=300s
           kubectl get pods -A
