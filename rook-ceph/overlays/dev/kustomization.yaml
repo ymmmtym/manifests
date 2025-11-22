@@ -15,7 +15,7 @@ helmCharts:
   namespace: rook-ceph
   includeCRDs: true
   releaseName: rook-ceph-cluster
-  version: v1.18.6
+  version: v1.18.7
   repo: https://charts.rook.io/release
   valuesFile: values-rook-ceph-cluster.yaml
 
