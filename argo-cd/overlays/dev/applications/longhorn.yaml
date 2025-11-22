@@ -17,7 +17,7 @@ spec:
       valueFiles:
       - https://raw.githubusercontent.com/ymmmtym/manifests/main/longhorn/overlays/dev/values.yaml
     repoURL: https://charts.longhorn.io
-    targetRevision: 1.10.0
+    targetRevision: 1.10.1
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
