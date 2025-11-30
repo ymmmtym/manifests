@@ -1,0 +1,96 @@
+
+version: '3'
+
+vars:
+  OVERLAYS:
+    sh: echo "dev"
+  APPS:
+    sh: ls -d */ | sed 's|/||'
+
+tasks:
+  eval:
+    cmds:
+      - task: eval-base
+      - task: eval-overlay
+        vars:
+          OVERLAY: "{{.OVERLAYS}}"
+
+  eval-base:
+    cmds:
+      - for: {var: APPS}
+        cmd: |
+          echo "### {{.ITEM}}/base ###"
+          kustomize build --enable-helm {{.ITEM}}/base/ | kubeval --ignore-missing-schemas --skip-kinds CustomResourceDefinition --additional-schema-locations https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master
+
+  eval-overlay:
+    cmds:
+      - for: {var: APPS}
+        cmd: |
+          echo "### {{.ITEM}}/overlays/{{.OVERLAY}} ###"
+          kustomize build --enable-helm {{.ITEM}}/overlays/{{.OVERLAY}}/ | kubeval --ignore-missing-schemas --skip-kinds CustomResourceDefinition --additional-schema-locations https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master
+
+  build:
+    cmds:
+      - task: build-base
+      - task: build-overlay
+        vars:
+          OVERLAY: "{{.OVERLAYS}}"
+
+  build-base:
+    cmds:
+      - for: {var: APPS}
+        cmd: kustomize build --enable-helm {{.ITEM}}/base/
+
+  build-overlay:
+    cmds:
+      - for: {var: APPS}
+        cmd: kustomize build --enable-helm {{.ITEM}}/overlays/{{.OVERLAY}}/
+
+  create:
+    cmds:
+      - task: create-base
+      - task: create-overlay
+        vars:
+          OVERLAY: "{{.OVERLAYS}}"
+
+  create-base:
+    cmds:
+      - for: {var: APPS}
+        cmd: kustomize build --enable-helm {{.ITEM}}/base/ | kubectl create -f -
+
+  create-overlay:
+    cmds:
+      - for: {var: APPS}
+        cmd: kustomize build --enable-helm {{.ITEM}}/overlays/{{.OVERLAY}}/ | kubectl create -f -
+
+  apply:
+    cmds:
+      - task: apply-base
+      - task: apply-overlay
+        vars:
+          OVERLAY: "{{.OVERLAYS}}"
+
+  apply-base:
+    cmds:
+      - for: {var: APPS}
+        cmd: kustomize build --enable-helm {{.ITEM}}/base/ | kubectl apply -f -
+
+  apply-overlay:
+    cmds:
+      - for: {var: APPS}
+        cmd: kustomize build --enable-helm {{.ITEM}}/overlays/{{.OVERLAY}}/ | kubectl apply -f -
+
+  diff:
+    cmds:
+      - for: {var: APPS}
+        cmd: bash diff.sh {{.OVERLAYS}} {{.ITEM}}
+
+  update:
+    cmds:
+      - task: build
+      - for: {var: APPS}
+        cmd: bash update.sh {{.ITEM}}
+
+  clean:
+    cmds:
+      - rm -fr */base/charts/ */overlays/*/charts/
