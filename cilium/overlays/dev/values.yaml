@@ -1547,7 +1547,7 @@ preflight:
   image:
     override: ~
     repository: quay.io/cilium/cilium
-    tag: v1.18.4
+    tag: v1.18.5
     # cilium-digest
     digest: "sha256:d9d4c7759175db31aa32eaa68274bb9355d468fbc87e23123c80052e3ed63116"
     useDigest: true
