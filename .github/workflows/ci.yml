@@ -14,8 +14,14 @@ jobs:
           wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
           tar xf kubeval-linux-amd64.tar.gz
           mv kubeval /usr/local/bin/
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: Install task
+        run: go install github.com/go-task/task/v3/cmd/task@latest
       - name: eval
-        run: make eval | tee make-eval-output.txt
+        run: task eval | tee make-eval-output.txt
       - name: upload eval output to artifact
         uses: actions/upload-artifact@v4
         with:
@@ -32,6 +38,12 @@ jobs:
         run: |
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
           mv kustomize /usr/local/bin/
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: Install task
+        run: go install github.com/go-task/task/v3/cmd/task@latest
       - name: Install kube-score
         run: brew install kube-score
       - name: Score manifests
@@ -69,8 +81,14 @@ jobs:
         run: |
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
           mv kustomize /usr/local/bin/
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: Install task
+        run: go install github.com/go-task/task/v3/cmd/task@latest
       - name: diff
-        run: make diff | tee make-diff-output.txt
+        run: task diff | tee make-diff-output.txt
       - name: upload diff output to artifact
         uses: actions/upload-artifact@v4
         with:
