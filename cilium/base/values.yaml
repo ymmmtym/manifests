@@ -1905,7 +1905,7 @@ clustermesh:
       image:
         override: ~
         repository: "quay.io/coreos/etcd"
-        tag: "v3.6.8@sha256:b88bf32c663e2599bd3742ded6cd9106431288528c0d2c9425fb03f348f59419"
+        tag: "v3.6.10@sha256:6742378fabf521b47edd637914d508061528924d5915af0fd5d6379cfef89b7a"
         pullPolicy: "IfNotPresent"
 
     service:
