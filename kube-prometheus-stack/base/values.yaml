@@ -4159,7 +4159,7 @@ prometheus:
     image:
       registry: quay.io
       repository: prometheus/prometheus
-      tag: v3.11.2
+      tag: v3.11.3
       sha: ""
       pullPolicy: IfNotPresent
 
@@ -4650,6 +4650,7 @@ prometheus:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api-reference/api.md#thanosspec
     ##
     thanos: {}
+      # image: quay.io/thanos/thanos
       # secretProviderClass:
       #   provider: gcp
       #   parameters:
