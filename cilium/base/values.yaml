@@ -90,7 +90,7 @@ rollOutCiliumPods: false
 image:
   override: ~
   repository: "quay.io/cilium/cilium"
-  tag: "v1.18.7"
+  tag: "v1.18.8"
   pullPolicy: "IfNotPresent"
   # cilium-digest
   digest: "sha256:ea2db1ee21b88127b5c18a96ad155c25485d0815a667ef77c2b7c7f31cab601b"
@@ -786,7 +786,7 @@ hubble:
     image:
       override: ~
       repository: "quay.io/cilium/hubble-relay"
-      tag: "v1.18.7"
+      tag: "v1.18.8"
        # hubble-relay-digest
       digest: "sha256:646582b22bf41ad29dd7739b12aae77455ee5757b9ee087f2d45d684afef5fa1"
       useDigest: true
@@ -1524,7 +1524,7 @@ operator:
   image:
     override: ~
     repository: "quay.io/cilium/operator"
-    tag: "v1.18.7"
+    tag: "v1.18.8"
     # operator-generic-digest
     genericDigest: "sha256:93d5aaeda37d59e6c4325ff05030d7b48fabde6576478e3fdbfb9bb4a68ec4a1"
     # operator-azure-digest
@@ -1757,7 +1757,7 @@ preflight:
   image:
     override: ~
     repository: "quay.io/cilium/cilium"
-    tag: "v1.18.7"
+    tag: "v1.18.8"
     # cilium-digest
     digest: "sha256:ea2db1ee21b88127b5c18a96ad155c25485d0815a667ef77c2b7c7f31cab601b"
     useDigest: true
@@ -1894,7 +1894,7 @@ clustermesh:
     image:
       override: ~
       repository: "quay.io/cilium/clustermesh-apiserver"
-      tag: "v1.18.7"
+      tag: "v1.18.8"
       # clustermesh-apiserver-digest
       digest: "sha256:c80a8d6ffdf7cab4699441496f628a09a31d0300e623cadb2837c86fa368c02f"
       useDigest: true
@@ -1905,7 +1905,7 @@ clustermesh:
       image:
         override: ~
         repository: "quay.io/coreos/etcd"
-        tag: "v3.6.8@sha256:b88bf32c663e2599bd3742ded6cd9106431288528c0d2c9425fb03f348f59419"
+        tag: "v3.6.10@sha256:6742378fabf521b47edd637914d508061528924d5915af0fd5d6379cfef89b7a"
         pullPolicy: "IfNotPresent"
 
     service:
