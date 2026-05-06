@@ -4068,7 +4068,7 @@ postgresql:
   enabled: true
   image:
     repository: bitnamilegacy/postgresql
-    tag: "16.1.0-debian-11-r15"
+    tag: "16.2.0-debian-11-r15"
   auth:
     enablePostgresUser: true
     postgresPassword: postgres
