@@ -7,15 +7,17 @@
     }
   ],
   "labels": ["dependencies"],
-  "dependencyDashboard": "true",
+  "dependencyDashboard": true,
   "argocd": {
-    "fileMatch": ["argo-cd/.+\\.yaml$"]
+    "managerFilePatterns": [
+      "/argo-cd/.+\\.yaml$/"
+    ]
   },
   "helm-values": {
     "enabled": false
   },
   "extends": [
-    "config:base",
+    "config:recommended",
     ":timezone(Asia/Tokyo)",
     ":prHourlyLimitNone",
     ":automergePatch"
