@@ -11,6 +11,9 @@
   "argocd": {
     "fileMatch": ["argo-cd/.+\\.yaml$"]
   },
+  "helm-values": {
+    "enabled": false
+  },
   "extends": [
     "config:base",
     ":timezone(Asia/Tokyo)",
@@ -18,9 +21,6 @@
     ":automergePatch"
   ],
   "automerge": true,
-  "ignoreDeps": [
-    "helm-values"
-  ],
   "ignorePaths": [
     "argo-cd/base"
   ],
