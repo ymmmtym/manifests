@@ -14,8 +14,14 @@ jobs:
         run: |
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
           mv kustomize /usr/local/bin/
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: Install task
+        run: go install github.com/go-task/task/v3/cmd/task@latest
       - name: Update
-        run: make update
+        run: task update
       - name: Push auto-fixed files
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
